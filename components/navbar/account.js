@@ -31,7 +31,7 @@ export default function Account() {
               type="submit"
               className="btn btn-warning m-2 px-9 text-white hidden lg:inline"
               onClick={() => {
-                router.push("/login");
+                router.push("/identification");
               }}
             >
               SIGNUP
