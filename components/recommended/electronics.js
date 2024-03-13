@@ -29,7 +29,7 @@ export default function Electronics() {
 
   return (
     <div className="pt-5">
-    <RecomHeader title="Recommended Electronics" color="bg-lime-300" />
+    <RecomHeader title="Recommended Electronics" color="bg-yellow-500 " />
     <div className="carousel carousel-center w-full bg-white shadow-lg rounded-lg">
         {products.map((product) => (
           <div key={product.id} className="carousel-item flex flex-col w-[150px] md:w-[200px]">
