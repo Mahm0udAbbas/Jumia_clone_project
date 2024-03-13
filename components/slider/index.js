@@ -3,6 +3,7 @@ import RecomHeader from "../recommended/header";
 import { getFirestore, collection, getDocs } from "firebase/firestore";
 import db from "../../firebase";
 import Link from "next/link";
+import { Margin } from "@mui/icons-material";
 
 export default function SliderMainPage() {
   const [products, setProducts] = useState([]);
@@ -28,7 +29,7 @@ export default function SliderMainPage() {
   }, []);
   return (
     <div className="container mt-5 items-center justify-center">
-      <RecomHeader title="Recommended Products" color="bg-lime-300" />
+      <RecomHeader title="Recommended Products" color="bg-yellow-500"/>
       <div className="container mt-3 flex flex-wrap justify-around m-3">
   {products.map((product) => (
     <div key={product.id} className="mb-4 mx-1 flex items-center justify-center">
@@ -41,7 +42,7 @@ export default function SliderMainPage() {
         />
         <div className="text-center">
         <h3 className="text-lg font-semibold mb-2 overflow-hidden line-clamp-1">{product.name}</h3>
-          <Link href={`/products/${product.id}`} className="btn btn-primary m-2">
+          <Link href={`/products/${product.id}`} className="btn btn-warning rounded-2 text-white hidden lg:inline p-3 m-2">
             Details
           </Link>
         </div>

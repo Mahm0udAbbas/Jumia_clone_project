@@ -15,7 +15,7 @@ import {
 function TMyNavbar() {
   return (
     <>
-      <div className="relative text-black flex w-full gap-2 md:w-max">
+      <div className="my-2 flex flex-col gap-2 relative text-black flex w-full gap-2 md:w-max lg:mb-0 lg:mt-0 lg:flex-row lg:items-center lg:gap-6 ">
         <Link href="/help">
           <span className="flex">
             <span className="flex flex-row items-center">
@@ -68,7 +68,7 @@ export function MyNavbar() {
     <Navbar
       fullWidth="true"
       shadow="false"
-      className="w-full mx-auto  px-4 py-3 round-0 mb-2  max-w-screen-xl px-6 py-3"
+      className=" mx-auto  px-4 py-3 round-0 mb-2  max-w-screen-xl px-6 py-3 max-w-full"
     >
       <div className="flex items-center justify-between text-blue-gray-900">
         <Typography
@@ -85,7 +85,10 @@ export function MyNavbar() {
             alt="logo"
           />
         </Typography>
-        <Typography variant="h4" className="mr-4 ml-2 capitalize py-1.5">
+        <Typography
+          variant="h4"
+          className="mr-4 ml-2 capitalize py-1.5 flex-grow text-center"
+        >
           edit adress
         </Typography>
         <div className="hidden lg:block">
