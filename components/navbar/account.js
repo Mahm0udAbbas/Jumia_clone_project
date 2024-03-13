@@ -1,17 +1,14 @@
-// import Link from "next/link";
-import PersonIcon from "@mui/icons-material/Person";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-import InventoryIcon from "@mui/icons-material/Inventory";
-import MailIcon from "@mui/icons-material/Mail";
 import LocalAtmIcon from "@mui/icons-material/LocalAtm";
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 import ShoppingBagOutlinedIcon from "@mui/icons-material/ShoppingBagOutlined";
 import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
 import React, { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/router";
 export default function Account() {
   const [isOpen, setIsOpen] = useState(false);
-
+  const router = useRouter();
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
   };
@@ -33,6 +30,9 @@ export default function Account() {
             <button
               type="submit"
               className="btn btn-warning m-2 px-9 text-white hidden lg:inline"
+              onClick={() => {
+                router.push("/login");
+              }}
             >
               SIGNUP
             </button>
