@@ -1,23 +1,19 @@
-import {
-  Card,
-  Input,
-  Button,
-  Typography,
-} from "@material-tailwind/react";
+import { Card, Input, Button, Typography } from "@material-tailwind/react";
 import { useForm } from "react-hook-form";
-import { getAuth, fetchSignInMethodsForEmail } from "firebase/auth";
+import { fetchSignInMethodsForEmail } from "firebase/auth";
 import { useRouter } from "next/router";
-import {auth} from "@/firebase";
-import Image from 'next/image';
+import { auth } from "@/firebase";
+import Image from "next/image";
 import topLogo from "@/public/1.png";
 import bottomLogo from "@/public/bottom-logo.png";
 
-
-
 function Login_signup() {
-  // const auth = getAuth(firestore);
-  const router = useRouter()
-  const { register, handleSubmit, formState: { errors }, } = useForm();
+  const router = useRouter();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
 
   async function loginOrSignup({ email }) {
     const isExist = await fetchSignInMethodsForEmail(auth, email);
@@ -28,9 +24,15 @@ function Login_signup() {
     }
   }
   return (
-    <Card className='flex flex-col items-center mt-10' shadow={false}>
-      <div className='flex flex-col items-center w-[30rem]'>
-        <Image width="70" height="70" className='object-cover object-center mb-3' src={topLogo} alt='logo-image' />
+    <Card className="flex flex-col items-center mt-10" shadow={false}>
+      <div className="flex flex-col items-center w-[30rem]">
+        <Image
+          width="70"
+          height="70"
+          className="object-cover object-center mb-3"
+          src={topLogo}
+          alt="logo-image"
+        />
         <Typography variant="h3" color="black">
           Welcome to Jumia
         </Typography>
@@ -40,17 +42,31 @@ function Login_signup() {
       </div>
 
       <form className="border-b-2" onSubmit={handleSubmit(loginOrSignup)}>
-        <div className='w-[28rem] my-10'>
-          <Input size="lg" color={(errors.email) ? "red" : "orange"} label="Enter your email" {...register("email", {
-            required: true, pattern: {
-              value: /^[a-zA-Z0-9]+(?:\.[a-zA-Z0-9]+)*@(gmail|yahoo|outlook)+(.com)$/,
-              message: "This email is not valid. inser valid email to continue. Email must be (gmail - yahoo - outlook)."
-            }
-          })} />
+        <div className="w-[28rem] my-10">
+          <Input
+            size="lg"
+            color={errors.email ? "red" : "orange"}
+            label="Enter your email"
+            {...register("email", {
+              required: true,
+              pattern: {
+                value:
+                  /^[a-zA-Z0-9]+(?:\.[a-zA-Z0-9]+)*@(gmail|yahoo|outlook)+(.com)$/,
+                message:
+                  "This email is not valid. inser valid email to continue. Email must be (gmail - yahoo - outlook).",
+              },
+            })}
+          />
           <p className="text-red-600 text-xs">{errors.email?.message}</p>
         </div>
 
-        <Button type="submit" className="mt-6" size='lg' color='orange' fullWidth>
+        <Button
+          type="submit"
+          className="mt-6 text-white"
+          size="lg"
+          color="amber"
+          fullWidth
+        >
           Continue
         </Button>
         <Typography color="black" className="text-xs my-2 text-center">
@@ -60,23 +76,37 @@ function Login_signup() {
           </a>
         </Typography>
       </form>
-      <div className='w-[28rem]'>
-        <Button className="mt-5 mb-8 hover:bg-orange-800/5" size='lg' variant="outlined" color='orange' fullWidth>
+      <div className="w-[28rem]">
+        <Button
+          className="mt-5 mb-8 hover:bg-orange-800/5"
+          size="lg"
+          variant="outlined"
+          color="orange"
+          fullWidth
+        >
           Login with Passkeys
         </Button>
-        <Button className="mt-12 mb-8" size='lg' color='blue' fullWidth>
+        <Button className="mt-12 mb-8" size="lg" color="blue" fullWidth>
           Login with Facebook
         </Button>
         <Typography color="black" className="text-sm text-center">
-          For further support, you may visit the Help Center or contact our customer service team.
+          For further support, you may visit the Help Center or contact our
+          customer service team.
         </Typography>
-        <div className='flex flex-col  items-center mt-5'>
-          <Image width="50" height="50" className='object-cover object-center' src={bottomLogo} alt='another-logo' />
+        <div className="flex flex-col  items-center mt-5">
+          <Image
+            width="50"
+            height="50"
+            className="object-cover object-center"
+            src={bottomLogo}
+            alt="another-logo"
+          />
         </div>
       </div>
     </Card>
-  )
+  );
 }
 
 export default Login_signup;
-
+export const loginSignup = (page) => page;
+Login_signup.getLayout = loginSignup;
