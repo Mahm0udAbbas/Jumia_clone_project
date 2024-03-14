@@ -81,3 +81,27 @@
     width: 25px;
     display:inline;
 }
+.Chat{
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 1px 4px 10px -2px #888888;
+    font-size: large;
+    font-weight: bold;
+    height: 120px;
+    margin: 20px 0;
+    width: fit-content;
+}
+.Chat1{
+    padding: 20px;
+    border-radius: 10px;
+    font-size: large;
+    font-weight: bold;
+    /* height: 120px; */
+    margin: 0 50px 100px;
+    width: fit-content;
+}
+.cta{
+    display: flex;
+    gap: 10px;
+}
