@@ -37,8 +37,8 @@ function Signup() {
   const [signupError, setSignupError] = useState(false);
   const match = watch("password");
   const regx = new RegExp(match);
-  function createNewUser({email, password }) {
-    createUserWithEmailAndPassword(auth, email, password)
+  function createNewUser({ password }) {
+    createUserWithEmailAndPassword(auth, emailRoute, password)
       .then((userCredential) => {
         setSignupAlert(true);
         setTimeout(() => { router.push("/"); }, 3000);
@@ -75,7 +75,6 @@ function Signup() {
             size="lg"
             defaultValue={emailRoute}
             disabled
-            {...register("email")}
             color="orange"
             label="Enter your email"
           />

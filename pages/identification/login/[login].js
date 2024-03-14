@@ -1,7 +1,7 @@
 import { Card, Input, Button, Typography } from "@material-tailwind/react";
 import { useForm } from "react-hook-form";
 import Image from "next/image";
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "@/firebase";
 import topLogo from "@/public/1.png";
 import bottomLogo from "@/public/bottom-logo.png";
@@ -18,6 +18,7 @@ function Login() {
     await signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         console.log(userCredential);
+        router.push("/");
       })
       .catch((err) => {
         console.log(err);
@@ -25,7 +26,6 @@ function Login() {
           setErrors({ ...errors, password: "Password Wrong" });
         }
       });
-    router.push("/");
   }
 
   return (
