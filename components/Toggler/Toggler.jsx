@@ -2,7 +2,7 @@ import styles from "../../styles/Toggler.module.css";
 import React, { useState, useEffect } from "react";
 import jsonData from "./dummyData.json";
 
-export default function Toggler({ activeItemIndex }) {
+export default function Toggler() {
   const [filteredData, setFilteredData] = useState(
     jsonData.filter((item) => item.id === 0)
   );
@@ -31,18 +31,16 @@ export default function Toggler({ activeItemIndex }) {
     setToggles(Array(filteredData.length).fill(false));
 
     setFilteredData(filteredData);
-    console.log(filteredData);
   };
-  console.log(activeItemIndex);
 
   return (
     <>
       <div
-        className={` ${styles.parent} mx-auto w-full max-w-1170 bg-gray-100`}
+        className={` ${styles.parent} mx-auto w-full max-w-1170 bg-gray-100 mt-6 lg:mt-0`}
       >
         <div className="container mx-auto">
-          <div className="grid grid-cols-4 sm:grid-cols-12 gap-6">
-            <div className="col-span-4 sm:col-span-3">
+          <div className="grid grid-cols-4 md:grid-cols-12 gap-6 mt-2">
+            <div className="col-span-12 md:col-span-3">
               <div className="bg-white shadow rounded-lg">
                 <div className="flex flex-col">
                   <ul className="font-semibold">
@@ -154,7 +152,7 @@ export default function Toggler({ activeItemIndex }) {
                 </div>
               </div>
             </div>
-            <div className="col-span-4 sm:col-span-9">
+            <div className="col-span-12 md:col-span-9">
               <div className="bg-white shadow rounded-lg p-6">
                 <div className="max-w-5xl mx-auto flex flex-col md:flex-row gap-12">
                   <ul className="w-full border border-solid border-gray-300 rounded-md ">
@@ -169,7 +167,7 @@ export default function Toggler({ activeItemIndex }) {
                             {item.title}
                           </span>
                           <svg
-                            className="flex-shrink-0 w-4 h-4 ml-auto fill-current transform transition duration-200 ease-out"
+                            className="flex-shrink-0 w-2 h-2 ml-auto fill-current transform transition duration-200 ease-out"
                             viewBox="0 0 16 16"
                             xmlns="http://www.w3.org/2000/svg"
                           >
@@ -211,9 +209,13 @@ export default function Toggler({ activeItemIndex }) {
                           }}
                         >
                           <div className="pb-5 leading-relaxed">
-                            <div className="space-y-2 leading-relaxed">
-                              {item.description}
-                            </div>
+                            {/* Render HTML content safely */}
+                            <div
+                              className="space-y-2 leading-relaxed"
+                              dangerouslySetInnerHTML={{
+                                __html: item.description,
+                              }}
+                            />
                           </div>
                         </div>
                       </li>
@@ -221,6 +223,52 @@ export default function Toggler({ activeItemIndex }) {
                   </ul>
                 </div>
               </div>
+            </div>
+          </div>
+        </div>
+        <div
+          className={`${styles.Chat1}`}
+        >
+          <div>
+            <p style={{ fontWeight: 600, color: "#282828", fontSize: "20px" }}>
+              Talk to an agent
+            </p>
+            <div className={`${styles.Chat}`}>
+              <button
+                className={`${styles.cta}`}
+                aria-type="cta"
+                data-btn-lc="true"
+                data-eventcategory="LiveChat"
+                data-eventaction="open"
+                data-track-onclick="true"
+                data-track-onclick-bound="true"
+              >
+                <img
+                  src="https://cxp-desktop.netlify.app/jpg/chat.jpg"
+                  className="w-12"
+                  alt="icon"
+                />
+                <div
+                  style={{
+                    fontWeight: 600,
+                    textAlign: "left",
+                    fontSize: "20px",
+                  }}
+                >
+                  <span>Live Chat</span>
+                  <p
+                    style={{
+                      fontWeight: 600,
+                      color: "#282828",
+                      fontSize: "1.5vh",
+                    }}
+                    className={`${styles.text}`}
+                  >
+                      Ramadan Kareem! We are available from Sunday to Thursday
+                      and on Saturday, between 8 pm and 2 am.
+                  </p>
+                </div>
+              </button>
             </div>
           </div>
         </div>

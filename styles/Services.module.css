@@ -88,6 +88,16 @@
   gap: 16px;
 }
 
-.Top {
+@media (max-width: 1024px) {
+  .parent {
+      display: none;
+  }
+  .hero{
+      margin-bottom: 0px !important;
+  }
+}
+
+.Top{
   border-top: 5px solid #f68b1e;
 }
+

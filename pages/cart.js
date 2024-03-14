@@ -5,10 +5,12 @@ import { useRouter } from "next/router";
 import { updateDoc, doc, onSnapshot } from "firebase/firestore";
 import { firestore } from "../firebase";
 import { useEffect, useState } from "react";
+import Image from "next/image";
+import logoExpress from "@/public/Logo-express.png";
 
 function Cart() {
   const [cartProducts, setCartProducts] = useState([]);
-  let spredProducts = [];
+  let separateProducts = [];
   let total = 0;
 
   useEffect(() => {
@@ -20,24 +22,24 @@ function Cart() {
   const router = useRouter();
 
   function increaseCart(index) {
-    spredProducts = [...cartProducts];
-    ++spredProducts[index].quantity;
+    separateProducts = [...cartProducts];
+    ++separateProducts[index].quantity;
     updateDoc(doc(firestore, "cart", "wj3GhaCeRd4pnKwMZ6Ny"), {
-      items: [...spredProducts],
+      items: [...separateProducts],
     });
   }
   function decreaseCart(index) {
-    spredProducts = [...cartProducts];
-    --spredProducts[index].quantity;
+    separateProducts = [...cartProducts];
+    --separateProducts[index].quantity;
     updateDoc(doc(firestore, "cart", "wj3GhaCeRd4pnKwMZ6Ny"), {
-      items: [...spredProducts],
+      items: [...separateProducts],
     });
   }
   function removeItemFromCart(index) {
-    spredProducts = [...cartProducts];
-    spredProducts.splice(index, 1);
+    separateProducts = [...cartProducts];
+    separateProducts.splice(index, 1);
     updateDoc(doc(firestore, "cart", "wj3GhaCeRd4pnKwMZ6Ny"), {
-      items: [...spredProducts],
+      items: [...separateProducts],
     });
   }
   return (
@@ -55,7 +57,9 @@ function Cart() {
                   <div key={product.product.id}>
                     <li className="flex py-6 sm:py-6 ">
                       <div className="flex-shrink-0">
-                        <img
+                        <Image
+                          width={100}
+                          height={100}
                           src={product.product.images[0]}
                           alt={product.product.title}
                           className="sm:h-38 sm:w-38 h-24 w-24 rounded-md object-contain object-center"
@@ -93,8 +97,10 @@ function Cart() {
                             </p>
                           </div>
                         </div>
-                        <img
-                          src="https://ma.jumia.is/cms/1_2017/jumiaFirst/Logo-JumiaExpressPNG.png"
+                        <Image
+                          width={100}
+                          height={100}
+                          src={logoExpress}
                           alt="jumia logo"
                           className="w-24 object-contain"
                         />
@@ -119,7 +125,6 @@ function Cart() {
                       </div>
                       <div className="min-w-24 flex">
                         <Button
-                          className="text-white font-bold"
                           variant="gradient"
                           size="sm"
                           color="amber"
@@ -130,7 +135,6 @@ function Cart() {
                         </Button>
                         <span className="mx-6">{product.quantity}</span>
                         <Button
-                          className="text-white font-bold"
                           variant="gradient"
                           size="sm"
                           color="amber"
@@ -158,18 +162,25 @@ function Cart() {
                 EGP {total}.00
               </div>
             </div>
-            <div className="flex justify-between border-b mb-2 p-3">
+            <div className="flex justify-between p-3">
               <FiCheckCircle className="text-3xl me-1" color="green" />
               <p className="p-0 m-0 text-sm">
                 Jumia Express items are eligible for free delivery.
               </p>
             </div>
-            <div className="text-green-700">
+            <Image
+              className="px-3"
+              width={120}
+              height={120}
+              src={logoExpress}
+              alt="logo express"
+            />
+            <div className="text-green-700 border-t">
               <div className="flex gap-4 p-2">
                 <Button
-                  className="text-white font-bold text-lg"
                   onClick={() => router.push("/checkout_layout/address")}
-                  variant="filled"
+                  variant="gradient"
+                  className="text-xl"
                   color="amber"
                   fullWidth
                 >

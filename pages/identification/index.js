@@ -1,10 +1,13 @@
 import { Card, Input, Button, Typography } from "@material-tailwind/react";
 import { useForm } from "react-hook-form";
-import { getAuth, fetchSignInMethodsForEmail } from "firebase/auth";
+import { fetchSignInMethodsForEmail } from "firebase/auth";
 import { useRouter } from "next/router";
+import { auth } from "@/firebase";
+import Image from "next/image";
+import topLogo from "@/public/1.png";
+import bottomLogo from "@/public/bottom-logo.png";
 
 function Login_signup() {
-  // const auth = getAuth();
   const router = useRouter();
   const {
     register,
@@ -13,19 +16,21 @@ function Login_signup() {
   } = useForm();
 
   async function loginOrSignup({ email }) {
-    // const isExist = await fetchSignInMethodsForEmail(auth, email);
+    const isExist = await fetchSignInMethodsForEmail(auth, email);
     if (isExist.length) {
-      // router.push("login");
+      router.push("/identification/login/" + email);
     } else {
-      // router.push("signup/"+email);
+      router.push("/identification/signup/" + email);
     }
   }
   return (
     <Card className="flex flex-col items-center mt-10" shadow={false}>
       <div className="flex flex-col items-center w-[30rem]">
-        <img
-          className="object-cover object-center w-20 mb-3"
-          src="https://my.jumia.com.eg/pictures/myjumia/myjumia-top-logo.png"
+        <Image
+          width="70"
+          height="70"
+          className="object-cover object-center mb-3"
+          src={topLogo}
           alt="logo-image"
         />
         <Typography variant="h3" color="black">
@@ -45,9 +50,10 @@ function Login_signup() {
             {...register("email", {
               required: true,
               pattern: {
-                value: /^[a-zA-Z0-9]+(?:\.[a-zA-Z0-9]+)*@[a-z]+(?:\.com)/g,
+                value:
+                  /^[a-zA-Z0-9]+(?:\.[a-zA-Z0-9]+)*@(gmail|yahoo|outlook)+(.com)$/,
                 message:
-                  "This email is not valid. inser valid email to continue.",
+                  "This email is not valid. inser valid email to continue. Email must be (gmail - yahoo - outlook).",
               },
             })}
           />
@@ -56,15 +62,15 @@ function Login_signup() {
 
         <Button
           type="submit"
-          className="mt-6"
+          className="mt-6 text-white"
           size="lg"
-          color="orange"
+          color="amber"
           fullWidth
         >
           Continue
         </Button>
         <Typography color="black" className="text-xs my-2 text-center">
-          By continuing you agree to Jumia's
+          By continuing you agree to Jumia&apos;s
           <a href="#" className="block underline mt-1 text-orange-500">
             Terms and Conditions
           </a>
@@ -88,9 +94,11 @@ function Login_signup() {
           customer service team.
         </Typography>
         <div className="flex flex-col  items-center mt-5">
-          <img
+          <Image
+            width="50"
+            height="50"
             className="object-cover object-center"
-            src="https://my.jumia.com.eg/pictures/myjumia/myjumia-bottom-logo.png"
+            src={bottomLogo}
             alt="another-logo"
           />
         </div>
@@ -100,6 +108,5 @@ function Login_signup() {
 }
 
 export default Login_signup;
-
-export const Loginsignup = (page) => page;
-Login_signup.getLayout = Loginsignup;
+export const loginSignup = (page) => page;
+Login_signup.getLayout = loginSignup;
