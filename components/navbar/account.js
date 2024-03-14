@@ -3,24 +3,41 @@ import LocalAtmIcon from "@mui/icons-material/LocalAtm";
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 import ShoppingBagOutlinedIcon from "@mui/icons-material/ShoppingBagOutlined";
 import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
+
 export default function Account() {
   const [isOpen, setIsOpen] = useState(false);
   const router = useRouter();
+  const dropdownRef = useRef(null);
+
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
   };
+
+  const handleClickOutside = (event) => {
+    if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+      setIsOpen(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   return (
-    <div className="relative">
-      <dropDown
+    <div className="relative" ref={dropdownRef}>
+      <div
         className="cursor-pointer flex items-center space-x-2"
         onClick={toggleDropdown}
       >
         <PersonOutlineIcon className="h-12 font-bold" />
-        <span className="font-bold capitalize">Account</span>
-      </dropDown>
+        <span >Account</span>
+      </div>
       {isOpen && (
         <div
           className="absolute top-full w-48 left-0 mt-2 bg-white border border-gray-300 shadow-md rounded-md"
@@ -31,7 +48,7 @@ export default function Account() {
               type="submit"
               className="btn btn-warning m-2 px-9 text-white hidden lg:inline"
               onClick={() => {
-                router.push("/identification");
+                router.push("/login");
               }}
             >
               SIGNUP

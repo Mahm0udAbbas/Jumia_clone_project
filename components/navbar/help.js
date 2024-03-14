@@ -1,24 +1,40 @@
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
+
 export default function Help() {
   const [isOpen, setIsOpen] = useState(false);
+  const dropdownRef = useRef(null);
 
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
   };
+
+  const handleClickOutside = (event) => {
+    if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+      setIsOpen(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   return (
-    <div className="relative">
-      <dropDown
+    <div className="relative" ref={dropdownRef}>
+      <div
         className="cursor-pointer flex items-center space-x-2"
         onClick={toggleDropdown}
       >
         <HelpOutlineOutlinedIcon className="h-12 font-bold" />
-        <span className="font-bold capitalize">help</span>
-      </dropDown>
+        <span >help</span>
+      </div>
       {isOpen && (
         <div
-          className="absolute top-full w-52 left-0 mt-2 bg-white border border-gray-300 shadow-md rounded-md "
+          className="absolute top-full w-52 left-0 mt-2 bg-white border border-gray-300 shadow-md rounded-md"
           style={{ zIndex: 100 }}
         >
           <Link href="/help">
@@ -68,6 +84,3 @@ export default function Help() {
     </div>
   );
 }
-Help.getLayout = function getLayout(page) {
-  return <Layout>{page}</Layout>;
-};
