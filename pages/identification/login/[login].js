@@ -26,6 +26,7 @@ function Login() {
           setErrors({ ...errors, password: "Password Wrong" });
         }
       });
+    router.push("/");
   }
 
   return (
