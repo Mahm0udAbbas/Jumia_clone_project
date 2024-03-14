@@ -1,4 +1,4 @@
-import { Card, Input, Button, Typography } from "@material-tailwind/react";
+import { Card, Input, Button, Typography, Alert } from "@material-tailwind/react";
 import { createUserWithEmailAndPassword, getAuth } from "firebase/auth";
 import { useRouter } from "next/router";
 import Image from "next/image";
@@ -6,6 +6,23 @@ import { useForm } from "react-hook-form";
 import topLogo from "@/public/1.png";
 import bottomLogo from "@/public/bottom-logo.png";
 import { auth } from "@/firebase";
+import { useState } from 'react';
+
+
+
+
+function CheckIcon() {
+  return <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+    <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+  </svg>
+}
+function WrongIcone() {
+  return <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+    <path strokeLinecap="round" strokeLinejoin="round" d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+  </svg>
+
+}
+
 
 function Signup() {
   const {
@@ -15,21 +32,28 @@ function Signup() {
     watch,
   } = useForm();
   const router = useRouter();
-  const { signup: email } = router.query;
+  const { signup: emailRoute } = router.query;
+  const [signupAlert, setSignupAlert] = useState(false);
+  const [signupError, setSignupError] = useState(false);
   const match = watch("password");
   const regx = new RegExp(match);
-  function createNewUser({ password }) {
+  function createNewUser({email, password }) {
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
-        console.log(userCredential);
-        router.push("/");
+        setSignupAlert(true);
+        setTimeout(() => { router.push("/"); }, 3000);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        setSignupError(true);
+        setTimeout(() => { setSignupError(false); }, 5000);
+      });
   }
 
   return (
     <Card className="flex flex-col items-center mt-10" shadow={false}>
       <div className="flex flex-col items-center w-[30rem]">
+        <Alert icon={<CheckIcon />} className={signupAlert ? "rounded-none border-l-4 border-green-500 bg-green-500/10 font-medium text-green-500 my-8" : "hidden"}>SginUp Success.</Alert>
+        <Alert icon={<WrongIcone />} className={signupError ? "rounded-none border-l-4 border-red-500 bg-red-500/10 font-medium text-red-500 my-8" : "hidden"}>Error in Signup.</Alert>
         <Image
           width="70"
           height="70"
@@ -49,8 +73,9 @@ function Signup() {
         <div className="w-[28rem] mt-20">
           <Input
             size="lg"
-            defaultValue={email}
+            defaultValue={emailRoute}
             disabled
+            {...register("email")}
             color="orange"
             label="Enter your email"
           />
