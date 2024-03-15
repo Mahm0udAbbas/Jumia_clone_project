@@ -6,11 +6,16 @@ import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 function CheckoutLayout({ children }) {
   return (
     <>
-      <MyNavbar />
-      <section className="container mx-auto  grid grid-cols-12 gap-6 l">
-        <section className=" col-span-12 md:col-span-8 lg:col-span-9  p-0 h-screen">
-          <div>
-            {children}
+      <section className="min-h-screen">
+        <MyNavbar />
+        <section className="container mx-auto  grid grid-cols-12 gap-6 ">
+          <section className=" col-span-12 md:col-span-8 lg:col-span-9  p-0 ">
+            <div>{children}</div>
+          </section>
+          <div className="col-span-12 md:col-span-4  lg:col-span-3">
+            <ProccedToBuy />
+          </div>
+          <div className="col-span-12 md:col-span-8 lg:col-span-9">
             <Link
               href={"/"}
               className="text-blue-900 mt-2 flex justify-start items-center"
@@ -22,9 +27,6 @@ function CheckoutLayout({ children }) {
             </Link>
           </div>
         </section>
-        <div className="col-span-12 md:col-span-4  lg:col-span-3">
-          <ProccedToBuy />
-        </div>
       </section>
     </>
   );

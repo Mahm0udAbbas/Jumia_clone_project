@@ -1,3 +1,5 @@
+"use client"
+
 import React from 'react'
 import { MdEmail, MdStars } from "react-icons/md";
 import { FaFacebookF, FaYoutube, FaTwitter, FaCcMastercard, FaMaxcdn } from "react-icons/fa";
@@ -9,7 +11,6 @@ const Footer = () => {
   return (
 
     <div class="bg-gray-800" style={{ backgroundColor: '#535357' }}>
-
       <footer className='footer-top-strip px-5' style={{ backgroundColor: '#313131' }}>
         <div className="container mx-auto">
           <div className="grid grid-cols-12 gap-4">

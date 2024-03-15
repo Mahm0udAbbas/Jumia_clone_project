@@ -1,3 +1,4 @@
+"use client"
 import React from 'react';
 import { FaStar } from "react-icons/fa";
 import { ProgressBar } from 'react-bootstrap';
@@ -8,13 +9,13 @@ const FeedbackList = () => {
   const now = 60;
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '20px' }}>
-    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
-      <h3 className='font-bold text-2xl text-gray-700 hover:text-gray-900'>Verified Customer Feedback</h3>
+    <div style={{ display: 'flex', flexDirection: 'column',  padding: '20px' }}>
+    <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
+    <h3 className='text-gray-700 hover:text-gray-900' style={{fontSize: '1.25rem', fontWeight: '500'}}>Verified Customer Feedback</h3>
       <div className='my-3 border-b border-gray-300'></div>
       <button style={{ backgroundColor: 'transparent', border: 'none', color: 'orange', display: 'flex', alignItems: 'center' }}>SEE ALL <IoIosArrowForward style={{ color: 'orange' }} /></button>
     </div>
-    <div className="border-t border-gray-300 my-2"></div>
+    <div className='my-4 border-b border-gray-100 w-full'></div>
     <div style={{ display: 'flex', width: '100%' }}>
       <div style={{ flex: '0 0 30%' }}>
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '10px' }}>

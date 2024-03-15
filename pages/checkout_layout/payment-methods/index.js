@@ -31,8 +31,8 @@ function ChoosePaymant() {
             info={"elmaady | Cairo - Maadi-Ashanat El Maadi | +02 1281935436"}
           />
         </Card>
-        <Card>
-          <div className="flex justify-between items-center">
+        <Card className="mt-3">
+          <div className="flex justify-between items-center ">
             <ListHeader value="Delivery Options" color="text-green-900" />
             <Link href="/checkout_layout/shipping-options">
               <span className="ms-2 text-blue-900 hover:underline">Change</span>
@@ -52,7 +52,7 @@ function ChoosePaymant() {
             <div>
               <h2 className="py-3 font-bold">Payment on delivery</h2>
               <div className="flex justify-between">
-                <div className="flex items-start h-5">
+                <div className="flex items-start ">
                   <div>
                     <input
                       id="helper-radio"
@@ -62,7 +62,7 @@ function ChoosePaymant() {
                       className="w-4 h-4 text-gray-200 bg-gray-100 border-gray-300 focus:text-orange-500  focus:ring-orange-500 dark:focus:ring-orange-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                     />
                   </div>
-                  <div className="ms-2 text-sm">
+                  <div className="ms-2 text-sm ">
                     <label
                       htmlFor="helper-radio"
                       className="font-medium text-gray-900 dark:text-gray-300"
@@ -84,8 +84,8 @@ function ChoosePaymant() {
               </div>
             </div>
             <Card>
-              <div className=" flex justify-between "></div>
-              <div className="flex justify-start items-center border rounded p-3">
+              {/* <div className=" flex justify-between "> </div> */}
+              <div className="flex justify-start items-center border rounded p-2">
                 <div>
                   <p className="text-sm">
                     - When you choose Cash on delivery, you can pay for your
@@ -131,7 +131,7 @@ function ChoosePaymant() {
                         <SaveButton
                           handleSubmit={handleSubmit}
                           label="Accept"
-                          color="warning"
+                          color="amber"
                         />
                       </Modal.Footer>
                     </Modal>
@@ -173,10 +173,10 @@ function ChoosePaymant() {
                 </div>
               </div>
             </div>
-            <div className="flex jusitfy-start">
+            <div className="flex jusitfy-start mt-2">
               <SaveButton
-                label={"confirm Payment Details"}
-                color={"warning"}
+                label="confirm Payment Details"
+                color="amber"
                 handleSubmit={goToSammry}
               />
             </div>
