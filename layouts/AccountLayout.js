@@ -9,7 +9,7 @@ import AddBusinessOutlinedIcon from "@mui/icons-material/AddBusinessOutlined";
 import RestoreOutlinedIcon from "@mui/icons-material/RestoreOutlined";
 import RateReviewOutlinedIcon from "@mui/icons-material/RateReviewOutlined";
 import Navbar from "@/components/navbar";
-import Footer from "@/components/footer";
+import Footer from "@/components/Footer";
 const AccountLayout = ({ children }) => {
   return (
     <>

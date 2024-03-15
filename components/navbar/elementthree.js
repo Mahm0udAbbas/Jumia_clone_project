@@ -2,7 +2,6 @@ import * as React from "react";
 import Button from "@mui/material/Button";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
-
 import LocalGroceryStoreIcon from "@mui/icons-material/LocalGroceryStore";
 import MedicationLiquidIcon from "@mui/icons-material/MedicationLiquid";
 import HomeWorkIcon from "@mui/icons-material/HomeWork";
@@ -15,14 +14,16 @@ import ChildFriendlyIcon from "@mui/icons-material/ChildFriendly";
 import SportsEsportsIcon from "@mui/icons-material/SportsEsports";
 import DownhillSkiingIcon from "@mui/icons-material/DownhillSkiing";
 import CategoryIcon from "@mui/icons-material/Category";
-
 import MenuIcon from "@mui/icons-material/Menu";
 import SidebarMenuItem from "../header/SidebarMenuItem";
 
 export default function Elementthree() {
   return (
     <>
-      <div className="dropdown dropdown-bottom cursor-pointer md:hidden" style={{zIndex:100}}>
+      <div
+        className="dropdown dropdown-bottom cursor-pointer md:hidden"
+        style={{ zIndex: 100 }}
+      >
         <label tabIndex={0} className=" m-1">
           <MenuIcon className="my-auto ml-1 mt-2" />
         </label>

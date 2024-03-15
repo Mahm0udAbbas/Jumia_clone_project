@@ -12,7 +12,6 @@ import { CiDeliveryTruck } from "react-icons/ci";
 import { GoPackageDependencies } from "react-icons/go";
 import { IoIosArrowForward } from "react-icons/io";
 import FeedbackList from "../../components/ProductDetails/CustomerFeedback/index";
-import Footer from "@/components/ProductDetails/Footer";
 
 const data5 = [
   {
@@ -314,7 +313,7 @@ const ProductDetails = () => {
                         className="my-3 form-select"
                         aria-label="Default select example"
                       >
-                        <option selected>Al Minya</option>
+                        <option>Al Minya</option>
                         <option value="1">Cairo</option>
                         <option value="2">Giza</option>
                         <option value="3">Alexandria</option>
@@ -323,7 +322,7 @@ const ProductDetails = () => {
                         className="my-2 form-select"
                         aria-label="Default select example"
                       >
-                        <option selected>Minya</option>
+                        <option>Minya</option>
                         <option value="1">Magaha</option>
                         <option value="2">Malawi</option>
                         <option value="3">Samalot</option>
@@ -572,7 +571,7 @@ const ProductDetails = () => {
                           className="my-3 form-select"
                           aria-label="Default select example"
                         >
-                          <option selected>Al Minya</option>
+                          <option>Al Minya</option>
                           <option value="1">Cairo</option>
                           <option value="2">Giza</option>
                           <option value="3">Alexandria</option>
@@ -581,7 +580,7 @@ const ProductDetails = () => {
                           className="my-2 form-select"
                           aria-label="Default select example"
                         >
-                          <option selected>Minya</option>
+                          <option>Minya</option>
                           <option value="1">Magaha</option>
                           <option value="2">Malawi</option>
                           <option value="3">Samalot</option>
@@ -960,7 +959,7 @@ const ProductDetails = () => {
             </div>
           </div>
         </div>
-        <Footer />
+        {/* <Footer /> */}
       </>
     );
   else return <h1>you have a problem with ssr</h1>;

@@ -1,99 +1,400 @@
 import React from "react";
-
-export default function Footer() {
+import { MdEmail, MdStars } from "react-icons/md";
+import {
+  FaFacebookF,
+  FaYoutube,
+  FaTwitter,
+  FaCcMastercard,
+  FaMaxcdn,
+} from "react-icons/fa";
+import { TiSocialInstagram } from "react-icons/ti";
+import { GiReceiveMoney } from "react-icons/gi";
+import { RiVisaLine } from "react-icons/ri";
+import {
+  TbBrandAirbnb,
+  TbBrandAngular,
+  TbBrandAmongUs,
+  TbBrandAws,
+} from "react-icons/tb";
+import SaveButton from "../order/Save_button/SaveButton";
+import { Button } from "@material-tailwind/react";
+const Footer = () => {
   return (
-    <div>
+    <div className="bg-gray-800" style={{ backgroundColor: "#535357" }}>
       <footer
-        className="footer p-10 bg-base-200 text-base-content"
-        data-theme="dark"
+        className="footer-top-strip px-5"
+        style={{ backgroundColor: "#313131" }}
       >
-        <div>
-          <span className="footer-title">Services</span>
-          <a className="link link-hover">Branding</a>
-          <a className="link link-hover">Design</a>
-          <a className="link link-hover">Marketing</a>
-          <a className="link link-hover">Advertisement</a>
-        </div>
-        <div>
-          <span className="footer-title">Company</span>
-          <a className="link link-hover">About us</a>
-          <a className="link link-hover">Contact</a>
-          <a className="link link-hover">Jobs</a>
-          <a className="link link-hover">Press kit</a>
-        </div>
-        <div>
-          <span className="footer-title">Legal</span>
-          <a className="link link-hover">Terms of use</a>
-          <a className="link link-hover">Privacy policy</a>
-          <a className="link link-hover">Cookie policy</a>
-        </div>
-        <div>
-          <span className="footer-title">Newsletter</span>
-          <div className="form-control w-80">
-            <label className="label">
-              <span className="label-text">Enter your email address</span>
-            </label>
-            <div className="relative">
-              <input
-                type="text"
-                placeholder="username@site.com"
-                className="input input-bordered w-full pr-16"
+        <div className="container mx-auto">
+          <div className="grid grid-cols-12 gap-4">
+            <div className="col-span-12 md:col-span-6 lg:col-span-2 px-5 py-4">
+              <img
+                className="w-96 md:w-36 md:h-8"
+                src="https://techinporto.com/archive/2017/img/Jumia_Group_Logo_white.png"
+                alt=""
               />
-              <button className="btn btn-warning absolute top-0 right-0 rounded-l-none">
-                Subscribe
-              </button>
+            </div>
+            <div className="col-span-12 md:col-span-6 lg:col-span-6 px-5 py-4">
+              <h6 className="text-white font-bold">New to Jumia?</h6>
+              <p className="text-white">
+                Subscribe to our newsletter to get updates on our latest offers!
+              </p>
+              <div className="flex flex-col lg:flex-row items-start lg:items-center justify-center mt-2">
+                <div className="relative mb-2 md:mb-0">
+                  <span className="absolute inset-y-0 left-0 flex items-center pl-2">
+                    <MdEmail className="text-gray-400 h-6 w-6" />
+                  </span>
+                  <input
+                    type="text"
+                    className="form-input py-3 pl-10 border-2 border-gray-200 rounded-sm"
+                    placeholder="Enter E-mail Address"
+                    aria-label="Enter E-mail Address"
+                  />
+                </div>
+                <div className="flex mt-3 lg:mt-0 items-center  ">
+                  <Button
+                    variant="outlined"
+                    color="white"
+                    className="lg:mx-3 hover:text-amber-500 hover:border-amber-500"
+                  >
+                    Male
+                  </Button>
+                  <Button
+                    variant="outlined"
+                    color="white"
+                    className=" hover:text-amber-500 hover:border-amber-500"
+                  >
+                    Female
+                  </Button>
+                </div>
+              </div>
+            </div>
+            <div className="col-span-12 md:col-span-12 lg:col-span-4 px-5 py-4">
+              <div className="flex items-center">
+                <div className="star-box flex items-center justify-center">
+                  <MdStars className="m-1 text-white w-8 h-8" />
+                </div>
+                <div className="ml-2">
+                  <h6 className="text-white font-bold">New to Jumia?</h6>
+                  <p className="text-white">Get access to exclusive offers!</p>
+                </div>
+              </div>
+              <div className="mt-4 flex justify-center md:justify-start space-x-4">
+                <img
+                  className="w-30 h-8"
+                  src="https://www.pikpng.com/pngl/b/144-1445686_app-store-available-on-apple-google-store-logo.png"
+                  alt=""
+                />
+                <img
+                  className="w-30 h-8"
+                  src="https://play.google.com/intl/en_us/badges/images/books/en-play-badge-border.png?hl=es-419"
+                  alt=""
+                />
+              </div>
             </div>
           </div>
         </div>
       </footer>
-      <footer className="footer footer-center p-10 bg-base-200 text-base-content rounded">
-        <div className="grid grid-flow-col gap-4">
-          <a className="link link-hover">About us</a>
-          <a className="link link-hover">Contact</a>
-          <a className="link link-hover">Jobs</a>
-          <a className="link link-hover">Press kit</a>
-        </div>
-        <div>
-          <div className="grid grid-flow-col gap-4">
-            <a>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                className="fill-current"
-              >
-                <path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"></path>
-              </svg>
-            </a>
-            <a>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                className="fill-current"
-              >
-                <path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"></path>
-              </svg>
-            </a>
-            <a>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                className="fill-current"
-              >
-                <path d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z"></path>
-              </svg>
-            </a>
+
+      <footer
+        className="container mx-auto px-5 py-4"
+        style={{ backgroundColor: "#535357" }}
+      >
+        <div className="flex flex-wrap gap-4">
+          <div className="w-full lg:w-1/6 md:w-1/2 pt-2">
+            <h2 className="text-white font-heading text-base mb-2">
+              NEED HELP?
+            </h2>
+            <ul className="list-unstyled text-white text-xs">
+              <li className="mb-1">
+                <a href="#" className="hover:underline">
+                  Chat with us
+                </a>
+              </li>
+              <li className="mb-1">
+                <a href="#" className="hover:underline">
+                  Help Center
+                </a>
+              </li>
+              <li className="mb-1">
+                <a href="/contact" className="hover:underline">
+                  Contact Us
+                </a>
+              </li>
+            </ul>
+          </div>
+          <div className="w-full lg:w-1/6 md:w-1/2">
+            <h2 className="text-white font-heading text-base mb-2">
+              USEFUL LINKS
+            </h2>
+            <ul className="list-unstyled text-white text-xs">
+              <li className="mb-1">
+                <a href="#" className="hover:underline">
+                  Service Center
+                </a>
+              </li>
+              <li className="mb-1">
+                <a href="#" className="hover:underline">
+                  How to shop on Jumia?
+                </a>
+              </li>
+              <li className="mb-1">
+                <a href="#" className="hover:underline">
+                  Delivery options and timelines
+                </a>
+              </li>
+              <li className="mb-1">
+                <a href="#" className="hover:underline">
+                  How to return a product on Jumia?
+                </a>
+              </li>
+              <li className="mb-1">
+                <a href="#" className="hover:underline">
+                  Corporate and bulk purchases
+                </a>
+              </li>
+              <li className="mb-1">
+                <a href="#" className="hover:underline">
+                  Report a Product
+                </a>
+              </li>
+              <li className="mb-1">
+                <a href="#" className="hover:underline">
+                  Ship your package anywhere in Egypt
+                </a>
+              </li>
+              <li className="mb-1">
+                <a href="#" className="hover:underline">
+                  Dispute Resolution Policy
+                </a>
+              </li>
+              <li className="mb-1">
+                <a href="#" className="hover:underline">
+                  Returns & Refund Timeline
+                </a>
+              </li>
+              <li className="mb-1">
+                <a href="#" className="hover:underline">
+                  Return Policy
+                </a>
+              </li>
+            </ul>
+          </div>
+          <div className="w-full lg:w-1/6 md:w-1/2">
+            <h2 className="text-white font-heading text-base mb-2">
+              ABOUT JUMIA
+            </h2>
+            <ul className="list-unstyled text-white text-xs">
+              <li className="mb-1">
+                <a href="/about" className="hover:underline">
+                  About us
+                </a>
+              </li>
+              <li className="mb-1">
+                <a href="#" className="hover:underline">
+                  Jumia careers
+                </a>
+              </li>
+              <li className="mb-1">
+                <a href="#" className="hover:underline">
+                  Jumia Express
+                </a>
+              </li>
+              <li className="mb-1">
+                <a href="#" className="hover:underline">
+                  Terms and Conditions
+                </a>
+              </li>
+              <li className="mb-1">
+                <a href="#" className="hover:underline">
+                  Privacy Notice
+                </a>
+              </li>
+              <li className="mb-1">
+                <a href="#" className="hover:underline">
+                  Jumia Store Credit Terms & Conditions
+                </a>
+              </li>
+              <li className="mb-1">
+                <a href="#" className="hover:underline">
+                  Jumia Payment Information Guidelines
+                </a>
+              </li>
+              <li className="mb-1">
+                <a href="#" className="hover:underline">
+                  Cookie Notice
+                </a>
+              </li>
+              <li className="mb-1">
+                <a href="#" className="hover:underline">
+                  Jumia Global
+                </a>
+              </li>
+              <li className="mb-1">
+                <a href="#" className="hover:underline">
+                  Official Stores
+                </a>
+              </li>
+              <li className="mb-1">
+                <a href="#" className="hover:underline">
+                  Flash Sales
+                </a>
+              </li>
+            </ul>
+          </div>
+          <div
+            className="w-full lg:w-1/6 md:w-1/2"
+            //
+          >
+            <h2 className="text-white font-heading text-base mb-2">
+              NEED HELP?
+            </h2>
+            <ul className="list-unstyled text-white text-xs">
+              <li className="mb-1">
+                <a href="/about" className="hover:underline">
+                  Sell on Jumia
+                </a>
+              </li>
+              <li className="mb-1">
+                <a href="#" className="hover:underline">
+                  Vendor hub
+                </a>
+              </li>
+              <li className="mb-1">
+                <a href="#" className="hover:underline">
+                  Become a Sales Consultant
+                </a>
+              </li>
+              <li className="mb-1">
+                <a href="#" className="hover:underline">
+                  Become a Logistics Service Partner
+                </a>
+              </li>
+              <li className="mb-1">
+                <a href="#" className="hover:underline">
+                  Join the Jumia DA Academy
+                </a>
+              </li>
+              <li className="mb-1">
+                <a href="#" className="hover:underline">
+                  Join the Jumia KOL Program
+                </a>
+              </li>
+            </ul>
+          </div>
+          <div className="w-full lg:w-1/6 md:w-1/2">
+            <h2 className="text-white font-heading text-base mb-2">
+              NEED HELP?
+            </h2>
+            <ul className="list-unstyled text-white text-xs">
+              <li className="mb-1">
+                <a href="/about" className="hover:underline">
+                  Sell on Jumia
+                </a>
+              </li>
+              <li className="mb-1">
+                <a href="#" className="hover:underline">
+                  Vendor hub
+                </a>
+              </li>
+              <li className="mb-1">
+                <a href="#" className="hover:underline">
+                  Become a Sales Consultant
+                </a>
+              </li>
+              <li className="mb-1">
+                <a href="#" className="hover:underline">
+                  Become a Logistics Service Partner
+                </a>
+              </li>
+              <li className="mb-1">
+                <a href="#" className="hover:underline">
+                  Join the Jumia DA Academy
+                </a>
+              </li>
+              <li className="mb-1">
+                <a href="#" className="hover:underline">
+                  Join the Jumia KOL Program
+                </a>
+              </li>
+            </ul>
           </div>
         </div>
-        <div>
-          <p>Copyright © 2023 - All right reserved by ACME Industries Ltd</p>
+        <div className="grid grid-cols-1 md:grid-cols-2 py-2 border-b border-gray-300">
+          <div className="p-5 md:pb-4">
+            <h4 className="text-white mb-1 md:ml-5">JOIN US ON</h4>
+            <div className="flex flex-row md:pl-5 py-2 mb-2">
+              <a href="#" className="text-white text-2xl mr-2">
+                <i className="text-xl social-icons text-white">
+                  <FaFacebookF />
+                </i>
+              </a>
+              <a href="#" className="text-white text-2xl mx-2">
+                <i className="fab fa-youtube"></i>
+              </a>
+              <a href="#" className="text-white text-2xl mx-2">
+                <i className="text-xl social-icons text-white">
+                  <TiSocialInstagram />
+                </i>
+              </a>
+              <a href="#" className="text-white text-2xl mx-2">
+                <i className="fab fa-twitter"></i>
+              </a>
+            </div>
+          </div>
+          <div className="p-5 md:pb-4">
+            <h4 className="text-white mb-1 md:ml-5">
+              PAYMENT METHODS & DELIVERY PARTNERS
+            </h4>
+            <div className="flex flex-row md:pl-5 py-2 mb-2">
+              <a href="#" className="text-white text-2xl mr-3">
+                <i className="text-xl social-icons text-white">
+                  <GiReceiveMoney />
+                </i>
+              </a>
+              <a href="#" className="text-white text-2xl mx-3">
+                <i className="fab fa-cc-mastercard"></i>
+              </a>
+              <a href="#" className="text-white text-2xl mx-3">
+                <i className="text-xl social-icons text-white">
+                  <RiVisaLine />
+                </i>
+              </a>
+              <a href="#" className="text-white text-2xl mx-3">
+                <i className="text-xl social-icons text-white">
+                  <TbBrandAirbnb />
+                </i>
+              </a>
+              <a href="#" className="text-white text-2xl mx-3">
+                <i className="fab fa-maxcdn"></i>
+              </a>
+              <a href="#" className="text-white text-2xl mx-3">
+                <i className="text-xl social-icons text-white">
+                  <TbBrandAmongUs />
+                </i>
+              </a>
+              <a href="#" className="text-white text-2xl mx-3">
+                <i className="text-xl social-icons text-white">
+                  <TbBrandAngular />
+                </i>
+              </a>
+              <a href="#" className="text-white text-2xl mx-3">
+                <i className="text-xl social-icons text-white">
+                  <TbBrandAws />
+                </i>
+              </a>
+            </div>
+          </div>
         </div>
+      </footer>
+      <footer
+        className="bg-gray-700 text-white text-center py-4"
+        style={{ backgroundColor: "#535357" }}
+      >
+        <p className="mb-0">&copy; {new Date().getFullYear()} Powered Jumia</p>
       </footer>
     </div>
   );
-}
+};
+
+export default Footer;
