@@ -1,6 +1,6 @@
 import "@/styles/globals.css";
 import Navbar from "@/components/navbar";
-import Footer from "@/components/Footer";
+import Footer from "@/components/footer";
 // import Footer from "@/components/footer";
 
 const MyLayout = ({ Component, pageProps }) => {
