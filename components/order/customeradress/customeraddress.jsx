@@ -1,11 +1,11 @@
-import { Card } from "flowbite-react";
-import ListHeader from "../ListHeader/ListHeader";
-import Link from "next/link";
+import { Card } from "@material-tailwind/react";
+
+// import { Card } from "flowbite-react";
 function CustomerAdress({ title, info }) {
   return (
     <>
-      <section className="bg-[#e5e5e580] mb-3">
-        <Card>
+      <section className=" mb-3">
+        <Card className="p-6">
           <div>
             <span className="mb-3">{title}</span>
             <div>{info}</div>

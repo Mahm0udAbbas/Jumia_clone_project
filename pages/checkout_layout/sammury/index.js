@@ -1,14 +1,14 @@
 import { useEffect, useState } from "react";
 import { getDocs, collection } from "firebase/firestore";
 import { firestore } from "../../../firebase";
-import { Card } from "flowbite-react";
+// import { Card } from "flowbite-react";
 import Image from "next/image";
 import Link from "next/link";
-
 import MySpinner from "@/components/order/Spiner/Spinner";
 import ListHeader from "@/components/order/ListHeader/ListHeader";
 import CustomerAdress from "@/components/order/customeradress/customeraddress";
 import { CheckPageLayout } from "..";
+import { Card } from "@material-tailwind/react";
 function Summery() {
   const [addressdata, setAddressData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -41,7 +41,7 @@ function Summery() {
     return (
       <>
         <section className="bg-[#e5e5e580]">
-          <Card>
+          <Card className="p-6">
             <div className="flex justify-between items-center">
               <ListHeader value="customer Adress" color="text-green-900" />
               <Link href="/checkout_layout/address">
@@ -55,7 +55,7 @@ function Summery() {
               info={`${addressdata[0].shippingAddress.region} | ${addressdata[0].shippingAddress.city}  | ${addressdata[0].shippingAddress.address} | ${addressdata[0].shippingAddress.additionalInfo}`}
             />
           </Card>
-          <Card className="mt-3">
+          <Card className="mt-3 p-6">
             <div className="flex justify-between items-center">
               <ListHeader value="delivery details" color="text-green-900" />
               <Link href="/checkout_layout/shipping-options">
@@ -76,7 +76,7 @@ function Summery() {
                 Fulfilled by Dream2000 EG Marketplace
               </span>
             </div>
-            <Card>
+            <Card className="p-6">
               <div>
                 <p className="text-sm">Door Delivery</p>
                 <p className="text-xs">
@@ -100,7 +100,7 @@ function Summery() {
           </Card>
 
           <div className="text-grey-100 pt-3">
-            <Card>
+            <Card className="p-6">
               <div className="flex justify-between items-center">
                 <ListHeader value="Payment method" color="text-green-900" />
                 <Link href="/checkout_layout/payment-methods">

@@ -1,22 +1,10 @@
 import React from "react";
-import { MdEmail, MdStars } from "react-icons/md";
-import {
-  FaFacebookF,
-  FaYoutube,
-  FaTwitter,
-  FaCcMastercard,
-  FaMaxcdn,
-} from "react-icons/fa";
-import { TiSocialInstagram } from "react-icons/ti";
-import { GiReceiveMoney } from "react-icons/gi";
-import { RiVisaLine } from "react-icons/ri";
-import {
-  TbBrandAirbnb,
-  TbBrandAngular,
-  TbBrandAmongUs,
-  TbBrandAws,
-} from "react-icons/tb";
-import SaveButton from "../order/Save_button/SaveButton";
+import StarsOutlinedIcon from "@mui/icons-material/StarsOutlined";
+import MarkunreadOutlinedIcon from "@mui/icons-material/MarkunreadOutlined";
+import FacebookOutlinedIcon from "@mui/icons-material/FacebookOutlined";
+import CameraAltIcon from "@mui/icons-material/CameraAlt";
+import VolunteerActivismIcon from "@mui/icons-material/VolunteerActivism";
+import CreditCardIcon from "@mui/icons-material/CreditCard";
 import { Button } from "@material-tailwind/react";
 const Footer = () => {
   return (
@@ -42,7 +30,7 @@ const Footer = () => {
               <div className="flex flex-col lg:flex-row items-start lg:items-center justify-center mt-2">
                 <div className="relative mb-2 md:mb-0">
                   <span className="absolute inset-y-0 left-0 flex items-center pl-2">
-                    <MdEmail className="text-gray-400 h-6 w-6" />
+                    <MarkunreadOutlinedIcon className="text-gray-400 h-6 w-6" />
                   </span>
                   <input
                     type="text"
@@ -72,7 +60,7 @@ const Footer = () => {
             <div className="col-span-12 md:col-span-12 lg:col-span-4 px-5 py-4">
               <div className="flex items-center">
                 <div className="star-box flex items-center justify-center">
-                  <MdStars className="m-1 text-white w-8 h-8" />
+                  <StarsOutlinedIcon className="m-1 text-white w-8 h-8" />
                 </div>
                 <div className="ml-2">
                   <h6 className="text-white font-bold">New to Jumia?</h6>
@@ -326,7 +314,7 @@ const Footer = () => {
             <div className="flex flex-row md:pl-5 py-2 mb-2">
               <a href="#" className="text-white text-2xl mr-2">
                 <i className="text-xl social-icons text-white">
-                  <FaFacebookF />
+                  <FacebookOutlinedIcon />
                 </i>
               </a>
               <a href="#" className="text-white text-2xl mx-2">
@@ -334,7 +322,7 @@ const Footer = () => {
               </a>
               <a href="#" className="text-white text-2xl mx-2">
                 <i className="text-xl social-icons text-white">
-                  <TiSocialInstagram />
+                  <CameraAltIcon />
                 </i>
               </a>
               <a href="#" className="text-white text-2xl mx-2">
@@ -349,7 +337,7 @@ const Footer = () => {
             <div className="flex flex-row md:pl-5 py-2 mb-2">
               <a href="#" className="text-white text-2xl mr-3">
                 <i className="text-xl social-icons text-white">
-                  <GiReceiveMoney />
+                  <VolunteerActivismIcon />
                 </i>
               </a>
               <a href="#" className="text-white text-2xl mx-3">
@@ -357,31 +345,12 @@ const Footer = () => {
               </a>
               <a href="#" className="text-white text-2xl mx-3">
                 <i className="text-xl social-icons text-white">
-                  <RiVisaLine />
+                  <CreditCardIcon />
                 </i>
               </a>
-              <a href="#" className="text-white text-2xl mx-3">
-                <i className="text-xl social-icons text-white">
-                  <TbBrandAirbnb />
-                </i>
-              </a>
+
               <a href="#" className="text-white text-2xl mx-3">
                 <i className="fab fa-maxcdn"></i>
-              </a>
-              <a href="#" className="text-white text-2xl mx-3">
-                <i className="text-xl social-icons text-white">
-                  <TbBrandAmongUs />
-                </i>
-              </a>
-              <a href="#" className="text-white text-2xl mx-3">
-                <i className="text-xl social-icons text-white">
-                  <TbBrandAngular />
-                </i>
-              </a>
-              <a href="#" className="text-white text-2xl mx-3">
-                <i className="text-xl social-icons text-white">
-                  <TbBrandAws />
-                </i>
               </a>
             </div>
           </div>

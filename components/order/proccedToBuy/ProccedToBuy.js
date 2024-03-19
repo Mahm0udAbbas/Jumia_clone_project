@@ -1,5 +1,6 @@
 "use client";
-import { Card } from "flowbite-react";
+import { Card } from "@material-tailwind/react";
+// import { Card } from "flowbite-react";
 import SaveButton from "../Save_button/SaveButton";
 function ProccedToBuy() {
   function handleSubmit() {
@@ -7,7 +8,7 @@ function ProccedToBuy() {
   }
   return (
     <>
-      <Card>
+      <Card className="p-6">
         <div>
           <h5 className=" border-b-2 py-1 font-semibold text-sm ">
             Order summary
