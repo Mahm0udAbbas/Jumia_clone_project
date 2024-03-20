@@ -1,6 +1,6 @@
 import { Button } from "@material-tailwind/react";
-import { FiCheckCircle } from "react-icons/fi";
-import { LuTrash } from "react-icons/lu";
+import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import { useRouter } from "next/router";
 import { updateDoc, doc, onSnapshot } from "firebase/firestore";
 import { firestore } from "../firebase";
@@ -112,7 +112,10 @@ function Cart() {
                           type="button"
                           className="flex rounded p-2 items-center space-x-2 hover:bg-orange-500/25 "
                         >
-                          <LuTrash size={18} className="text-orange-500" />
+                          <DeleteForeverIcon
+                            size={18}
+                            className="text-orange-500"
+                          />
                           <span
                             className="text-sm font-medium text-orange-500"
                             onClick={() => {
@@ -125,6 +128,7 @@ function Cart() {
                       </div>
                       <div className="min-w-24 flex">
                         <Button
+                          className="text-white"
                           variant="gradient"
                           size="sm"
                           color="amber"
@@ -135,6 +139,7 @@ function Cart() {
                         </Button>
                         <span className="mx-6">{product.quantity}</span>
                         <Button
+                          className="text-white"
                           variant="gradient"
                           size="sm"
                           color="amber"
@@ -163,7 +168,7 @@ function Cart() {
               </div>
             </div>
             <div className="flex justify-between p-3">
-              <FiCheckCircle className="text-3xl me-1" color="green" />
+              <CheckCircleOutlineIcon className="text-3xl me-1" color="green" />
               <p className="p-0 m-0 text-sm">
                 Jumia Express items are eligible for free delivery.
               </p>
@@ -180,7 +185,7 @@ function Cart() {
                 <Button
                   onClick={() => router.push("/checkout_layout/address")}
                   variant="gradient"
-                  className="text-xl"
+                  className="text-lg text-white"
                   color="amber"
                   fullWidth
                 >
