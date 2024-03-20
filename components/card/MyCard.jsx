@@ -9,31 +9,35 @@ import Image from "next/image";
 import logoExpress from "@/public/Logo-express.png";
 
 
-function CatProdCard() {
+function CatProdCard({ data }) {
   return (
-    <div className="grid lg:grid-cols-4 lg:gap-4 md:grid-cols-2 md:gap-2 sm:grid-cols-1 sm:gap-1">
-      <Card className="w-90 group hover:shadow-2xl">
-        <img src="https://ng.jumia.is/cms/0-1-christmas-sale/2022/thumbnails/groceries_220x220.png" alt="profile-picture" />
-        <CardBody className="text-left">
-          <p className="mb-1">Bahi Powder Lavander - 1 Kg</p>
-          <p className="font-medium">EGP 44.00</p>
-          <Typography className="flex">
-            <span className="me-2 line-through text-gray-500 font-normal text-xs">EGP 53.25</span>
-            <span className="bg-amber-700/25 text-center text-xs text-amber-700">-17%</span>
-          </Typography>
-          <Rating />
-          <Image
-            width={120}
-            height={120}
-            src={logoExpress}
-            alt="logo express"
-          />
-        </CardBody>
-        <CardFooter>
-          <Button onClick={() => addToCart()} className="text-white invisible group-hover:visible" color="amber" fullWidth> Add to Card</Button>
-        </CardFooter>
-      </Card>
-    </div>
+    <Card className="w-90 shadow-none group hover:shadow-2xl">
+      <Image
+        width={250}
+        height={250}
+        src={data.imageURL}
+        alt="product picture"
+      />
+      <CardBody className="text-left">
+        <p className="mb-1">{data.name}</p>
+        <p className="font-medium">{data.price}</p>
+        <Typography className="flex">
+          <span className="me-2 line-through text-gray-500 font-normal text-xs">EGP 53.25</span>
+          <span className="bg-amber-700/25 text-center text-xs text-amber-700">-17%</span>
+        </Typography>
+        <Rating />
+        <Image
+          width={120}
+          height={120}
+          src={logoExpress}
+          alt="logo express"
+        />
+      </CardBody>
+      <CardFooter>
+        <Button className="text-white invisible group-hover:visible" color="amber" fullWidth> Add to Card</Button>
+      </CardFooter>
+    </Card>
+
   )
 }
 
