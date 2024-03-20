@@ -1,4 +1,4 @@
-import { Card, Modal } from "flowbite-react";
+import { Modal } from "flowbite-react";
 import Link from "next/link";
 import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
 import LocalPoliceIcon from "@mui/icons-material/LocalPolice";
@@ -8,6 +8,7 @@ import ListHeader from "@/components/order/ListHeader/ListHeader";
 import SaveButton from "@/components/order/Save_button/SaveButton";
 import CustomerAdress from "@/components/order/customeradress/customeraddress";
 import { CheckPageLayout } from "..";
+import { Card } from "@material-tailwind/react";
 function ChoosePaymant() {
   const [openModal, setOpenModal] = useState(false);
   const handleSubmit = () => setOpenModal(false);
@@ -19,7 +20,7 @@ function ChoosePaymant() {
   return (
     <>
       <section className="bg-[#e5e5e580]">
-        <Card>
+        <Card className="p-6">
           <div className="flex justify-between items-center">
             <ListHeader value="customer Adress" color="text-green-900" />
             <Link href="/checkout_layout/address">
@@ -31,7 +32,7 @@ function ChoosePaymant() {
             info={"elmaady | Cairo - Maadi-Ashanat El Maadi | +02 1281935436"}
           />
         </Card>
-        <Card className="mt-3">
+        <Card className="mt-3 p-6">
           <div className="flex justify-between items-center ">
             <ListHeader value="Delivery Options" color="text-green-900" />
             <Link href="/checkout_layout/shipping-options">
@@ -46,7 +47,7 @@ function ChoosePaymant() {
 
         <div className="text-grey-100">
           {" "}
-          <Card className="mt-3">
+          <Card className="mt-3 p-6">
             <ListHeader value={"payment method"} />
             <hr></hr>
             <div>
@@ -83,7 +84,7 @@ function ChoosePaymant() {
                 </div>
               </div>
             </div>
-            <Card>
+            <Card className="p-6 my-5">
               {/* <div className=" flex justify-between "> </div> */}
               <div className="flex justify-start items-center border rounded p-2">
                 <div>
@@ -140,7 +141,7 @@ function ChoosePaymant() {
               </div>
             </Card>
             <hr></hr>
-            <div>
+            <div className="mt-2">
               <div className="flex justify-between">
                 <div className="flex items-start h-5">
                   <div>
@@ -173,7 +174,7 @@ function ChoosePaymant() {
                 </div>
               </div>
             </div>
-            <div className="flex jusitfy-start mt-2">
+            <div className="flex jusitfy-start mt-6">
               <SaveButton
                 label="confirm Payment Details"
                 color="amber"

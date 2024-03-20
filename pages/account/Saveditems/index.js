@@ -2,7 +2,8 @@ import { AccountPageLayout } from "@/components/Account_Layout";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
-import { AiOutlineDelete } from "react-icons/ai";
+// import { DeleteForeverIcon } from "react-icons/ai";
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 
 function SavedItem() {
   return (
@@ -35,7 +36,7 @@ function SavedItem() {
               </form>
               <form className="mt-9 ">
                 <button className="flex rounded-lg py-3  text-center px-4 text-yellow-500 bg-none  hover:bg-yellow-200">
-                  <AiOutlineDelete size={20} className="mr-1" />
+                  <DeleteForeverIcon size={20} className="mr-1" />
                   REMOVE
                 </button>
               </form>
@@ -66,7 +67,7 @@ function SavedItem() {
               </form>
               <form className="mt-9 ">
                 <button className="flex rounded-lg py-3  text-center px-4 text-yellow-500 bg-none  hover:bg-yellow-200">
-                  <AiOutlineDelete size={20} className="mr-1" />
+                  <DeleteForeverIcon size={20} className="mr-1" />
                   REMOVE
                 </button>
               </form>

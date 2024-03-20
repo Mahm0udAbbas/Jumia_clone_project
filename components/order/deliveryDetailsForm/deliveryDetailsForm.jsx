@@ -1,4 +1,4 @@
-import { Card, Modal } from "flowbite-react";
+import { Modal } from "flowbite-react";
 import ListHeader from "../ListHeader/ListHeader";
 import VolunteerActivismIcon from "@mui/icons-material/VolunteerActivism";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
@@ -11,6 +11,7 @@ import CancelButton from "../Cancle_button/CancelButton";
 import LocalShippingIcon from "@mui/icons-material/LocalShipping";
 import Image from "next/image";
 import { useRouter } from "next/router";
+import { Card } from "@material-tailwind/react";
 const governorates = [
   "Alexandria",
   "Aswan",
@@ -79,7 +80,7 @@ function DeliveryDetailsForm() {
   };
   return (
     <>
-      <Card className="mt-3">
+      <Card className="mt-3 p-6">
         <ListHeader value={"delevriy details"} />
         <div>
           <div className="flex justify-between">
@@ -114,7 +115,7 @@ function DeliveryDetailsForm() {
             </div>
           </div>
         </div>
-        <Card>
+        <Card className="p-6 my-5 ">
           <div className=" flex justify-between ">
             <span className="text-sm">Pickup Station</span>
             <Link
@@ -170,7 +171,7 @@ function DeliveryDetailsForm() {
         </Card>
         <hr></hr>
         <div>
-          <div className="flex justify-between">
+          <div className="flex justify-between my-5">
             <div className="flex items-start h-5">
               <div>
                 <input
@@ -210,7 +211,7 @@ function DeliveryDetailsForm() {
             Fulfilled by Dream2000 EG Marketplace
           </span>
         </div>
-        <Card>
+        <Card className="p-6 mb-2">
           <div>
             <p className="text-sm">Door Delivery</p>
             <p className="text-xs">Delivery between 10 March and 11 March</p>
