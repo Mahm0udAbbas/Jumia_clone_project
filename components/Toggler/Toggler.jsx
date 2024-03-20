@@ -5,27 +5,15 @@ import React, { useState, useEffect } from "react";
 import jsonData from "./dummyData.json";
 
 export default function Toggler({ activeItemIndex }) {
-<<<<<<< HEAD
-  const [filteredData, setFilteredData] = useState(
-    jsonData.filter((item) => item.id === 0)
-  );
-
-  const [activeItem, setActiveItem] = useState(null);
-
-  useEffect(() => {
-    setActiveItem(activeItemIndex);
-  }, [activeItemIndex]);
-=======
   const [activeItem, setActiveItem] = useState(0);
 
   // useEffect(() => {
   //   setActiveItem(activeItemIndex);
   // }, [activeItemIndex]);
-  
+
   const [filteredData, setFilteredData] = useState(
     jsonData.filter((item) => item.id === 0)
   );
->>>>>>> main
 
   const handleClick = (index) => {
     setActiveItem(index);
@@ -155,17 +143,10 @@ export default function Toggler({ activeItemIndex }) {
             <div className="col-span-12 md:col-span-9">
               <div className="bg-white shadow rounded-lg p-6">
                 <div className="max-w-5xl mx-auto flex flex-col md:flex-row gap-12">
-<<<<<<< HEAD
-                  {activeItem < 7 ? (
-                    <Test filteredData={filteredData} />
-                  ) : (
-                    console.log(activeItem),
-=======
                   {activeItem < 8 ? (
                     <Test filteredData={filteredData} />
                   ) : (
->>>>>>> main
-                    <Test2  filteredData={filteredData} />
+                    <Test2 filteredData={filteredData} />
                   )}
                 </div>
               </div>
@@ -178,17 +159,7 @@ export default function Toggler({ activeItemIndex }) {
               Talk to an agent
             </p>
             <div className={`${styles.Chat}`}>
-              <button
-                className={`${styles.cta}`}
-<<<<<<< HEAD
-                data-btn-lc="true"
-                data-eventcategory="LiveChat"
-                data-eventaction="open"
-                data-track-onclick="true"
-                data-track-onclick-bound="true"
-=======
->>>>>>> main
-              >
+              <button className={`${styles.cta}`}>
                 <img
                   src="https://cxp-desktop.netlify.app/jpg/chat.jpg"
                   className="w-12"
