@@ -55,7 +55,7 @@ function Summery() {
               info={`${addressdata[0].shippingAddress.region} | ${addressdata[0].shippingAddress.city}  | ${addressdata[0].shippingAddress.address} | ${addressdata[0].shippingAddress.additionalInfo}`}
             />
           </Card>
-          <Card>
+          <Card className="mt-3">
             <div className="flex justify-between items-center">
               <ListHeader value="delivery details" color="text-green-900" />
               <Link href="/checkout_layout/shipping-options">

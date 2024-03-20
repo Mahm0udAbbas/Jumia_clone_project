@@ -14,6 +14,10 @@ export default function Test({filteredData}) {
     newToggles[index] = !newToggles[index];
     setToggles(newToggles);
   };
+<<<<<<< HEAD
+=======
+
+>>>>>>> main
   return (
     <div>
       <ul className="w-full border border-solid border-gray-300 rounded-md ">

@@ -151,13 +151,9 @@ function DeliveryDetailsForm() {
                 <SaveButton
                   handleSubmit={handleSubmit}
                   label="save"
-                  color="warning"
+                  color="amber"
                 />
-                <CancelButton
-                  handleSubmit={cancel}
-                  label="save"
-                  color="warning"
-                />
+                <CancelButton handleSubmit={cancel} label="save" />
               </Modal.Footer>
             </Modal>
           </div>
@@ -235,8 +231,8 @@ function DeliveryDetailsForm() {
         </Card>
         <div className="flex jusitfy-start">
           <SaveButton
-            label={"CONFIRM DELIVERY DETAILS"}
-            color={"warning"}
+            label="CONFIRM DELIVERY DETAILS"
+            color="amber"
             handleSubmit={goToPayment}
           />
         </div>

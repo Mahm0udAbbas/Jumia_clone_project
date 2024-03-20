@@ -125,6 +125,7 @@ function Cart() {
                       </div>
                       <div className="min-w-24 flex">
                         <Button
+                          className="text-white"
                           variant="gradient"
                           size="sm"
                           color="amber"
@@ -135,6 +136,7 @@ function Cart() {
                         </Button>
                         <span className="mx-6">{product.quantity}</span>
                         <Button
+                          className="text-white"
                           variant="gradient"
                           size="sm"
                           color="amber"
@@ -180,7 +182,7 @@ function Cart() {
                 <Button
                   onClick={() => router.push("/checkout_layout/address")}
                   variant="gradient"
-                  className="text-xl"
+                  className="text-lg text-white"
                   color="amber"
                   fullWidth
                 >
