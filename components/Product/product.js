@@ -1,18 +1,12 @@
 import React from "react";
 
-const Product = ({ imageURL, imageAlt }) => {
+const Product = ({ imageUrl, imageAlt }) => {
   return (
-    <div>
-      <div className="w-[150px] md:w-[200px]">
-        <img
-          src={imageURL} 
-          alt={imageAlt}
-        />
-      </div>
-    </div>
+    <img
+      src={imageUrl}
+      alt={imageAlt}
+      className=" hover:scale-110 rounded-lg   "
+    />
   );
 };
-
 export default Product;
-
-
