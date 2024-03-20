@@ -5,7 +5,7 @@ import Toggler from "../Toggler/Toggler";
 export default function Services() {
   const [activeItem, setActiveItem] = useState(null);
 
-  const handleClick = (index) => {
+  const handleItemClick = (index) => {
     setActiveItem(index);
   };
 
@@ -25,7 +25,7 @@ export default function Services() {
             className={`${styles.guide} ${
               activeItem === 8 ? `${styles.Top}` : ""
             }`}
-            onClick={() => handleClick(8)}
+            onClick={() => handleItemClick(8)}
           >
             <span className={`${styles.clickable}`} data-type="guide"></span>
             <p className={`${styles.txt}`}>Place an Order</p>
@@ -39,7 +39,7 @@ export default function Services() {
             className={`${styles.guide} ${
               activeItem === 9 ? `${styles.Top}` : ""
             }`}
-            onClick={() => handleClick(9)}
+            onClick={() => handleItemClick(9)}
           >
             <span className={`${styles.clickable}`} data-type="guide"></span>
             <p className={`${styles.txt}`}>Track Your Order</p>
@@ -53,7 +53,7 @@ export default function Services() {
             className={`${styles.guide} ${
               activeItem === 10 ? `${styles.Top}` : ""
             }`}
-            onClick={() => handleClick(10)}
+            onClick={() => handleItemClick(10)}
           >
             <span className={`${styles.clickable}`} data-type="guide"></span>
             <p className={`${styles.txt}`}>Pay For Order</p>
@@ -67,7 +67,7 @@ export default function Services() {
             className={`${styles.guide} ${
               activeItem === 11 ? `${styles.Top}` : ""
             }`}
-            onClick={() => handleClick(11)}
+            onClick={() => handleItemClick(11)}
           >
             <span className={`${styles.clickable}`} data-type="guide"></span>
             <p className={`${styles.txt}`}>Track Your Order</p>
@@ -81,7 +81,7 @@ export default function Services() {
             className={`${styles.guide} ${
               activeItem === 12 ? `${styles.Top}` : ""
             }`}
-            onClick={() => handleClick(12)}
+            onClick={() => handleItemClick(12)}
           >
             <span className={`${styles.clickable}`} data-type="guide"></span>
             <p className={`${styles.txt}`}>Create a Return</p>
@@ -122,7 +122,7 @@ export default function Services() {
             </button>
           </div>
         </div>
-        <Toggler activeItemIndex={activeItem} />
+        <Toggler activeItem={activeItem} />
       </div>
     </div>
   );
