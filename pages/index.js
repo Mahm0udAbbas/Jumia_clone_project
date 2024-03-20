@@ -9,15 +9,15 @@ import MenClothing from "@/components/recommended/mens";
 
 export default function Home() {
   return (
-   <main className="md:max-w-7xl mx-auto p-2">
-    <Header/>
-    <Recommended/>
-    <SliderMainPage/>
-    <Recommendedforu/>
-    <Electronics/>
-    <Jewelry/>
-    <WomenClothing/>
-    <MenClothing/>
-   </main>
+    <main className="md:max-w-7xl mx-auto p-2">
+      <Header />
+      <Recommended />
+      <SliderMainPage />
+      <Recommendedforu />
+      <Electronics />
+      <Jewelry />
+      <WomenClothing />
+      <MenClothing />
+    </main>
   );
 }
