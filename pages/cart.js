@@ -7,6 +7,7 @@ import { firestore } from "../firebase";
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import logoExpress from "@/public/Logo-express.png";
+import cartEmpty from "@/public/cartEmpty.svg";
 
 function Cart() {
   const [cartProducts, setCartProducts] = useState([]);
@@ -42,6 +43,7 @@ function Cart() {
       items: [...separateProducts],
     });
   }
+
   return (
     <div className="container mx-auto px-4 max-w-7xl px-2 lg:px-0">
       <div className="mx-auto max-w-2xl py-8 lg:max-w-7xl">
@@ -51,7 +53,7 @@ function Cart() {
             className="p-4 rounded-lg bg-white lg:col-span-8"
           >
             <ul role="list" className="divide-y divide-gray-200">
-              {cartProducts.map((product, index) => {
+              {cartProducts.length > 0 ? cartProducts.map((product, index) => {
                 total += product.product.price * product.quantity;
                 return (
                   <div key={product.product.id}>
@@ -151,9 +153,29 @@ function Cart() {
                     </div>
                   </div>
                 );
-              })}
+              }) :
+                <div className="flex flex-col items-center my-8 text-black">
+                  <Image
+                    width={100}
+                    height={100}
+                    src={cartEmpty}
+                    alt="Cart empty logo"
+                  />
+                  <p className="my-4">Your cart is empty!</p>
+                  <p className="text-xs mb-4">Browse our categories and discover our best deals!</p>
+                  <Button
+                  onClick={() => router.push("/")}
+                  
+                  className="text-xs text-white"
+                  color="amber"
+                >
+                  START SHOPPING
+                </Button>
+                </div>
+              }
             </ul>
           </section>
+          {/* Checkout Side */}
           <section className="mt-16 rounded-md bg-white lg:col-span-4 lg:mt-0 lg:p-0">
             <div className=" flex items-center p-3">
               <h2 className="m-0 p-0">CART SUMMARY</h2>
