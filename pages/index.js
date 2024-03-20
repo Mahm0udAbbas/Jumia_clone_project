@@ -1,23 +1,25 @@
-import Header from "@/components/header/header";
-import Electronics from "@/components/recommended/electronics";
-import SliderMainPage from "@/components/slider";
-import Recommended from "@/components/recommended/recommended";
-import Recommendedforu from "@/components/recommended/recommendedforu";
-import Jewelry from "@/components/recommended/jewelry";
-import WomenClothing from "@/components/recommended/women";
-import MenClothing from "@/components/recommended/mens";
+// import Header from "@/components/header/header";
+// import Electronics from "@/components/recommended/electronics";
+// import SliderMainPage from "@/components/slider";
+// import Recommended from "@/components/recommended/recommended";
+// import Recommendedforu from "@/components/recommended/recommendedforu";
+// import Jewelry from "@/components/recommended/jewelry";
+// import WomenClothing from "@/components/recommended/women";
+// import MenClothing from "@/components/recommended/mens";
+import Categories from "@/components/Product/categories";
 
 export default function Home() {
   return (
-   <main className="md:max-w-7xl mx-auto p-2">
-    <Header/>
+   <main className="md:max-w-7xl mx-auto p-40">
+    {/* <Header/>
     <Recommended/>
     <SliderMainPage/>
     <Recommendedforu/>
     <Electronics/>
     <Jewelry/>
     <WomenClothing/>
-    <MenClothing/>
+    <MenClothing/> */}
+    <Categories/>
    </main>
   );
 }

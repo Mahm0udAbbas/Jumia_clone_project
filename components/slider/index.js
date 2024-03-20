@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
-import RecomHeader from "../recommended/header";
+import RecomHeader from "../Product/header";
 import { getFirestore, collection, getDocs } from "firebase/firestore";
 import db from "../../firebase";
 import Link from "next/link";
-import { Margin } from "@mui/icons-material";
+
 
 export default function SliderMainPage() {
   const [products, setProducts] = useState([]);

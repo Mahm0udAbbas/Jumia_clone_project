@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { getFirestore, collection, getDocs, query, where } from 'firebase/firestore';
 import db from "../../firebase";
-import RecomHeader from './header';
+import RecomHeader from '../Product/header';
 
 export default function Electronics() {
 
