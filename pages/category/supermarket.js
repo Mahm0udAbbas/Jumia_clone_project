@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { firestore } from "../../firebase";
+import { firestore, getAllProducts } from "../../firebase";
 import { collection, getDocs } from "firebase/firestore";
 import Sidebar from "@/components/Sidebar/Sidebar";
 import { Breadcrumbs } from "@material-tailwind/react";
@@ -36,22 +36,18 @@ export default function Supermarket() {
   const [catProducts, setCatProducts] = useState([]);
 
   useEffect(() => {
-    getData();
+    const fetchData = async () => {
+      try {
+        const data = await getAllProducts();
+        setCatProducts(data);
+      } catch (error) {
+        console.error("Error fetching products:", error);
+      }
+    };
+    fetchData();
+    setLoading(false);
   }, []);
-  async function getData() {
-    try {
-      const querySnapshot = await getDocs(collection(firestore, "products"));
-      const data = querySnapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
-      setCatProducts(data);
-      setLoading(false);
-      console.log(data);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  }
+
   if (loading) {
     return (
       <div className="flex justify-center items-center h-screen">
