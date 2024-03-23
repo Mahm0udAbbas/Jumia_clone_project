@@ -4535,3 +4535,47 @@ export const data = [
     sold: 12,
   },
 ];
+export const categories = [
+  {
+    id: "65527a31376a52ea210d9703",
+    name: "Electronics",
+    description:
+      "Electronics category includes a wide range of electronic devices such as smartphones, laptops, tablets, cameras, gaming consoles, and audio equipment, catering to various consumer needs and preferences.",
+  },
+  {
+    id: "65527ac3376a52ea210d9706",
+    name: "Watches",
+    description:
+      "Watches category encompasses a diverse array of timepieces, ranging from elegant analog watches to high-tech smartwatches, designed for both functional timekeeping and stylish accessories.",
+  },
+  {
+    id: "65527c22376a52ea210d9708",
+    name: "Coffee",
+    description:
+      "Coffee category offers an assortment of coffee products, including premium coffee beans sourced from different regions, ground coffee for brewing, espresso machines, coffee grinders, and accessories, satisfying the discerning tastes of coffee enthusiasts.",
+  },
+  {
+    id: "65527c8c376a52ea210d970a",
+    name: "Health & Personal Care",
+    description:
+      "Health & Personal Care category features a comprehensive selection of products for personal well-being and grooming, encompassing skincare, haircare, oral hygiene, vitamins, supplements, and other essentials for maintaining a healthy lifestyle.",
+  },
+  {
+    id: "6562f3891cf9fca552f8c5ac",
+    name: "Office Supplies",
+    description:
+      "Office Supplies category provides a wide array of essential items for office environments, including paper, pens, pencils, notebooks, organizers, desk accessories, and stationery, facilitating productivity and organization in professional settings.",
+  },
+  {
+    id: "65658ceae686c668a4d191ec",
+    name: "Kindle",
+    description:
+      "Kindle category offers innovative e-readers, a vast library of e-books spanning various genres and languages, and accessories tailored for avid readers, providing a convenient and immersive digital reading experience.",
+  },
+  {
+    id: "8c8b49e6d5004e08b9e787f8567fae2c",
+    name: "Perfume",
+    description:
+      "Perfume category presents a collection of fragrances crafted with exquisite blends of aromatic ingredients, offering a sensory experience that enhances personal style and leaves a lasting impression.",
+  },
+];

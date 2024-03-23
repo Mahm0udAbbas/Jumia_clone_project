@@ -22,7 +22,7 @@ export default function SliderMainPage() {
 
   return (
     <div className=" mt-5  items-center justify-center ">
-      <RecomHeader title="Recommended Products" color="bg-amber-700" />
+      <RecomHeader title="Recommended Products" color="bg-yellow-300" />
       <div className=" grid grid-cols-1 sm:grid-cols-2  md:grid-cols-4  gap-2 mt-1">
         {products.map((product) => (
           <div key={product.id} className=" ">

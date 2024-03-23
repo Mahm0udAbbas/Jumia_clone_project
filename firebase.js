@@ -9,9 +9,11 @@ import {
   getFirestore,
   limit,
   query,
+  setDoc,
+  where,
 } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
-import { data } from "./data";
+import { categories, data } from "./data";
 import SuperJSON from "superjson";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -32,7 +34,7 @@ export const firebaseConfig = {
 export const app = initializeApp(firebaseConfig);
 export const firestore = getFirestore(app);
 export const auth = getAuth(app);
-// let products = data;
+let products = data;
 // console.log(data);
 export const addNewProduct = async (product) => {
   const productDocRef = doc(firestore, "Products", product.proId);
@@ -126,3 +128,49 @@ export const getProductById = async (id) => {
     console.log("No such document!");
   }
 };
+
+async function addCategories(categories) {
+  try {
+    for (const category of categories) {
+      await setDoc(doc(firestore, "categories", category.id), {
+        name: category.name,
+        description: category.description,
+      });
+      console.log("Category added with ID: ", category.id);
+    }
+    console.log("All categories added successfully.");
+  } catch (e) {
+    console.error("Error adding categories: ", e);
+  }
+}
+
+// addCategories(categories);
+
+export const getCategoryByName = async (name) => {
+  let querys1 = query(
+    collection(firestore, "Categories"),
+    where("name", "==", name)
+  );
+  let respose = await getDocs(querys1);
+  let category = {};
+  respose.docs.forEach((cat) => {
+    category = { id: cat.id, ...cat.data() };
+  });
+
+  return category;
+};
+
+export const getProductsByCategoryId = async (id) => {
+  let querys1 = query(
+    collection(firestore, "products"),
+    where("categoryId", "==", id)
+  );
+  let respose = await getDocs(querys1);
+  let products = [];
+  respose.docs.forEach((cat) => {
+    products.push({ id: cat.id, ...cat.data() });
+  });
+  return products;
+};
+// let pro = await getProductsByCategoryId("65527c22376a52ea210d9708");
+// console.log(pro);
