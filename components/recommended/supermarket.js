@@ -1,23 +1,16 @@
 import React, { useState, useEffect } from "react";
-import {
-  getFirestore,
-  collection,
-  getDocs,
-  query,
-  where,
-} from "firebase/firestore";
-import { getProductsByCategoryId } from "../../firebase";
 import RecomHeader from "../Product/header";
+import { getProductsByCategoryId } from "@/firebase";
 import Link from "next/link";
 
-export default function Electronics() {
+export default function Supermarket() {
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const products = await getProductsByCategoryId(
-          "65527a31376a52ea210d9703"
+          "65527c22376a52ea210d9708"
         );
         setProducts(products);
       } catch (error) {
@@ -26,10 +19,13 @@ export default function Electronics() {
     };
     fetchData();
   }, []);
-  console.log(products);
+
   return (
     <div className="pt-5">
-      <RecomHeader title="Recommended Electronics" color="bg-yellow-300 " />
+      <RecomHeader
+        title="Recommended Supermarket Products"
+        color="bg-yellow-300 "
+      />
       <div className="carousel carousel-center w-full bg-white shadow-lg rounded-lg">
         {products.map((product) => (
           <Link href={`/ProductDetails/${product.id}`}>

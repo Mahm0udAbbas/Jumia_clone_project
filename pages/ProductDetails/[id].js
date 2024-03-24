@@ -10,6 +10,8 @@ import VolunteerActivismOutlinedIcon from "@mui/icons-material/VolunteerActivism
 import AddShoppingCartOutlinedIcon from "@mui/icons-material/AddShoppingCartOutlined";
 import LocalShippingOutlinedIcon from "@mui/icons-material/LocalShippingOutlined";
 import AssignmentReturnOutlinedIcon from "@mui/icons-material/AssignmentReturnOutlined";
+import { getProductById } from "@/firebase";
+import { Breadcrumbs } from "@mui/material";
 
 const data5 = [
   {
@@ -120,38 +122,50 @@ const data5 = [
       "https://ng.jumia.is/unsafe/fit-in/500x500/filters:fill(white)/product/31/6439772/1.jpg?9332",
   },
 ];
+export const getServerSideProps = async (context) => {
+  const { id } = context.params;
+  try {
+    const product = await getProductById(id);
 
-const ProductDetails = () => {
+    return {
+      props: { product },
+    };
+  } catch (e) {
+    console.log(e);
+    return {
+      props: { product: null },
+    };
+  }
+};
+
+const ProductDetails = ({ product }) => {
+  product = product.json;
+  let date = new Date();
+  let day = date.toLocaleDateString();
+  date.setDate(date.getDate() + 3);
+  let result = date.toLocaleDateString();
   return (
     <>
       <div className="container mx-auto">
+        <h1></h1>
         <div>
           <div className="pt-4 text-md p-2.5">
-            <a href="/" className="me-2 text-decoration-none text-sm">
-              Home {"> "}
-            </a>
-            <a href="/category" className="me-2 text-decoration-none text-sm">
-              Phones & Tablet {">"}
-            </a>
-            <a href="/category" className="me-2 text-decoration-none text-sm">
-              Mobile Phones {">"}
-            </a>
-            <a
-              href="/ProducDetails"
-              className="me-2 text-decoration-none text-sm"
-            >
-              XIAOMI Redmi Note 13 6.67" 6GB RAM/128GB ROM Android 12 - Black
-            </a>
+            <Breadcrumbs separator=">">
+              <a href="/" className="opacity-60">
+                Home
+              </a>
+              <a href="">coffee</a>
+              <a href={`/ProductDetails/${product.id}`}>
+                {product.en.description}
+              </a>
+            </Breadcrumbs>
           </div>
 
           <div className="grid grid-cols-12 gap-4 px-2">
             <div className="bg-white mt-2 col-span-12 md:col-span-9 rounded">
               <div className="grid grid-cols-12  gap-4 mt-3">
                 <div className="col-span-4">
-                  <img
-                    src="https://ng.jumia.is/unsafe/fit-in/500x500/filters:fill(white)/product/55/3476082/1.jpg?5801"
-                    alt=""
-                  />
+                  <img src={product.thumbnail} alt="" />
                   <p className="ps-12 text-sm pt-1 text-gray-700 mx-2me-2 hover:text-gray-900 text-decoration-none">
                     SHARE THIS PRODUCT
                   </p>
@@ -167,18 +181,17 @@ const ProductDetails = () => {
 
                 <div className="col-span-8 p-2.5">
                   <h3 className="text-gray-700 hover:text-gray-900 text-xl">
-                    XIAOMI Redmi Note 13 6.67" 6GB RAM/128GB ROM Android 12 -
-                    Black
+                    {product.en.title}
                   </h3>
-                  <h4 className="text-sm">brand: </h4>
+                  <h4 className="text-sm">brand:{product.en.brand} </h4>
                   <div className="w-full border-b border-gray-200"></div>
                   <div className="flex items-end">
                     <p className="text-gray-700 me-1  text-2xl font-bold hover:text-gray-900">
-                      EGP 214,000
+                      EGP {product.price}
                     </p>
                   </div>
                   <p className="text-gray-700 text-[12px]  hover:text-gray-900">
-                    13 units left
+                    {product.quantityInStock} units left
                   </p>
                   <p className="text-gray-700 text-[12px] hover:text-gray-900">
                     Delivery fees from EGP 35.00 to Minya. Save 10 EGP on
@@ -186,14 +199,44 @@ const ProductDetails = () => {
                   </p>
                   <div className="flex items-center">
                     <div className="flex">
-                      <StarIcon className="text-amber-500" />
-                      <StarIcon className="text-amber-500" />
-                      <StarIcon className="text-amber-500" />
-                      <StarIcon className="text-amber-500" />
-                      <StarHalfIcon className="text-amber-500" />
+                      <StarIcon
+                        className={
+                          product.rating >= 1
+                            ? "text-amber-500"
+                            : "text-grey-100"
+                        }
+                      />
+                      <StarIcon
+                        className={
+                          product.rating >= 2
+                            ? "text-amber-500"
+                            : "text-grey-100"
+                        }
+                      />
+                      <StarIcon
+                        className={
+                          product.rating >= 3
+                            ? "text-amber-500"
+                            : "text-grey-100"
+                        }
+                      />
+                      <StarIcon
+                        className={
+                          product.rating >= 4
+                            ? "text-amber-500"
+                            : "text-grey-100"
+                        }
+                      />
+                      <StarIcon
+                        className={
+                          product.rating >= 5
+                            ? "text-amber-500"
+                            : "text-grey-100"
+                        }
+                      />
                     </div>
                     <div className="mt-1 ms-1 text-sm font-medium text-gray-700 hover:text-gray-900 text-sm color-blue-900">
-                      20 verified ratings
+                      {product.ratingQuantity} verified ratings
                     </div>
                   </div>
                   <div className="w-full my-2 border-b border-gray-200 "></div>
@@ -308,8 +351,8 @@ const ProductDetails = () => {
                       </div>
                       <p className="text-xs ">Delivery </p>
                       <p className="text-xs ">
-                        Ready for delivery between 12 March & 14 March when you
-                        order within next 3hrs 24mins
+                        Ready for delivery between{day}& {result} when you order
+                        within next 3hrs 24mins
                       </p>
                     </div>
                   </div>
@@ -346,10 +389,7 @@ const ProductDetails = () => {
               <div className="w-full my-4 border-b border-gray-100"></div>
               <ul>
                 <li className="text-gray-700 text-sm ">
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                  Voluptate excepturi aspernatur modi sapiente quasi ullam alias
-                  blanditiis, soluta placeat omnis fuga deserunt quisquam
-                  commodi distinctio et quas in architecto dignissimos.
+                  {product.en.description}
                 </li>
               </ul>
             </div>
@@ -362,42 +402,14 @@ const ProductDetails = () => {
                   Specifications
                 </p>
                 <div className="my-4 border-b border-gray-100"></div>
-                <div className="flex flex-col md:flex-row gap-2 justify-between pt-6">
+                <div className="flex  justify-center pt-6">
                   <div className="rounded-none border p-5">
                     <p className="text-center font-semibold text-sm p-3.5 text-gray-700 hover:text-gray-900">
                       SPECIFICATIONS
                     </p>
                     <ul className="list-disc list-inside p-1">
                       <li className="text-base text-gray-700 text-sm font-medium py-1 ">
-                        SKU: SA024MP1IC742NAFAMZ
-                      </li>
-                      <li className="text-base text-gray-700 text-sm font-medium py-1 ">
-                        Model: SM-A145F
-                      </li>
-                      <li className="text-base text-gray-700 text-sm font-medium py-1 ">
-                        Size (L x W x H cm): 167.7 x 78 x 9.1 mm
-                      </li>
-                      <li className="text-base text-gray-700 text-sm font-medium py-1 ">
-                        Color: Black
-                      </li>
-                    </ul>
-                  </div>
-                  <div className="rounded-none border p-5">
-                    <p className="text-center font-semibold text-sm p-3.5 text-gray-700 hover:text-gray-900">
-                      SPECIFICATIONS
-                    </p>
-                    <ul className="list-disc list-inside p-1">
-                      <li className="text-base text-gray-700 text-sm font-medium py-1 ">
-                        SKU: SA024MP1IC742NAFAMZ
-                      </li>
-                      <li className="text-base text-gray-700 text-sm font-medium py-1 ">
-                        Model: SM-A145F
-                      </li>
-                      <li className="text-base text-gray-700 text-sm font-medium py-1 ">
-                        Size (L x W x H cm): 167.7 x 78 x 9.1 mm
-                      </li>
-                      <li className="text-base text-gray-700 text-sm font-medium py-1 ">
-                        Color: Black
+                        SKU: {product.sku}
                       </li>
                     </ul>
                   </div>
@@ -422,7 +434,10 @@ const ProductDetails = () => {
 
           <div className="grid grid-cols-12 gap-4 px-2">
             <div className="mt-3 bg-white mt-2 col-span-12 md:col-span-9 rounded">
-              <FeedbackList />
+              <FeedbackList
+                rating={product.rating}
+                verifiedReting={product.ratingQuantity}
+              />
             </div>
           </div>
 

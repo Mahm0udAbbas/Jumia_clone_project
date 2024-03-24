@@ -1,16 +1,10 @@
 import LocalGroceryStoreIcon from "@mui/icons-material/LocalGroceryStore";
 import MedicationLiquidIcon from "@mui/icons-material/MedicationLiquid";
 import HomeWorkIcon from "@mui/icons-material/HomeWork";
-import MicrowaveIcon from "@mui/icons-material/Microwave";
-import PhoneAndroidIcon from "@mui/icons-material/PhoneAndroid";
-import ComputerIcon from "@mui/icons-material/Computer";
+import WatchIcon from "@mui/icons-material/Watch";
+import FilterVintageIcon from "@mui/icons-material/FilterVintage";
+import WhatshotOutlinedIcon from "@mui/icons-material/WhatshotOutlined";
 import CableIcon from "@mui/icons-material/Cable";
-import DiamondIcon from "@mui/icons-material/Diamond";
-import ChildFriendlyIcon from "@mui/icons-material/ChildFriendly";
-import SportsEsportsIcon from "@mui/icons-material/SportsEsports";
-import DownhillSkiingIcon from "@mui/icons-material/DownhillSkiing";
-import CategoryIcon from "@mui/icons-material/Category";
-
 import SidebarMenuItem from "./SidebarMenuItem";
 
 export default function Leftside() {
@@ -29,46 +23,25 @@ export default function Leftside() {
           Icon={MedicationLiquidIcon}
         />
         <SidebarMenuItem
-          link="homeoffice"
-          text="Home & Office"
+          link="officesupplies"
+          text="Office Supplies"
           Icon={HomeWorkIcon}
         />
+        <SidebarMenuItem link="watches" text="Watches" Icon={WatchIcon} />
         <SidebarMenuItem
-          link="appliances"
-          text="Appliances"
-          Icon={MicrowaveIcon}
+          link="perfumes"
+          text="Perfumes"
+          Icon={FilterVintageIcon}
         />
         <SidebarMenuItem
-          link="phonestablets"
-          text="Phones & Tablets"
-          Icon={PhoneAndroidIcon}
-        />
-        <SidebarMenuItem
-          link="computing"
-          text="Computing"
-          Icon={ComputerIcon}
+          link="kindle"
+          text="Kindles"
+          Icon={WhatshotOutlinedIcon}
         />
         <SidebarMenuItem
           link="electronics"
           text="Electronics"
           Icon={CableIcon}
-        />
-        <SidebarMenuItem link="fashion" text="Fashion" Icon={DiamondIcon} />
-        <SidebarMenuItem
-          link="babyproducts"
-          text="Baby Products"
-          Icon={ChildFriendlyIcon}
-        />
-        <SidebarMenuItem link="gaming" text="Gaming" Icon={SportsEsportsIcon} />
-        <SidebarMenuItem
-          link="sportinggoods"
-          text="Sporting Goods"
-          Icon={DownhillSkiingIcon}
-        />
-        <SidebarMenuItem
-          link="othercategories"
-          text="Other Categories"
-          Icon={CategoryIcon}
         />
       </div>
     </div>
