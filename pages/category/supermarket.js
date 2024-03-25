@@ -33,7 +33,6 @@ export default function Supermarket() {
     "https://eg.jumia.is/cms/Ramadan-24/CATs-UNs/Supermarket/Farida/572x250EN.png",
   ];
   const [catProducts, setCatProducts] = useState([]);
-
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -66,7 +65,7 @@ export default function Supermarket() {
         </Breadcrumbs>
         <div className="">
           <SubCategories>
-            <Header title="Household Supplies" />
+            <Header title="Supermarket" />
             <div className="grid gap-2  grid-cols-1 sm:grid-cols-3  md:grid-cols-6  p-5">
               {imageUrls.map((imageUrl, index) => (
                 <div key={index} className="">
@@ -108,10 +107,10 @@ export default function Supermarket() {
         </div>
         <div className="grid grid-cols-12 gap-2">
           <div className="col-span-12   md:col-span-3">
-            <Sidebar />;
+            <Sidebar catData="Supermarket" />;
           </div>
           <div className=" col-span-12 md:col-span-9 py-2">
-            <CatProdList catProducts={catProducts} />
+            <CatProdList catProducts={catProducts} catData="Supermarket" />
           </div>
         </div>
       </main>

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { getProductsByCategoryId } from "../../firebase";
+import { getCategoryByName, getProductsByCategoryId } from "../../firebase";
 import Sidebar from "@/components/Sidebar/Sidebar";
 import { Breadcrumbs } from "@material-tailwind/react";
 import SubCategories from "@/components/Product/subcategories";
@@ -27,20 +27,19 @@ export default function Health() {
     "https://eg.jumia.is/cms/Ramadan-24/ADS/GSK/572x250EN.png",
   ];
   const [catProducts, setCatProducts] = useState([]);
-
   useEffect(() => {
     const fetchData = async () => {
       try {
         const products = await getProductsByCategoryId(
-          "65527c8c376a52ea210d970a "
+          "65527c8c376a52ea210d970a"
         );
         setCatProducts(products);
+        setLoading(false);
       } catch (error) {
         console.error("Error fetching products:", error);
       }
     };
     fetchData();
-    setLoading(false);
   }, []);
 
   if (loading) {
@@ -56,14 +55,14 @@ export default function Health() {
           <a href="/" className="opacity-60">
             Home
           </a>
-          <a href="/category/healthbeauty">Health & Personal Care</a>
+          <a href="/category/healthbeauty">Health & Care</a>
         </Breadcrumbs>
         <div className="">
           <SubCategories>
-            <Header title="Health & Personal Care" />
+            <Header title="Health & Care" />
             <div className="grid gap-2  grid-cols-1 sm:grid-cols-3  md:grid-cols-6  p-5">
               {imageUrls.map((imageUrl, index) => (
-                <div key={index} className="">
+                <div key={index}>
                   <Product imageUrl={imageUrl} imageAlt={`img ${index + 1}`} />
                 </div>
               ))}
@@ -102,10 +101,10 @@ export default function Health() {
         </div>
         <div className="grid grid-cols-12 gap-2">
           <div className="col-span-12   md:col-span-3">
-            <Sidebar />;
+            <Sidebar catProducts={catProducts} catData="Health & Care" />;
           </div>
-          <div className=" col-span-12 md:col-span-9 py-2">
-            <CatProdList catProducts={catProducts} />
+          <div className=" col-span-12 md:col-span-9 ">
+            <CatProdList catProducts={catProducts} catData="Health & Care" />
           </div>
         </div>
       </main>

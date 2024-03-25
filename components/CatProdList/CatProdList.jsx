@@ -1,13 +1,14 @@
 import { firestore } from "@/firebase";
-import { collection, getDocs } from "firebase/firestore";
-import { useEffect, useState } from "react";
 import CatProdCard from "../card/MyCard";
 
-function CatProdList({ catProducts }) {
+function CatProdList({ catProducts, catData, subCatData }) {
   return (
     <>
       <div className="bg-white">
-        <p className="p-3 tex t-black text-xl">{catProducts[0]?.category}</p>
+        <p className="p-3 tex t-black text-xl">
+          {catData}
+          {subCatData ? ` / ${subCatData}` : ""}{" "}
+        </p>
         <hr />
         <p className="p-3">{catProducts.length} products found</p>
         <hr />

@@ -1,21 +1,29 @@
 import React, { useEffect, useState } from "react";
-import { getProductsByCategoryId } from "../../firebase";
 import Sidebar from "@/components/Sidebar/Sidebar";
 import { Breadcrumbs } from "@material-tailwind/react";
-import CatProdList from "@/components/CatProdList/CatProdList";
 import MySpinner from "@/components/order/Spiner/Spinner";
+import CatProdList from "@/components/CatProdList/CatProdList";
+import {
+  getAllSubCategories,
+  getCategoryByName,
+  getProductsBySubCategoryId,
+  getSubCategoryByName,
+} from "@/firebase";
 
-export default function Perfumes() {
+export default function Labtop() {
   const [loading, setLoading] = useState(true);
   const [catProducts, setCatProducts] = useState([]);
-
+  const [subCats, setSubCats] = useState([]);
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const products = await getProductsByCategoryId(
-          "8c8b49e6d5004e08b9e787f8567fae2c"
+        const products = await getProductsBySubCategoryId(
+          "65527fdca8299445e5fe5e87"
         );
+
+        const subCat = await getAllSubCategories("65527a31376a52ea210d9703");
         setCatProducts(products);
+        setSubCats(subCat);
       } catch (error) {
         console.error("Error fetching products:", error);
       }
@@ -37,14 +45,19 @@ export default function Perfumes() {
           <a href="/" className="opacity-60">
             Home
           </a>
-          <a href="/category/perfumes">Perfumes</a>
+          <a href="/category/electronics">Electronics</a>
+          <a href="/category/electronics/headphones">Headphones</a>
         </Breadcrumbs>
         <div className="grid grid-cols-12 gap-2">
           <div className="col-span-12   md:col-span-3">
-            <Sidebar catData="Perfumes" />;
+            <Sidebar catData="Electronics" subCats={subCats} />;
           </div>
-          <div className=" col-span-12 md:col-span-9 ">
-            <CatProdList catProducts={catProducts} catData="Perfumes" />
+          <div className="col-span-12 md:col-span-9">
+            <CatProdList
+              catProducts={catProducts}
+              catData="Electronics"
+              subCatData="Headphones"
+            />
           </div>
         </div>
       </main>

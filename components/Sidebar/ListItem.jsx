@@ -1,24 +1,17 @@
-import React from 'react'
+import Link from "next/link";
+import React from "react";
 
-export default function ListItem({ children , className }) {
+export default function ListItem({ children }) {
   return (
     <>
-        <li>
-            <a href="#" className={className}> {children} </a>
-        </li>
+      <li>
+        <Link
+          href={`/category/electronics/${children.name}`}
+          className="text-gray-700 hover:bg-gray-200 block px-6"
+        >
+          {children.name}
+        </Link>
+      </li>
     </>
-  )
+  );
 }
-
-// // Assuming ListItem.js
-// import React from 'react';
-
-// const ListItem = ({ children }) => {
-//     return (
-//         <li>
-//             {children}
-//         </li>
-//     );
-// };
-
-// export default ListItem;

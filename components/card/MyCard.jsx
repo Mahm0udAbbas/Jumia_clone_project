@@ -24,11 +24,8 @@ function CatProdCard({ cardData }) {
         <p className="mb-1"></p>
         <p className="font-medium"> {cardData.en.title}</p>
         <Typography className="flex">
-          <span className="me-2 line-through text-gray-500 font-normal text-xs">
+          <span className="me-2  text-gray-500 font-normal text-xs">
             {cardData.price}
-          </span>
-          <span className="bg-amber-700/25 text-center text-xs text-amber-700">
-            -17%
           </span>
         </Typography>
         <div className="flex items-center">

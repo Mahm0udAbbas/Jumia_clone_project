@@ -4,6 +4,7 @@ import {
   addDoc,
   collection,
   doc,
+  documentId,
   getDoc,
   getDocs,
   getFirestore,
@@ -15,6 +16,7 @@ import {
 import { getAuth } from "firebase/auth";
 import { categories, data } from "./data";
 import SuperJSON from "superjson";
+import SubCategories from "./components/Product/subcategories";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -148,7 +150,7 @@ async function addCategories(categories) {
 
 export const getCategoryByName = async (name) => {
   let querys1 = query(
-    collection(firestore, "Categories"),
+    collection(firestore, "categories"),
     where("name", "==", name)
   );
   let respose = await getDocs(querys1);
@@ -160,6 +162,63 @@ export const getCategoryByName = async (name) => {
   return category;
 };
 
+export const getSubCategoryByName = async (name, catid) => {
+  try {
+    const subcategoriesRef = collection(
+      firestore,
+      "categories",
+      catid,
+      "Subcategories"
+    );
+    const q = query(subcategoriesRef, where("name", "==", name));
+
+    const querySnapshot = await getDocs(q);
+
+    if (querySnapshot.empty) {
+      console.log("No matching documents.");
+      return null;
+    }
+
+    let category = {};
+    querySnapshot.forEach((doc) => {
+      category = { id: doc.id, ...doc.data() };
+    });
+
+    return category;
+  } catch (error) {
+    console.error("Error getting subcategory:", error);
+    throw error;
+  }
+};
+export const getAllSubCategories = async (catid) => {
+  try {
+    const subcategoriesRef = collection(
+      firestore,
+      "categories",
+      catid,
+      "Subcategories"
+    );
+
+    const querySnapshot = await getDocs(subcategoriesRef);
+    console.log(querySnapshot);
+    if (querySnapshot.empty) {
+      console.log("No matching documents.");
+      return [];
+    }
+
+    let category = [];
+    querySnapshot.forEach((doc) => {
+      category.push({ id: doc.id, ...doc.data() });
+    });
+
+    return category;
+  } catch (error) {
+    console.error("Error getting subcategory:", error);
+    throw error;
+  }
+};
+// let data1 = await getAllSubCategories("65527a31376a52ea210d9703");
+// console.log(data1);
 export const getProductsByCategoryId = async (id) => {
   let querys1 = query(
     collection(firestore, "products"),
@@ -172,5 +231,44 @@ export const getProductsByCategoryId = async (id) => {
   });
   return products;
 };
+export const getProductsBySubCategoryId = async (subId) => {
+  let querys1 = query(
+    collection(firestore, "products"),
+    where("subCategoryId", "==", subId)
+  );
+  let respose = await getDocs(querys1);
+  let products = [];
+  respose.docs.forEach((cat) => {
+    products.push({ id: cat.id, ...cat.data() });
+  });
+  return products;
+};
 // let pro = await getProductsByCategoryId("65527c22376a52ea210d9708");
 // console.log(pro);
+export function filterPrice(products, min, max) {
+  products = products.filter((product) => {
+    return product.price > min && product.price < max;
+  });
+}
+export function getCheapestProduct(products) {
+  if (products.length === 0) {
+    return null;
+  }
+
+  return products.reduce((cheapestProduct, currentProduct) => {
+    return currentProduct.price < cheapestProduct.price
+      ? currentProduct
+      : cheapestProduct;
+  });
+}
+export function getHighestPriceProduct(products) {
+  if (products.length === 0) {
+    return null;
+  }
+
+  return products.reduce((HighestPriceProduct, currentProduct) => {
+    return currentProduct.price > HighestPriceProduct.price
+      ? currentProduct
+      : HighestPriceProduct;
+  });
+}

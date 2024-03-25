@@ -25,12 +25,11 @@ export default function OfficeSupplies() {
     "  https://eg.jumia.is/cms/41-22/UNs-Deals/Stationery/EN/School_Supplies_-_Floor-Desktop_-EN_.png",
   ];
   const [catProducts, setCatProducts] = useState([]);
-
   useEffect(() => {
     const fetchData = async () => {
       try {
         const products = await getProductsByCategoryId(
-          "6562f3891cf9fca552f8c5ac "
+          "6562f3891cf9fca552f8c5ac"
         );
         setCatProducts(products);
       } catch (error) {
@@ -54,7 +53,7 @@ export default function OfficeSupplies() {
           <a href="/" className="opacity-60">
             Home
           </a>
-          <a href="/category/officesupplies">Office Supplies</a>
+          <a href="/category/officesupplies">"Office Supplies"</a>
         </Breadcrumbs>
         <div className="">
           <SubCategories>
@@ -100,10 +99,10 @@ export default function OfficeSupplies() {
         </div>
         <div className="grid grid-cols-12 gap-2">
           <div className="col-span-12   md:col-span-3">
-            <Sidebar />;
+            <Sidebar catData="Office Supplies" />;
           </div>
-          <div className=" col-span-12 md:col-span-9 py-2">
-            <CatProdList catProducts={catProducts} />
+          <div className=" col-span-12 md:col-span-9 ">
+            <CatProdList catProducts={catProducts} catData="Office Supplies" />
           </div>
         </div>
       </main>

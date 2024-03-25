@@ -1,5 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { getProductsByCategoryId } from "../../firebase";
+import {
+  getAllSubCategories,
+  getCategoryByName,
+  getProductsByCategoryId,
+} from "../../../firebase";
 import Sidebar from "@/components/Sidebar/Sidebar";
 import { Breadcrumbs } from "@material-tailwind/react";
 import SubCategories from "@/components/Product/subcategories";
@@ -27,14 +31,17 @@ export default function Electronics() {
     "https://eg.jumia.is/cms/Ramadan-24/OPT/Mar-14/2B/572x250EN.jpg",
   ];
   const [catProducts, setCatProducts] = useState([]);
-
+  const [subCats, setSubCats] = useState([]);
   useEffect(() => {
     const fetchData = async () => {
       try {
         const products = await getProductsByCategoryId(
           "65527a31376a52ea210d9703"
         );
+        const subCat = await getAllSubCategories("65527a31376a52ea210d9703");
+
         setCatProducts(products);
+        setSubCats(subCat);
       } catch (error) {
         console.error("Error fetching products:", error);
       }
@@ -56,7 +63,7 @@ export default function Electronics() {
           <a href="/" className="opacity-60">
             Home
           </a>
-          <a href="/category/electronics">electronics</a>
+          <a href="/category/electronics">Electronics</a>
         </Breadcrumbs>
         <div className="">
           <SubCategories>
@@ -102,10 +109,10 @@ export default function Electronics() {
         </div>
         <div className="grid grid-cols-12 gap-2">
           <div className="col-span-12   md:col-span-3">
-            <Sidebar />;
+            <Sidebar catData="Electronics" subCats={subCats} />;
           </div>
-          <div className=" col-span-12 md:col-span-9 py-2">
-            <CatProdList catProducts={catProducts} />
+          <div className=" col-span-12 md:col-span-9 ">
+            <CatProdList catProducts={catProducts} catData="Electronics" />
           </div>
         </div>
       </main>

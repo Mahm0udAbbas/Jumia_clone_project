@@ -9,7 +9,6 @@ export default function Kindle() {
   const [loading, setLoading] = useState(true);
 
   const [catProducts, setCatProducts] = useState([]);
-
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -17,12 +16,12 @@ export default function Kindle() {
           "65658ceae686c668a4d191ec"
         );
         setCatProducts(products);
+        setLoading(false);
       } catch (error) {
         console.error("Error fetching products:", error);
       }
     };
     fetchData();
-    setLoading(false);
   }, []);
 
   if (loading) {
@@ -38,14 +37,14 @@ export default function Kindle() {
           <a href="/" className="opacity-60">
             Home
           </a>
-          <a href="/category/kindle">Kindles</a>
+          <a href="/category/kindle">Kindle</a>
         </Breadcrumbs>
         <div className="grid grid-cols-12 gap-2">
-          <div className="col-span-12   md:col-span-3">
-            <Sidebar />;
+          <div className="col-span-12 md:col-span-3">
+            <Sidebar catData="Kindle" />;
           </div>
-          <div className=" col-span-12 md:col-span-9 py-2">
-            <CatProdList catProducts={catProducts} />
+          <div className=" col-span-12 md:col-span-9 ">
+            <CatProdList catProducts={catProducts} catData="Kindle" />
           </div>
         </div>
       </main>

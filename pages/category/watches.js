@@ -12,20 +12,19 @@ export default function Watches() {
   const [loading, setLoading] = useState(true);
   const imageUrls = [
     "https://eg.jumia.is/cms/global-21/icons/men-watches/Skmei_192_x_107_.png",
-    " https://eg.jumia.is/cms/global-21/icons/men-watches/Digital_Watches__192_x_107_.png",
+    "https://eg.jumia.is/cms/global-21/icons/men-watches/Digital_Watches__192_x_107_.png",
     "https://eg.jumia.is/cms/global-21/icons/men-watches/Casual_Watches__192_x_107_.png",
     "https://eg.jumia.is/cms/global-21/icons/men-watches/Formal_Watches__192_x_107_.png",
-    "   https://eg.jumia.is/cms/global-21/icons/men-watches/Below_99_EGP_Store_192_x_107_.png",
+    "https://eg.jumia.is/cms/global-21/icons/men-watches/Below_99_EGP_Store_192_x_107_.png",
     "https://eg.jumia.is/cms/global-21/icons/men-watches/Wlisth_192_x_107_.png",
   ];
 
   const [catProducts, setCatProducts] = useState([]);
-
   useEffect(() => {
     const fetchData = async () => {
       try {
         const products = await getProductsByCategoryId(
-          "65527ac3376a52ea210d9706 "
+          "65527ac3376a52ea210d9706"
         );
         setCatProducts(products);
       } catch (error) {
@@ -65,10 +64,10 @@ export default function Watches() {
         </div>
         <div className="grid grid-cols-12 gap-2">
           <div className="col-span-12   md:col-span-3">
-            <Sidebar />;
+            <Sidebar catData="Watches" />;
           </div>
           <div className=" col-span-12 md:col-span-9 ">
-            <CatProdList catProducts={catProducts} />
+            <CatProdList catProducts={catProducts} catData="Watches" />
           </div>
         </div>
       </main>
