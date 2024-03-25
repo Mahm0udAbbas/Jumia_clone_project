@@ -1,10 +1,10 @@
 import React from 'react'
 
-export default function ListItem({ children , className }) {
+export default function ListItem({ children , className , onClick , id}) {
   return (
     <>
         <li>
-            <a href="#" className={className}> {children} </a>
+            <a href="#" className={className} id={id} onClick={onClick}> {children} </a>
         </li>
     </>
   )

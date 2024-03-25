@@ -10,7 +10,7 @@ import MySpinner from "@/components/order/Spiner/Spinner";
 import CatProdList from "@/components/CatProdList/CatProdList";
 
 export default function Supermarket() {
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const imageUrls = [
     "https://eg.jumia.is/cms/Icons-2023/Categories/Revamp/Supermarket/EN/24.png",
     " https://eg.jumia.is/cms/Icons-2023/Categories/Revamp/Supermarket/EN/18.png",
@@ -47,7 +47,7 @@ export default function Supermarket() {
       }));
       setCatProducts(data);
       setLoading(false);
-      console.log(data);
+      // console.log(data);
     } catch (error) {
       console.error("Error fetching data:", error);
     }

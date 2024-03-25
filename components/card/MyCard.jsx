@@ -9,7 +9,7 @@ import Image from "next/image";
 import logoExpress from "@/public/Logo-express.png";
 
 function CatProdCard({ cardData }) {
-  console.log(cardData);
+  // console.log(cardData);
   return (
     <Card className="items-between justify-between  shadow-none group hover:shadow-2xl">
       <div className="flex items-center justify-center p-2">

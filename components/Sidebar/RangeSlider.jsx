@@ -1,0 +1,80 @@
+import React, { useState } from 'react';
+import Box from '@mui/material/Box';
+import Slider from '@mui/material/Slider';
+import Input from '@mui/material/Input';
+import Button from '@mui/material/Button';
+import NestedCat from './NestedCat';
+import styles from '../../styles/RangeSlider.module.css';
+import PriceFilter from './PriceFilter';
+
+function valuetext(value) {
+  return `${value}`;
+}
+
+export default function RangeSlider() {
+  const [value, setValue] = useState([20, 43589]);
+  const [appliedValue, setAppliedValue] = useState([20, 43589]);
+
+  const handleChange = (event, newValue) => {
+    const updatedValue = Array.isArray(newValue) ? newValue.map(v => Math.min(Math.max(v, 0), 50000)) : Math.min(Math.max(newValue, 0), 50000);
+    setValue(updatedValue);
+  };
+
+  const handleInputChange = index => event => {
+    const newValue = parseInt(event.target.value);
+    const updatedValue = [...value];
+    updatedValue[index] = Math.min(Math.max(newValue, 0), 50000);
+    setValue(updatedValue);
+  };
+
+  const handleSubmit = () => {
+    console.log("Selected Range:", value);
+    setAppliedValue(value);
+  };
+
+  return (
+    <Box>
+      <PriceFilter value={appliedValue} />
+      <Box style={{ display: 'flex', alignItems: 'center', marginTop: '8px' }}>
+        <NestedCat>PRICE (EGP)</NestedCat>
+        <Box style={{ marginLeft: 'auto' }}>
+          <Button variant="text" color="warning" onClick={handleSubmit}>APPLY</Button>
+        </Box>
+      </Box>
+      <Slider
+        className={`${styles.slider}`}
+        getAriaLabel={() => 'Temperature range'}
+        value={value}
+        onChange={handleChange}
+        valueLabelDisplay="auto"
+        getAriaValueText={valuetext}
+        min={0}
+        max={50000}
+        color="warning"
+      />
+      <Box sx={{ display: 'flex', justifyContent: 'center' , gap:'15px'}}>
+        <Input
+          className={`${styles.Input}`}
+          type="number"
+          value={value[0]}
+          onChange={handleInputChange(0)}
+          inputProps={{
+            'aria-label': 'Start Point',
+            style: { textAlign: 'center' }
+          }}
+        />
+        <p className={`${styles.underScore}`}>_</p>
+        <Input
+          className={`${styles.Input}`}
+          type="number"
+          value={value[1]}
+          onChange={handleInputChange(1)}
+          inputProps={{
+            'aria-label': 'End Point',
+            style: { textAlign: 'center' }
+          }}
+        />
+      </Box>
+    </Box>
+  );
+}
