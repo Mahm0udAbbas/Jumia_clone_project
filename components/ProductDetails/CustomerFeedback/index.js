@@ -4,7 +4,7 @@ import TaskAltIcon from "@mui/icons-material/TaskAlt";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { Progress } from "@material-tailwind/react";
 
-const FeedbackList = () => {
+const FeedbackList = ({ rating, verifiedReting }) => {
   const now = 60;
 
   return (
@@ -25,35 +25,36 @@ const FeedbackList = () => {
         <div className="col-span-12 md:col-span-4">
           <div className="flex flex-col items-center p-3">
             <p className="text-gray-700 hover:text-gray-900">
-              VERIFIED RATINGS (8)
+              VERIFIED RATINGS ({verifiedReting})
             </p>
             <div className="bg-gray-200 p-3 w-full max-w-xs text-center">
-              <h2 className="text-amber-500 text-2xl font-bold mb-1">4.3/5</h2>
+              <h2 className="text-amber-500 text-2xl font-bold mb-1">
+                {rating}/5
+              </h2>
               <div className="flex justify-center pb-3">
                 <StarIcon className="text-amber-500" />
               </div>
               <p className="text-gray-700 hover:text-gray-900">
-                8 verified ratings
+                {verifiedReting} verified ratings
               </p>
             </div>
-            <div className="flex flex-col w-full max-w-xs">
-              {[5, 4, 3, 2, 1].map((rating, index) => (
-                <div
-                  className="flex justify-between items-center w-full"
-                  key={index}
-                >
-                  <span className="flex">
-                    5 <StarIcon className="text-amber-500" />
-                    (5)
-                  </span>
-                  <Progress
-                    size="sm"
-                    value={50}
-                    variant="filled"
-                    color="amber"
-                  />
-                </div>
-              ))}
+            <div className="flex flex-col w-full max-w-xs mt-5">
+              {/* {[5, 4, 3, 2, 1].map((rating, index) => (  */}
+              <div
+                className="flex justify-between items-center w-full"
+                // key={index}
+              >
+                <span className="flex">
+                  <StarIcon className="text-amber-500" />({verifiedReting})
+                </span>
+                <Progress
+                  size="sm"
+                  value={(rating / 5) * 100}
+                  variant="filled"
+                  color="amber"
+                />
+              </div>
+              {/* ))} */}
             </div>
           </div>
         </div>
@@ -61,13 +62,26 @@ const FeedbackList = () => {
         <div className="col-span-12 md:col-span-8">
           <div className="flex flex-col items-start p-3">
             <p className="text-gray-700 hover:text-gray-900">
-              PRODUCT REVIEWS (1)
+              PRODUCT REVIEWS ({verifiedReting})
             </p>
             <div className="flex justify-center pb-3">
-              <StarIcon className="text-amber-500" />
-              <StarIcon className="text-amber-500" />
-              <StarIcon className="text-amber-500" />
-              <StarIcon className="text-amber-500" />
+              <div className="flex">
+                <StarIcon
+                  className={rating >= 1 ? "text-amber-500" : "text-grey-100"}
+                />
+                <StarIcon
+                  className={rating >= 2 ? "text-amber-500" : "text-grey-100"}
+                />
+                <StarIcon
+                  className={rating >= 3 ? "text-amber-500" : "text-grey-100"}
+                />
+                <StarIcon
+                  className={rating >= 4 ? "text-amber-500" : "text-grey-100"}
+                />
+                <StarIcon
+                  className={rating >= 5 ? "text-amber-500" : "text-grey-100"}
+                />
+              </div>
             </div>
             <p className="font-bold text-gray-700 hover:text-gray-900 mb-2">
               حلوه
