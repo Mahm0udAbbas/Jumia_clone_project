@@ -2,10 +2,10 @@ import Header from "@/components/header/header";
 import Electronics from "@/components/recommended/electronics";
 import SliderMainPage from "@/components/slider";
 import Recommended from "@/components/recommended/recommended";
-import Recommendedforu from "@/components/recommended/recommendedforu";
-import Jewelry from "@/components/recommended/jewelry";
-import WomenClothing from "@/components/recommended/women";
-import MenClothing from "@/components/recommended/mens";
+import Supermarket from "@/components/recommended/supermarket";
+import HealthPersonalCare from "@/components/recommended/HealthPersonalCare";
+import OfficeSupplies from "@/components/recommended/OfficeSupplies";
+import Watches from "@/components/recommended/watches";
 
 export default function Home() {
   return (
@@ -13,11 +13,11 @@ export default function Home() {
       <Header />
       <Recommended />
       <SliderMainPage />
-      <Recommendedforu />
+      <Watches />
       <Electronics />
-      <Jewelry />
-      <WomenClothing />
-      <MenClothing />
+      <Supermarket />
+      <HealthPersonalCare />
+      <OfficeSupplies />
     </main>
   );
 }

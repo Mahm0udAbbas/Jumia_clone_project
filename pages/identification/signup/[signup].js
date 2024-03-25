@@ -1,14 +1,14 @@
-import { Card, Input, Button, Typography, Alert } from "@material-tailwind/react";
-import { createUserWithEmailAndPassword, getAuth } from "firebase/auth";
+import { Card, Input, Button, Typography, Alert, Menu, MenuHandler, MenuList, MenuItem } from "@material-tailwind/react";
+import { createUserWithEmailAndPassword } from "firebase/auth";
 import { useRouter } from "next/router";
 import Image from "next/image";
 import { useForm } from "react-hook-form";
 import topLogo from "@/public/1.png";
 import bottomLogo from "@/public/bottom-logo.png";
-import { auth } from "@/firebase";
+import { auth, firestore } from "@/firebase";
 import { useState } from 'react';
-
-
+import { useCountries } from "use-react-countries";
+import { setDoc, doc } from "firebase/firestore";
 
 
 function CheckIcon() {
@@ -35,15 +35,26 @@ function Signup() {
   const { signup: emailRoute } = router.query;
   const [signupAlert, setSignupAlert] = useState(false);
   const [signupError, setSignupError] = useState(false);
-  const match = watch("password");
-  const regx = new RegExp(match);
-  function createNewUser({ password }) {
+  const { countries } = useCountries();
+  const [country, setCountry] = useState(230);
+  const { name, flags, countryCallingCode } = countries[country];
+  const passwordMatch = watch("password");
+  const regx = new RegExp(passwordMatch);
+
+  function createNewUser({ password, username, phone }) {
     createUserWithEmailAndPassword(auth, emailRoute, password)
       .then((userCredential) => {
+        const userID = userCredential.user.uid;
+        const displayName = userCredential.user.displayName = username;
+        const phoneNumber = userCredential.user.phoneNumber = phone;
+        const email = userCredential.user.email;
+        const emailVerified = userCredential.user.emailVerified;
+        // Set new user in users collection.
+        setDoc(doc(firestore, "users", userID), { userID, displayName, email, phoneNumber, emailVerified });
         setSignupAlert(true);
         setTimeout(() => { router.push("/"); }, 3000);
       })
-      .catch((err) => {
+      .catch((error) => {
         setSignupError(true);
         setTimeout(() => { setSignupError(false); }, 5000);
       });
@@ -77,6 +88,70 @@ function Signup() {
             disabled
             color="orange"
             label="Enter your email"
+          />
+        </div>
+        <div className="w-[28rem] my-10">
+          <Input
+            size="lg"
+            color="orange"
+            label="Type your name"
+            {...register("username", {
+              required: true,
+            })}
+          />
+        </div>
+        <div className="relative flex w-full w-[28rem]">
+          <Menu placement="bottom-start">
+            <MenuHandler>
+              <Button
+                ripple={false}
+                variant="text"
+                color="blue-gray"
+                className="flex h-11 items-center gap-2 rounded-r-none border border-r-0 border-blue-gray-200 bg-blue-gray-500/10 pl-3"
+              >
+                <img
+                  src={flags.svg}
+                  alt={name}
+                  className="h-4 w-4 rounded-full object-cover"
+                />
+                {countryCallingCode}
+              </Button>
+            </MenuHandler>
+            <MenuList className="max-h-[20rem] max-w-[18rem]">
+              {countries.map(({ name, flags, countryCallingCode }, index) => {
+                return (
+                  <MenuItem
+                    key={name}
+                    value={name}
+                    className="flex items-center gap-2"
+                    onClick={() => setCountry(index)}
+                  >
+                    <img
+                      src={flags.svg}
+                      alt={name}
+                      className="h-5 w-5 rounded-full object-cover"
+                    />
+                    {name} <span className="ml-auto">{countryCallingCode}</span>
+                  </MenuItem>
+                );
+              })}
+            </MenuList>
+          </Menu>
+          <Input
+            type="tel"
+            size="lg"
+            placeholder="Mobile Number"
+            color="orange"
+            className="rounded-l-none"
+            labelProps={{
+              className: "before:content-none after:content-none",
+            }}
+            containerProps={{
+              className: "min-w-0",
+            }}
+            {...register("phone", {
+              required: true,
+            })}
           />
         </div>
         <div className="w-[28rem] my-10">

@@ -2,46 +2,88 @@ import { Button } from "@material-tailwind/react";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import { useRouter } from "next/router";
-import { updateDoc, doc, onSnapshot } from "firebase/firestore";
-import { firestore } from "../firebase";
+import { doc, onSnapshot, updateDoc } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import logoExpress from "@/public/Logo-express.png";
 import cartEmpty from "@/public/cartEmpty.svg";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth, firestore } from '@/firebase';
+
 
 function Cart() {
+  const router = useRouter();
   const [cartProducts, setCartProducts] = useState([]);
-  let separateProducts = [];
-  let total = 0;
+  const [userState, setUserState] = useState(null);
+  let separateProducts = Array();
+  let total = Number();
 
   useEffect(() => {
-    onSnapshot(doc(firestore, "cart", "wj3GhaCeRd4pnKwMZ6Ny"), (snapShot) => {
-      setCartProducts(snapShot.data().items);
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setUserState(user);
+        onSnapshot(doc(firestore, "cart", user.uid), (snapShot) => {
+          setCartProducts(snapShot.data()?.products);
+        });
+      }
+      else {
+        let productsFromLocalSorage = JSON.parse(localStorage.getItem("cart"));
+        setCartProducts(productsFromLocalSorage);
+      }
     });
   }, []);
 
-  const router = useRouter();
-
   function increaseCart(index) {
+    // User make update on him cart.
     separateProducts = [...cartProducts];
     ++separateProducts[index].quantity;
-    updateDoc(doc(firestore, "cart", "wj3GhaCeRd4pnKwMZ6Ny"), {
-      items: [...separateProducts],
-    });
+    // Check the user is sign in or not
+    if (userState) {
+      // Call firebase to update user cart
+      updateDoc(doc(firestore, "cart", userState.uid), {
+        products: [...separateProducts],
+      });
+    }
+    else {
+      // Call localStorage to update user cart
+      localStorage.setItem("cart", JSON.stringify(separateProducts));
+      setCartProducts(separateProducts);
+    }
   }
+
   function decreaseCart(index) {
+    // User make update on him cart.
     separateProducts = [...cartProducts];
     --separateProducts[index].quantity;
-    updateDoc(doc(firestore, "cart", "wj3GhaCeRd4pnKwMZ6Ny"), {
-      items: [...separateProducts],
-    });
+    // Check the user is sign in or not
+    if (userState) {
+      // Call firebase to update user cart
+      updateDoc(doc(firestore, "cart", userState.uid), {
+        products: [...separateProducts],
+      });
+    }
+    else {
+      // Call localStorage to update user cart
+      localStorage.setItem("cart", JSON.stringify(separateProducts));
+      setCartProducts(separateProducts);
+    }
   }
-  function removeItemFromCart(index) {
+
+  function removeProductFromCart(index) {
+    // User make update on him cart.
     separateProducts = [...cartProducts];
     separateProducts.splice(index, 1);
-    updateDoc(doc(firestore, "cart", "wj3GhaCeRd4pnKwMZ6Ny"), {
-      items: [...separateProducts],
-    });
+    if (userState) {
+      // Call firebase to update user cart
+      updateDoc(doc(firestore, "cart", userState.uid), {
+        products: [...separateProducts],
+      });
+    }
+    else {
+      // Call localStorage to update user cart
+      localStorage.setItem("cart", JSON.stringify(separateProducts));
+      setCartProducts([...separateProducts]);
+    }
   }
 
   return (
@@ -53,17 +95,17 @@ function Cart() {
             className="p-4 rounded-lg bg-white lg:col-span-8"
           >
             <ul role="list" className="divide-y divide-gray-200">
-              {cartProducts.length > 0 ? cartProducts.map((product, index) => {
+              {cartProducts?.length > 0 ? cartProducts.map((product, index) => {
                 total += product.product.price * product.quantity;
                 return (
-                  <div key={product.product.id}>
+                  <div key={product.product.proId}>
                     <li className="flex py-6 sm:py-6 ">
                       <div className="flex-shrink-0">
                         <Image
                           width={100}
                           height={100}
                           src={product.product.images[0]}
-                          alt={product.product.title}
+                          alt={product.product.en.title}
                           className="sm:h-38 sm:w-38 h-24 w-24 rounded-md object-contain object-center"
                         />
                       </div>
@@ -75,7 +117,7 @@ function Cart() {
                                 href={product.product.thumbnail}
                                 className=" text-black"
                               >
-                                {product.product.title}
+                                {product.product.en.title}
                               </a>
                             </h3>
                           </div>
@@ -87,7 +129,7 @@ function Cart() {
                         </div>
                         <div className="flex justify-between">
                           <p className="text-xs text-orange-500">
-                            {product.product.stock} units left
+                            {product.product.quantityInStock} units left
                           </p>
                           <div className="flex">
                             <p className="text-lg font-medium text-gray-500 line-through">
@@ -121,7 +163,7 @@ function Cart() {
                           <span
                             className="text-sm font-medium text-orange-500"
                             onClick={() => {
-                              removeItemFromCart(index);
+                              removeProductFromCart(index);
                             }}
                           >
                             REMOVE
@@ -164,13 +206,13 @@ function Cart() {
                   <p className="my-4">Your cart is empty!</p>
                   <p className="text-xs mb-4">Browse our categories and discover our best deals!</p>
                   <Button
-                  onClick={() => router.push("/")}
-                  
-                  className="text-xs text-white"
-                  color="amber"
-                >
-                  START SHOPPING
-                </Button>
+                    onClick={() => router.push("/")}
+
+                    className="text-xs text-white"
+                    color="amber"
+                  >
+                    START SHOPPING
+                  </Button>
                 </div>
               }
             </ul>
@@ -205,7 +247,7 @@ function Cart() {
             <div className="text-green-700 border-t">
               <div className="flex gap-4 p-2">
                 <Button
-                  onClick={() => router.push("/checkout_layout/address")}
+                  onClick={() => {userState?router.push("/checkout_layout/address"):router.push("/identification")}}
                   variant="gradient"
                   className="text-lg text-white"
                   color="amber"

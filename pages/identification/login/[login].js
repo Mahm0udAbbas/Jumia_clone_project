@@ -2,31 +2,44 @@ import { Card, Input, Button, Typography } from "@material-tailwind/react";
 import { useForm } from "react-hook-form";
 import Image from "next/image";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "@/firebase";
+import { auth, firestore } from "@/firebase";
 import topLogo from "@/public/1.png";
 import bottomLogo from "@/public/bottom-logo.png";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { setDoc, doc } from "firebase/firestore";
 
 function Login() {
   const { register, handleSubmit, formState } = useForm();
+  const [storageProducts, setStorageProducts] = useState(null);
+  const [isLoading, setLoading] = useState(false);
   const [errors, setErrors] = useState({ password: "" });
   const router = useRouter();
   const { login: email } = router.query;
 
-  async function userLogin({ email, password }) {
+  useEffect(() => {setStorageProducts(JSON.parse(localStorage.getItem("cart")))}, []);
+
+  async function userLogin({ password }) {
     await signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
-        console.log(userCredential);
-        router.push("/");
+        setLoading(true);
+        // If there cart in local storage set it in him firestore cart collection.
+        if (storageProducts) {
+          setDoc(doc(firestore, "cart", userCredential.user.uid), { products: [...storageProducts] });
+          // Remove it from local storage.
+          localStorage.removeItem("cart");
+        }
+        setTimeout(() => {
+          setLoading(false);
+          router.push("/");
+        }, 3000);
       })
       .catch((err) => {
         console.log(err);
-        if (err.code == "auth/wrong-password") {
+        if (err.code) {
           setErrors({ ...errors, password: "Password Wrong" });
         }
       });
-    // router.push("/");
   }
 
   return (
@@ -80,6 +93,7 @@ function Login() {
           type="submit"
           className="mt-6 text-white"
           size="lg"
+          loading={isLoading}
           color="amber"
           fullWidth
         >

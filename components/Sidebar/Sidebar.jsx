@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Category from "./Category";
 import NestedCat from "./NestedCat";
 import List from "./List";
@@ -9,8 +9,9 @@ import Radio from "./Radio";
 import CatFilter from "./CatFilter";
 import RangeSlider from "./RangeSlider";
 import RatingFilter from "./RatingFilter";
+import RatingsGenerator from "./RatingsGenerator";
 
-export default function Sidebar() {
+export default function Sidebar({ catData, subCats, setCatProducts, id }) {
   const CheckboxOptions = [
     { id: "Checkbox1", value: "option1", text: "Option 1" },
     { id: "Checkbox2", value: "option2", text: "Option 2" },
@@ -31,27 +32,26 @@ export default function Sidebar() {
     { id: "20", value: "20%", text: "20% or more" },
     { id: "10", value: "10%", text: "10% or more" },
   ];
-
-
+  const Ratings = RatingsGenerator();
   const checkedItems = false;
   const handleChange = (id) => {
     checkedItems != checkedItems;
   };
-
   return (
     <div>
       <Category>
         <NestedCat>CATEGORY</NestedCat>
         <List>
-          <CatFilter />
+          <NestedCat>{catData}</NestedCat>
+          {subCats
+            ? subCats.map((category, index) => (
+                <ListItem key={index}>{category}</ListItem>
+              ))
+            : ""}
         </List>
         <br />
         <hr />
-        <RangeSlider />
-        <br />
-        <hr />
-        <NestedCat>BRAND</NestedCat>
-        <Search />
+        <RangeSlider setCatProducts={setCatProducts} catId={id} />
         <List
           style={{
             maxHeight: "100px",
@@ -68,39 +68,26 @@ export default function Sidebar() {
                 value={option.value}
                 text={option.text}
                 checked={checkedItems[option.id]}
+                onChange={() => handleChange(option.id)}
               />
             </ListItem>
           ))}
         </List>
         <br />
         <hr />
-        <NestedCat>DISCOUNT</NestedCat>
-        <Checkbox
-          key="10"
-          name="checkGroup"
-          id="10"
-          value="Show only discounted items"
-          text="Show only discounted items"
-        />
-        <br />
-        <hr />
-        <NestedCat>DISCOUNT PERCENTAGE</NestedCat>
-        <List>
-          {PERCENTAGE.map((option, index) => (
-            <Radio
-              key={index}
-              name="Group1"
-              id={option.id}
-              value={option.value}
-              text={option.text}
-            />
-          ))}
-        </List>
-        <br />
-        <hr />
         <NestedCat>PRODUCT RATING</NestedCat>
         <List>
-            <RatingFilter />
+          <div>
+            {Ratings.map((option, index) => (
+              <Radio
+                key={index}
+                name="Group2"
+                id={option.id}
+                value={option.value}
+                text={option.text}
+              />
+            ))}
+          </div>
         </List>
       </Category>
     </div>

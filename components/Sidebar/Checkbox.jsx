@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import styles from '../../styles/CheckboxColor.module.css';
+import styles from "@/styles/checkBoxColor.module.css";
 
 export default function Checkbox({ name, id, value, text }) {
     const [isChecked, setIsChecked] = useState(false);
