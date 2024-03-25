@@ -107,7 +107,7 @@ export const getAllProducts = async () => {
       id: doc.id,
       ...doc.data(),
     }));
-    console.log(productsData);
+
 
     return productsData;
   } catch (error) {
@@ -172,5 +172,4 @@ export const getProductsByCategoryId = async (id) => {
   });
   return products;
 };
-// let pro = await getProductsByCategoryId("65527c22376a52ea210d9708");
-// console.log(pro);
+

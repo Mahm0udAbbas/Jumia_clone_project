@@ -5,7 +5,7 @@ import Recommended from "@/components/recommended/recommended";
 import Supermarket from "@/components/recommended/supermarket";
 import HealthPersonalCare from "@/components/recommended/HealthPersonalCare";
 import OfficeSupplies from "@/components/recommended/OfficeSupplies";
-import Watches from "@/components/recommended/Watches";
+import Watches from "@/components/recommended/watches";
 
 export default function Home() {
   return (

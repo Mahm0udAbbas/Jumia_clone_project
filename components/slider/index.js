@@ -24,7 +24,7 @@ export default function SliderMainPage() {
     <div className=" mt-5  items-center justify-center ">
       <RecomHeader title="Recommended Products" color="bg-yellow-300" />
       <div className=" grid grid-cols-1 sm:grid-cols-2  md:grid-cols-4  gap-2 mt-1">
-        {products.map((product) => (
+        {products?.map((product) => (
           <div key={product.id} className=" ">
             <div className="bg-white p-6 shadow-md rounded-md h-[400px] flex flex-col justify-between ">
               <div className="flex justify-center items-center">
