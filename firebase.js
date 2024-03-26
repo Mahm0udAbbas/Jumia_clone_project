@@ -4,7 +4,6 @@ import {
   addDoc,
   collection,
   doc,
-  documentId,
   getDoc,
   getDocs,
   getFirestore,

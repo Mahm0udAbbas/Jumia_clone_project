@@ -35,7 +35,6 @@ export default function RangeSlider({ setCatProducts, catId, subCatId }) {
     getData(appliedValue, subCatId);
   };
   async function getData(value, subCatId) {
-    console.log(subCatId);
     // Receive value as a parameter
     try {
       const productsData = await getProductsByCategoryId(catId);
