@@ -11,7 +11,7 @@ function valuetext(value) {
   return `${value}`;
 }
 
-export default function RangeSlider({ setCatProducts, catId }) {
+export default function RangeSlider({ setCatProducts, catId, subCatId }) {
   const [value, setValue] = useState([20, 48000]);
   const [appliedValue, setAppliedValue] = useState([20, 48000]);
   const [loading, setLoading] = useState(true);
@@ -32,18 +32,22 @@ export default function RangeSlider({ setCatProducts, catId }) {
 
   const handleSubmit = () => {
     setAppliedValue(value);
-    getData(appliedValue);
+    getData(appliedValue, subCatId);
   };
-  async function getData(value) {
+  async function getData(value, subCatId) {
+    console.log(subCatId);
     // Receive value as a parameter
     try {
       const productsData = await getProductsByCategoryId(catId);
       let data = productsData.filter(
         (product) => product.price >= value[0] && product.price <= value[1]
       ); // Filter products based on price range
+      if (subCatId) {
+        data = data.filter((product) => product.subCategoryId === subCatId);
+        console.log("hi");
+      }
       console.log(data);
       setCatProducts(data);
-      setLoading(false);
     } catch (error) {
       console.error("Error fetching data:", error);
     }

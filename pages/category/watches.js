@@ -7,6 +7,7 @@ import Header from "@/components/Product/header";
 import Product from "@/components/Product/product";
 import MySpinner from "@/components/order/Spiner/Spinner";
 import CatProdList from "@/components/CatProdList/CatProdList";
+import { catIds } from "@/data";
 
 export default function Watches() {
   const [loading, setLoading] = useState(true);
@@ -23,9 +24,7 @@ export default function Watches() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const products = await getProductsByCategoryId(
-          "65527ac3376a52ea210d9706"
-        );
+        const products = await getProductsByCategoryId(catIds.Watches);
         setCatProducts(products);
       } catch (error) {
         console.error("Error fetching products:", error);
@@ -64,7 +63,12 @@ export default function Watches() {
         </div>
         <div className="grid grid-cols-12 gap-2">
           <div className="col-span-12   md:col-span-3">
-            <Sidebar catData="Watches" />;
+            <Sidebar
+              catData="Watches"
+              setCatProducts={setCatProducts}
+              id={catIds.Watches}
+            />
+            ;
           </div>
           <div className=" col-span-12 md:col-span-9 ">
             <CatProdList catProducts={catProducts} catData="Watches" />

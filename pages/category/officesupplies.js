@@ -7,6 +7,7 @@ import Header from "@/components/Product/header";
 import Product from "@/components/Product/product";
 import MySpinner from "@/components/order/Spiner/Spinner";
 import CatProdList from "@/components/CatProdList/CatProdList";
+import { catIds } from "@/data";
 
 export default function OfficeSupplies() {
   const [loading, setLoading] = useState(true);
@@ -28,9 +29,7 @@ export default function OfficeSupplies() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const products = await getProductsByCategoryId(
-          "6562f3891cf9fca552f8c5ac"
-        );
+        const products = await getProductsByCategoryId(catIds.Office);
         setCatProducts(products);
       } catch (error) {
         console.error("Error fetching products:", error);
@@ -99,7 +98,12 @@ export default function OfficeSupplies() {
         </div>
         <div className="grid grid-cols-12 gap-2">
           <div className="col-span-12   md:col-span-3">
-            <Sidebar catData="Office Supplies" />;
+            <Sidebar
+              catData="Office Supplies"
+              setCatProducts={setCatProducts}
+              id={catIds.Office}
+            />
+            ;
           </div>
           <div className=" col-span-12 md:col-span-9 ">
             <CatProdList catProducts={catProducts} catData="Office Supplies" />

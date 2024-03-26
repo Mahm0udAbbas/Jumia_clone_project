@@ -3,15 +3,18 @@ import Category from "./Category";
 import NestedCat from "./NestedCat";
 import List from "./List";
 import ListItem from "./ListItem";
-import Search from "./Search";
 import Checkbox from "./Checkbox";
 import Radio from "./Radio";
-import CatFilter from "./CatFilter";
 import RangeSlider from "./RangeSlider";
-import RatingFilter from "./RatingFilter";
 import RatingsGenerator from "./RatingsGenerator";
 
-export default function Sidebar({ catData, subCats, setCatProducts, id }) {
+export default function Sidebar({
+  catData,
+  subCats,
+  setCatProducts,
+  id,
+  subCatId,
+}) {
   const CheckboxOptions = [
     { id: "Checkbox1", value: "option1", text: "Option 1" },
     { id: "Checkbox2", value: "option2", text: "Option 2" },
@@ -51,7 +54,11 @@ export default function Sidebar({ catData, subCats, setCatProducts, id }) {
         </List>
         <br />
         <hr />
-        <RangeSlider setCatProducts={setCatProducts} catId={id} />
+        <RangeSlider
+          setCatProducts={setCatProducts}
+          catId={id}
+          subCatId={subCatId}
+        />
         <List
           style={{
             maxHeight: "100px",

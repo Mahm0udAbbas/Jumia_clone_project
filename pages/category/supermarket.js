@@ -7,6 +7,7 @@ import Header from "@/components/Product/header";
 import Product from "@/components/Product/product";
 import MySpinner from "@/components/order/Spiner/Spinner";
 import CatProdList from "@/components/CatProdList/CatProdList";
+import { catIds } from "@/data";
 
 export default function Supermarket() {
   const [loading, setLoading] = useState(false);
@@ -36,9 +37,7 @@ export default function Supermarket() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const products = await getProductsByCategoryId(
-          "65527c22376a52ea210d9708"
-        );
+        const products = await getProductsByCategoryId(catIds.Supermarket);
         setCatProducts(products);
       } catch (error) {
         console.error("Error fetching products:", error);
@@ -106,7 +105,12 @@ export default function Supermarket() {
         </div>
         <div className="grid grid-cols-12 gap-2">
           <div className="col-span-12   md:col-span-3">
-            <Sidebar catData="Supermarket" />;
+            <Sidebar
+              catData="Supermarket"
+              setCatProducts={setCatProducts}
+              id={catIds.Supermarket}
+            />
+            ;
           </div>
           <div className=" col-span-12 md:col-span-9 py-2">
             <CatProdList catProducts={catProducts} catData="Supermarket" />
