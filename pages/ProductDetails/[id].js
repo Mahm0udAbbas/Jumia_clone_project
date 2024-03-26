@@ -12,6 +12,7 @@ import LocalShippingOutlinedIcon from "@mui/icons-material/LocalShippingOutlined
 import AssignmentReturnOutlinedIcon from "@mui/icons-material/AssignmentReturnOutlined";
 import { getProductById } from "@/firebase";
 import { Breadcrumbs } from "@mui/material";
+import addToCart from "@/services/addToCart";
 
 const data5 = [
   {
@@ -247,8 +248,11 @@ const ProductDetails = ({ product }) => {
                     black
                   </div>
 
-                  <div
-                    className="flex items-center justify-between px-2 py-2 mx-1 my-2"
+                  <button
+                    className="flex items-center justify-center px-2 py-2 mx-1 my-2 w-full"
+                    onClick={() => {
+                      addToCart(product);
+                    }}
                     style={{
                       backgroundColor: "orange",
                       borderRadius: "4px",
@@ -256,12 +260,11 @@ const ProductDetails = ({ product }) => {
                       cursor: "pointer",
                     }}
                   >
-                    <div className="text-2xl">
+                    <div className="self-center mx-2">
                       <AddShoppingCartOutlinedIcon />
                     </div>
-                    <p>ADD TO CART</p>
-                    <div></div>
-                  </div>
+                    <p className="text-center">ADD TO CART</p>
+                  </button>
 
                   <div className="w-full my-3 border-b border-gray-200"></div>
 

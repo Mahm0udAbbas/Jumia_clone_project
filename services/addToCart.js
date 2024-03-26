@@ -6,19 +6,19 @@ function addToCart(product) {
   // signOut(auth);
   const cartObject = { product, quantity: 1 };
   const storageProducts = JSON.parse(localStorage.getItem("cart"));
-  
+
   onAuthStateChanged(auth, (user) => {
     if (user) {
       // Set new cart by userID in cart collection.
-      setDoc(doc(firestore, "cart", user.uid), { products: arrayUnion(cartObject) });
-    }
-    else {
+      setDoc(doc(firestore, "cart", user.uid), {
+        products: arrayUnion(cartObject),
+      });
+    } else {
       if (storageProducts) {
         let localProducts = [];
         localProducts = [...storageProducts, cartObject];
         localStorage.setItem("cart", JSON.stringify(localProducts));
-      }
-      else {
+      } else {
         localStorage.setItem("cart", JSON.stringify([cartObject]));
       }
     }

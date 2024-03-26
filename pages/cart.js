@@ -8,8 +8,7 @@ import Image from "next/image";
 import logoExpress from "@/public/Logo-express.png";
 import cartEmpty from "@/public/cartEmpty.svg";
 import { onAuthStateChanged } from "firebase/auth";
-import { auth, firestore } from '@/firebase';
-
+import { auth, firestore } from "@/firebase";
 
 function Cart() {
   const router = useRouter();
@@ -17,7 +16,6 @@ function Cart() {
   const [userState, setUserState] = useState(null);
   let separateProducts = Array();
   let total = Number();
-
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
@@ -25,8 +23,7 @@ function Cart() {
         onSnapshot(doc(firestore, "cart", user.uid), (snapShot) => {
           setCartProducts(snapShot.data()?.products);
         });
-      }
-      else {
+      } else {
         let productsFromLocalSorage = JSON.parse(localStorage.getItem("cart"));
         setCartProducts(productsFromLocalSorage);
       }
@@ -43,8 +40,7 @@ function Cart() {
       updateDoc(doc(firestore, "cart", userState.uid), {
         products: [...separateProducts],
       });
-    }
-    else {
+    } else {
       // Call localStorage to update user cart
       localStorage.setItem("cart", JSON.stringify(separateProducts));
       setCartProducts(separateProducts);
@@ -61,8 +57,7 @@ function Cart() {
       updateDoc(doc(firestore, "cart", userState.uid), {
         products: [...separateProducts],
       });
-    }
-    else {
+    } else {
       // Call localStorage to update user cart
       localStorage.setItem("cart", JSON.stringify(separateProducts));
       setCartProducts(separateProducts);
@@ -78,8 +73,7 @@ function Cart() {
       updateDoc(doc(firestore, "cart", userState.uid), {
         products: [...separateProducts],
       });
-    }
-    else {
+    } else {
       // Call localStorage to update user cart
       localStorage.setItem("cart", JSON.stringify(separateProducts));
       setCartProducts([...separateProducts]);
@@ -95,107 +89,113 @@ function Cart() {
             className="p-4 rounded-lg bg-white lg:col-span-8"
           >
             <ul role="list" className="divide-y divide-gray-200">
-              {cartProducts?.length > 0 ? cartProducts.map((product, index) => {
-                total += product.product.price * product.quantity;
-                return (
-                  <div key={product.product.proId}>
-                    <li className="flex py-6 sm:py-6 ">
-                      <div className="flex-shrink-0">
-                        <Image
-                          width={100}
-                          height={100}
-                          src={product.product.images[0]}
-                          alt={product.product.en.title}
-                          className="sm:h-38 sm:w-38 h-24 w-24 rounded-md object-contain object-center"
-                        />
-                      </div>
-                      <div className="ml-4 flex flex-1 flex-col justify-between sm:ml-6">
-                        <div className="relative pr-9 sm:grid sm:grid-cols-2 sm:gap-x-6 sm:pr-0">
-                          <div className="flex justify-between">
-                            <h3 className="text-sm">
-                              <a
-                                href={product.product.thumbnail}
-                                className=" text-black"
-                              >
-                                {product.product.en.title}
-                              </a>
-                            </h3>
-                          </div>
-                          <div className="flex justify-end">
-                            <p className="text-xl font-medium text-gray-900">
-                              EGP {product.product.price}.00
-                            </p>
-                          </div>
-                        </div>
-                        <div className="flex justify-between">
-                          <p className="text-xs text-orange-500">
-                            {product.product.quantityInStock} units left
-                          </p>
-                          <div className="flex">
-                            <p className="text-lg font-medium text-gray-500 line-through">
-                              EGP 507.00
-                            </p>
-                            <p className="mx-1"></p>
-                            <p className="text-md text-orange-700 px-2 rounded bg-orange-700/10">
-                              -{Math.floor(product.product.discountPercentage)}%
-                            </p>
-                          </div>
-                        </div>
-                        <Image
-                          width={100}
-                          height={100}
-                          src={logoExpress}
-                          alt="jumia logo"
-                          className="w-24 object-contain"
-                        />
-                      </div>
-                    </li>
-                    <div className="mb-2 flex justify-between">
-                      <div className="flex">
-                        <button
-                          type="button"
-                          className="flex rounded p-2 items-center space-x-2 hover:bg-orange-500/25 "
-                        >
-                          <DeleteForeverIcon
-                            size={18}
-                            className="text-orange-500"
+              {cartProducts?.length > 0 ? (
+                cartProducts.map((product, index) => {
+                  total += product.product?.price * product.quantity;
+                  return (
+                    <div key={product.product?.proId}>
+                      <li className="flex py-6 sm:py-6 ">
+                        <div className="flex-shrink-0">
+                          <Image
+                            width={100}
+                            height={100}
+                            src={product.product?.images[0]}
+                            alt={product.product?.en.title}
+                            className="sm:h-38 sm:w-38 h-24 w-24 rounded-md object-contain object-center"
                           />
-                          <span
-                            className="text-sm font-medium text-orange-500"
-                            onClick={() => {
-                              removeProductFromCart(index);
-                            }}
+                        </div>
+                        <div className="ml-4 flex flex-1 flex-col justify-between sm:ml-6">
+                          <div className="relative pr-9 sm:grid sm:grid-cols-2 sm:gap-x-6 sm:pr-0">
+                            <div className="flex justify-between">
+                              <h3 className="text-sm">
+                                <a
+                                  href={product.product?.thumbnail}
+                                  className=" text-black"
+                                >
+                                  {product.product?.en.title}
+                                </a>
+                              </h3>
+                            </div>
+                            <div className="flex justify-end">
+                              <p className="text-xl font-medium text-gray-900">
+                                EGP {product.product?.price}.00
+                              </p>
+                            </div>
+                          </div>
+                          <div className="flex justify-between">
+                            <p className="text-xs text-orange-500">
+                              {product.product?.quantityInStock} units left
+                            </p>
+                            <div className="flex">
+                              <p className="text-lg font-medium text-gray-500 line-through">
+                                EGP 507.00
+                              </p>
+                              <p className="mx-1"></p>
+                              <p className="text-md text-orange-700 px-2 rounded bg-orange-700/10">
+                                -
+                                {Math.floor(
+                                  product.product?.discountPercentage
+                                )}
+                                %
+                              </p>
+                            </div>
+                          </div>
+                          <Image
+                            width={100}
+                            height={100}
+                            src={logoExpress}
+                            alt="jumia logo"
+                            className="w-24 object-contain"
+                          />
+                        </div>
+                      </li>
+                      <div className="mb-2 flex justify-between">
+                        <div className="flex">
+                          <button
+                            type="button"
+                            className="flex rounded p-2 items-center space-x-2 hover:bg-orange-500/25 "
                           >
-                            REMOVE
-                          </span>
-                        </button>
-                      </div>
-                      <div className="min-w-24 flex">
-                        <Button
-                          className="text-white"
-                          variant="gradient"
-                          size="sm"
-                          color="amber"
-                          disabled={product.quantity == 1}
-                          onClick={() => decreaseCart(index)}
-                        >
-                          -
-                        </Button>
-                        <span className="mx-6">{product.quantity}</span>
-                        <Button
-                          className="text-white"
-                          variant="gradient"
-                          size="sm"
-                          color="amber"
-                          onClick={() => increaseCart(index)}
-                        >
-                          +
-                        </Button>
+                            <DeleteForeverIcon
+                              size={18}
+                              className="text-orange-500"
+                            />
+                            <span
+                              className="text-sm font-medium text-orange-500"
+                              onClick={() => {
+                                removeProductFromCart(index);
+                              }}
+                            >
+                              REMOVE
+                            </span>
+                          </button>
+                        </div>
+                        <div className="min-w-24 flex">
+                          <Button
+                            className="text-white"
+                            variant="gradient"
+                            size="sm"
+                            color="amber"
+                            disabled={product.quantity == 1}
+                            onClick={() => decreaseCart(index)}
+                          >
+                            -
+                          </Button>
+                          <span className="mx-6">{product.quantity}</span>
+                          <Button
+                            className="text-white"
+                            variant="gradient"
+                            size="sm"
+                            color="amber"
+                            onClick={() => increaseCart(index)}
+                          >
+                            +
+                          </Button>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                );
-              }) :
+                  );
+                })
+              ) : (
                 <div className="flex flex-col items-center my-8 text-black">
                   <Image
                     width={100}
@@ -204,17 +204,18 @@ function Cart() {
                     alt="Cart empty logo"
                   />
                   <p className="my-4">Your cart is empty!</p>
-                  <p className="text-xs mb-4">Browse our categories and discover our best deals!</p>
+                  <p className="text-xs mb-4">
+                    Browse our categories and discover our best deals!
+                  </p>
                   <Button
                     onClick={() => router.push("/")}
-
                     className="text-xs text-white"
                     color="amber"
                   >
                     START SHOPPING
                   </Button>
                 </div>
-              }
+              )}
             </ul>
           </section>
           {/* Checkout Side */}
@@ -247,7 +248,11 @@ function Cart() {
             <div className="text-green-700 border-t">
               <div className="flex gap-4 p-2">
                 <Button
-                  onClick={() => {userState?router.push("/checkout_layout/address"):router.push("/identification")}}
+                  onClick={() => {
+                    userState
+                      ? router.push("/checkout_layout/address")
+                      : router.push("/identification");
+                  }}
                   variant="gradient"
                   className="text-lg text-white"
                   color="amber"
