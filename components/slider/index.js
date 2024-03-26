@@ -12,7 +12,7 @@ export default function SliderMainPage() {
       try {
         const data = await getAllProducts();
         setProducts(data);
-        setLoading(flase);
+        setLoading(false);
       } catch (error) {
         console.error("Error fetching products:", error);
       }

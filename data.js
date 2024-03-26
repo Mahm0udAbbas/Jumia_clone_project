@@ -4579,3 +4579,18 @@ export const categories = [
       "Perfume category presents a collection of fragrances crafted with exquisite blends of aromatic ingredients, offering a sensory experience that enhances personal style and leaves a lasting impression.",
   },
 ];
+
+export const catIds = {
+  Electronics: "65527a31376a52ea210d9703",
+  Watches: "65527ac3376a52ea210d9706",
+  Supermarket: "65527c22376a52ea210d9708",
+  Health: "65527c8c376a52ea210d970a",
+  Office: "6562f3891cf9fca552f8c5ac",
+  Kindle: "65658ceae686c668a4d191ec",
+  Perfumes: "8c8b49e6d5004e08b9e787f8567fae2c",
+};
+export const subCatIds = {
+  labtop: "65527fafa8299445e5fe5e85",
+  mobile: "656e34938ab097079167133d",
+  headphones: "65527fdca8299445e5fe5e87",
+};

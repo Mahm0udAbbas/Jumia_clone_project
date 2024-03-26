@@ -1,11 +1,4 @@
 import React, { useState, useEffect } from "react";
-import {
-  getFirestore,
-  collection,
-  getDocs,
-  query,
-  where,
-} from "firebase/firestore";
 import { getProductsByCategoryId } from "../../firebase";
 import RecomHeader from "../Product/header";
 import Link from "next/link";

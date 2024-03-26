@@ -109,7 +109,6 @@ export const getAllProducts = async () => {
       id: doc.id,
       ...doc.data(),
     }));
-    console.log(productsData);
 
     return productsData;
   } catch (error) {
@@ -242,6 +241,7 @@ export const getProductsBySubCategoryId = async (subId) => {
   });
   return products;
 };
+
 export function filterPrice(products, min, max) {
   products = products.filter((product) => {
     return product.price > min && product.price < max;

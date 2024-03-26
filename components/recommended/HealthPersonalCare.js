@@ -1,15 +1,11 @@
 import React, { useState, useEffect } from "react";
-import {
-  getFirestore,
-  collection,
-  getDocs,
-  query,
-  where,
-} from "firebase/firestore";
 import db, { getProductsByCategoryId } from "../../firebase";
 import RecomHeader from "../Product/header";
+<<<<<<< HEAD
 import MySpinner from "../order/Spiner/Spinner";
 
+=======
+>>>>>>> mahmoudhosni
 export default function HealthPersonalCare() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);

@@ -9,6 +9,7 @@ import {
   getProductsBySubCategoryId,
   getSubCategoryByName,
 } from "@/firebase";
+import { catIds, subCatIds } from "@/data";
 
 export default function Phones() {
   const [loading, setLoading] = useState(true);
@@ -17,10 +18,8 @@ export default function Phones() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const products = await getProductsBySubCategoryId(
-          "656e34938ab097079167133d"
-        );
-        const subCat = await getAllSubCategories("65527a31376a52ea210d9703");
+        const products = await getProductsBySubCategoryId(subCatIds.mobile);
+        const subCat = await getAllSubCategories(catIds.Electronics);
         setCatProducts(products);
         setSubCats(subCat);
       } catch (error) {
@@ -49,7 +48,14 @@ export default function Phones() {
         </Breadcrumbs>
         <div className="grid grid-cols-12 gap-2">
           <div className="col-span-12   md:col-span-3">
-            <Sidebar catData="Electronics" subCats={subCats} />;
+            <Sidebar
+              catData="Electronics"
+              subCats={subCats}
+              subCatId={subCatIds.mobile}
+              setCatProducts={setCatProducts}
+              id={catIds.Electronics}
+            />
+            ;
           </div>
           <div className=" col-span-12 md:col-span-9 ">
             <CatProdList

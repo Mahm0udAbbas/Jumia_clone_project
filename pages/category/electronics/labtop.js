@@ -9,6 +9,7 @@ import {
   getProductsBySubCategoryId,
   getSubCategoryByName,
 } from "@/firebase";
+import { catIds, subCatIds } from "@/data";
 
 export default function Labtop() {
   const [loading, setLoading] = useState(true);
@@ -17,10 +18,8 @@ export default function Labtop() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const products = await getProductsBySubCategoryId(
-          "65527fafa8299445e5fe5e85"
-        );
-        const subCat = await getAllSubCategories("65527a31376a52ea210d9703");
+        const products = await getProductsBySubCategoryId(subCatIds.labtop);
+        const subCat = await getAllSubCategories(catIds.Electronics);
         setCatProducts(products);
         setSubCats(subCat);
       } catch (error) {
@@ -49,7 +48,14 @@ export default function Labtop() {
         </Breadcrumbs>
         <div className="grid grid-cols-12 gap-2">
           <div className="col-span-12   md:col-span-3">
-            <Sidebar catData="Electronics" subCats={subCats} />;
+            <Sidebar
+              catData="Electronics"
+              subCats={subCats}
+              setCatProducts={setCatProducts}
+              id={catIds.Electronics}
+              subCatId={subCatIds.labtop}
+            />
+            ;
           </div>
           <div className=" col-span-12 md:col-span-9 ">
             <CatProdList

@@ -7,6 +7,7 @@ import Header from "@/components/Product/header";
 import Product from "@/components/Product/product";
 import MySpinner from "@/components/order/Spiner/Spinner";
 import CatProdList from "@/components/CatProdList/CatProdList";
+import { catIds } from "@/data";
 
 export default function Health() {
   const [loading, setLoading] = useState(true);
@@ -30,9 +31,7 @@ export default function Health() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const products = await getProductsByCategoryId(
-          "65527c8c376a52ea210d970a"
-        );
+        const products = await getProductsByCategoryId(catIds.Health);
         setCatProducts(products);
         setLoading(false);
       } catch (error) {
@@ -101,7 +100,12 @@ export default function Health() {
         </div>
         <div className="grid grid-cols-12 gap-2">
           <div className="col-span-12   md:col-span-3">
-            <Sidebar catProducts={catProducts} catData="Health & Care" />;
+            <Sidebar
+              setCatProducts={setCatProducts}
+              id={catIds.Health}
+              catData="Health & Care"
+            />
+            ;
           </div>
           <div className=" col-span-12 md:col-span-9 ">
             <CatProdList catProducts={catProducts} catData="Health & Care" />
