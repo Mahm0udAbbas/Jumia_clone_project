@@ -26,13 +26,13 @@ export default function Electronics() {
     };
     fetchData();
   }, []);
-  console.log(products);
+
   return (
     <div className="pt-5">
       <RecomHeader title="Recommended Electronics" color="bg-yellow-300 " />
       <div className="carousel carousel-center w-full bg-white shadow-lg rounded-lg">
         {products.map((product) => (
-          <Link href={`/ProductDetails/${product.id}`}>
+          <Link key={product.id} href={`/ProductDetails/${product.id}`}>
             <div
               key={product.id}
               className="carousel-item flex flex-col w-[150px] md:w-[200px]"

@@ -36,7 +36,6 @@ export default function Account() {
 
       }
     });
-    console.log(userState);
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);

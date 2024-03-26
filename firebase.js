@@ -109,7 +109,7 @@ export const getAllProducts = async () => {
       id: doc.id,
       ...doc.data(),
     }));
-    console.log(productsData);
+
 
     return productsData;
   } catch (error) {
@@ -272,3 +272,4 @@ export function getHighestPriceProduct(products) {
       : HighestPriceProduct;
   });
 }
+

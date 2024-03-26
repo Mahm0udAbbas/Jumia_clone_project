@@ -104,7 +104,7 @@ function Cart() {
                         <Image
                           width={100}
                           height={100}
-                          src={product.product.images[0]}
+                          src={product.product.thumbnail}
                           alt={product.product.en.title}
                           className="sm:h-38 sm:w-38 h-24 w-24 rounded-md object-contain object-center"
                         />
@@ -154,7 +154,10 @@ function Cart() {
                       <div className="flex">
                         <button
                           type="button"
-                          className="flex rounded p-2 items-center space-x-2 hover:bg-orange-500/25 "
+                          className="flex rounded p-2 items-center space-x-2 hover:bg-orange-500/25"
+                          onClick={() => {
+                            removeProductFromCart(index);
+                          }}
                         >
                           <DeleteForeverIcon
                             size={18}
@@ -162,9 +165,6 @@ function Cart() {
                           />
                           <span
                             className="text-sm font-medium text-orange-500"
-                            onClick={() => {
-                              removeProductFromCart(index);
-                            }}
                           >
                             REMOVE
                           </span>
@@ -247,7 +247,7 @@ function Cart() {
             <div className="text-green-700 border-t">
               <div className="flex gap-4 p-2">
                 <Button
-                  onClick={() => {userState?router.push("/checkout_layout/address"):router.push("/identification")}}
+                  onClick={() => { userState ? router.push("/checkout_layout/address") : router.push("/identification") }}
                   variant="gradient"
                   className="text-lg text-white"
                   color="amber"

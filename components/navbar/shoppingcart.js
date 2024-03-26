@@ -2,13 +2,16 @@ import { Badge } from "@material-tailwind/react";
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 import { onAuthStateChanged } from "firebase/auth";
 import Link from "next/link";
-import { auth,firestore } from '@/firebase';
+import { auth, firestore } from '@/firebase';
 import { useEffect, useState } from "react";
 import { doc, onSnapshot } from "firebase/firestore";
 
 export default function Shoppingcart() {
   const [cartLength, setCartLength] = useState(0);
-  
+  let productsFromLocalSorage;
+  if (typeof window !== "undefined") {
+    productsFromLocalSorage = JSON.parse(localStorage.getItem("cart"));
+  }
 
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
@@ -18,15 +21,14 @@ export default function Shoppingcart() {
         });
       }
       else {
-        let productsFromLocalSorage = JSON.parse(localStorage.getItem("cart"));
         setCartLength(productsFromLocalSorage?.length);
       }
     });
 
-  }, []);
+  }, [productsFromLocalSorage?.length]);
   return (
     <Link href="/cart" className="flex items-center">
-      <Badge color="orange" content={cartLength||""}>
+      <Badge color="orange" content={cartLength || ""}>
         <ShoppingCartOutlinedIcon className="h-12 text-3xl font-bold" />
       </Badge>
       <span className="font-bold">Cart</span>
