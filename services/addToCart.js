@@ -7,7 +7,6 @@ function addToCart(product) {
   const localCart = JSON.parse(localStorage.getItem("cart"));
 
   onAuthStateChanged(auth, (user) => {
-
     if (user) {
       // Set new cart by userID in cart collection.
       getDoc(doc(firestore, "cart", user.uid)).then((docSnap) => {
@@ -17,18 +16,22 @@ function addToCart(product) {
           firebaseCart.find((item) => {
             if (item.product.proId == newCartProduct.product.proId) {
               ++item.quantity;
-              setDoc(doc(firestore, "cart", user.uid), { products: firebaseCart });
+              setDoc(doc(firestore, "cart", user.uid), {
+                products: firebaseCart,
+              });
             } else {
-              updateDoc(doc(firestore, "cart", user.uid), { products: arrayUnion(newCartProduct) });
+              updateDoc(doc(firestore, "cart", user.uid), {
+                products: arrayUnion(newCartProduct),
+              });
             }
           });
+        } else {
+          setDoc(doc(firestore, "cart", user.uid), {
+            products: [newCartProduct],
+          });
         }
-        else {
-          setDoc(doc(firestore, "cart", user.uid), { products: [newCartProduct] });
-        }
-      })
-    }
-    else {
+      });
+    } else {
       if (localCart && localCart.length) {
         localCart.find((item) => {
           // If add product, but is exists add quantity by one.
@@ -41,13 +44,18 @@ function addToCart(product) {
           }
           localStorage.setItem("cart", JSON.stringify(localProducts));
         });
-      }
-      else {
-        localStorage.setItem("cart", JSON.stringify([newCartProduct]));
+      } else {
+        if (storageProducts) {
+          let localProducts = [];
+          localProducts = [...storageProducts, cartObject];
+          localStorage.setItem("cart", JSON.stringify(localProducts));
+        } else {
+          localStorage.setItem("cart", JSON.stringify([cartObject]));
+        }
       }
     }
+    return 0;
   });
-  return 0;
 }
 
 export default addToCart;

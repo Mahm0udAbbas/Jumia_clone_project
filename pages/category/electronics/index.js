@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import {
   getAllSubCategories,
-  getCategoryByName,
   getProductsByCategoryId,
 } from "../../../firebase";
 import Sidebar from "@/components/Sidebar/Sidebar";
@@ -11,6 +10,7 @@ import Header from "@/components/Product/header";
 import Product from "@/components/Product/product";
 import MySpinner from "@/components/order/Spiner/Spinner";
 import CatProdList from "@/components/CatProdList/CatProdList";
+import { catIds } from "@/data";
 
 export default function Electronics() {
   const [loading, setLoading] = useState(true);
@@ -35,19 +35,16 @@ export default function Electronics() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const products = await getProductsByCategoryId(
-          "65527a31376a52ea210d9703"
-        );
-        const subCat = await getAllSubCategories("65527a31376a52ea210d9703");
-
+        const products = await getProductsByCategoryId(catIds.Electronics);
+        const subCat = await getAllSubCategories(catIds.Electronics);
         setCatProducts(products);
         setSubCats(subCat);
+        setLoading(false);
       } catch (error) {
         console.error("Error fetching products:", error);
       }
     };
     fetchData();
-    setLoading(false);
   }, []);
 
   if (loading) {
@@ -109,7 +106,13 @@ export default function Electronics() {
         </div>
         <div className="grid grid-cols-12 gap-2">
           <div className="col-span-12   md:col-span-3">
-            <Sidebar catData="Electronics" subCats={subCats} />;
+            <Sidebar
+              catData="Electronics"
+              subCats={subCats}
+              setCatProducts={setCatProducts}
+              id={catIds.Electronics}
+            />
+            ;
           </div>
           <div className=" col-span-12 md:col-span-9 ">
             <CatProdList catProducts={catProducts} catData="Electronics" />

@@ -4,7 +4,6 @@ import {
   addDoc,
   collection,
   doc,
-  documentId,
   getDoc,
   getDocs,
   getFirestore,
@@ -109,7 +108,6 @@ export const getAllProducts = async () => {
       id: doc.id,
       ...doc.data(),
     }));
-
 
     return productsData;
   } catch (error) {
@@ -217,8 +215,7 @@ export const getAllSubCategories = async (catid) => {
     throw error;
   }
 };
-// let data1 = await getAllSubCategories("65527a31376a52ea210d9703");
-// console.log(data1);
+
 export const getProductsByCategoryId = async (id) => {
   let querys1 = query(
     collection(firestore, "products"),
@@ -243,33 +240,31 @@ export const getProductsBySubCategoryId = async (subId) => {
   });
   return products;
 };
-// let pro = await getProductsByCategoryId("65527c22376a52ea210d9708");
-// console.log(pro);
+
 export function filterPrice(products, min, max) {
   products = products.filter((product) => {
     return product.price > min && product.price < max;
   });
 }
-export function getCheapestProduct(products) {
-  if (products.length === 0) {
-    return null;
-  }
+// export function getCheapestProduct(products) {
+//   if (products.length === 0) {
+//     return null;
+//   }
 
-  return products.reduce((cheapestProduct, currentProduct) => {
-    return currentProduct.price < cheapestProduct.price
-      ? currentProduct
-      : cheapestProduct;
-  });
-}
-export function getHighestPriceProduct(products) {
-  if (products.length === 0) {
-    return null;
-  }
+//   return products.reduce((cheapestProduct, currentProduct) => {
+//     return currentProduct.price < cheapestProduct.price
+//       ? currentProduct
+//       : cheapestProduct;
+//   });
+// }
+// export function getHighestPriceProduct(products) {
+//   if (products.length === 0) {
+//     return null;
+//   }
 
-  return products.reduce((HighestPriceProduct, currentProduct) => {
-    return currentProduct.price > HighestPriceProduct.price
-      ? currentProduct
-      : HighestPriceProduct;
-  });
-}
-
+//   return products.reduce((HighestPriceProduct, currentProduct) => {
+//     return currentProduct.price > HighestPriceProduct.price
+//       ? currentProduct
+//       : HighestPriceProduct;
+//   });
+// }

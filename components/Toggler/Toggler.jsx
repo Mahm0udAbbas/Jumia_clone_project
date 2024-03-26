@@ -7,10 +7,6 @@ import jsonData from "./dummyData.json";
 export default function Toggler({ activeItemIndex }) {
   const [activeItem, setActiveItem] = useState(0);
 
-  // useEffect(() => {
-  //   setActiveItem(activeItemIndex);
-  // }, [activeItemIndex]);
-
   const [filteredData, setFilteredData] = useState(
     jsonData.filter((item) => item.id === 0)
   );

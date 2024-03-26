@@ -1,5 +1,5 @@
-import React from 'react';
-import { Rating } from 'flowbite-react';
+import React from "react";
+import { Rating } from "flowbite-react";
 
 export default function RatingsGenerator() {
   const Ratings = [];
@@ -15,9 +15,11 @@ export default function RatingsGenerator() {
     for (let j = 0; j < filledStars; j++) {
       stars.push(<Rating.Star key={`filled_${j}`} filled={false} />);
     }
-
-
-    Ratings.push({ id: `${i}`, value: `${i}`, text: <Rating>{stars} & above</Rating> });
+    Ratings.push({
+      id: `${i}`,
+      value: `${i}`,
+      text: <Rating>{stars} & above</Rating>,
+    });
   }
 
   return Ratings;

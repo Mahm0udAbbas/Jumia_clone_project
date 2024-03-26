@@ -9,7 +9,7 @@ import { Spinner } from "@material-tailwind/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { onAuthStateChanged, signOut } from "firebase/auth";
-import { auth, firestore } from '@/firebase';
+import { auth, firestore } from "@/firebase";
 import { getDoc, doc } from "firebase/firestore";
 
 export default function Account() {
@@ -31,9 +31,10 @@ export default function Account() {
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
-        getDoc(doc(firestore, "users", user.uid)).then((user) => setUserState(user.data()));
+        getDoc(doc(firestore, "users", user.uid)).then((user) =>
+          setUserState(user.data())
+        );
         setUserState(user);
-
       }
     });
     document.addEventListener("mousedown", handleClickOutside);
@@ -42,26 +43,25 @@ export default function Account() {
     };
   }, []);
 
-
-
   return (
     <div className="relative" ref={dropdownRef}>
       <div
         className="cursor-pointer flex items-center justify-center"
         onClick={toggleDropdown}
       >
-        {
-          userState ?
-            <>
-              <PersonOutlineIcon className="h-12 font-bold" />
-              <span>Hi, {userState.displayName?.split(" ")[0] || <Spinner />}</span>
-            </>
-            :
-            <>
-              <PersonOutlineIcon className="h-12 font-bold" />
-              <span>Account</span>
-            </>
-        }
+        {userState ? (
+          <>
+            <PersonOutlineIcon className="h-12 font-bold" />
+            <span>
+              Hi, {userState.displayName?.split(" ")[0] || <Spinner />}
+            </span>
+          </>
+        ) : (
+          <>
+            <PersonOutlineIcon className="h-12 font-bold" />
+            <span>Account</span>
+          </>
+        )}
       </div>
       {isOpen && (
         <div
@@ -70,19 +70,19 @@ export default function Account() {
           id="container"
         >
           <div className="flex items-center justify-center">
-            {
-              userState ? ""
-                : <button
-                  type="submit"
-                  className="btn btn-warning m-2 px-9 text-white hidden lg:inline"
-                  onClick={() => {
-                    router.push("/identification");
-                  }}
-                >
-                  SIGNUP
-                </button>
-            }
-
+            {userState ? (
+              ""
+            ) : (
+              <button
+                type="submit"
+                className="btn btn-warning m-2 px-9 text-white hidden lg:inline"
+                onClick={() => {
+                  router.push("/identification");
+                }}
+              >
+                SIGNUP
+              </button>
+            )}
           </div>
           <hr></hr>
           <Link href="/account/JumiaAccount">
@@ -101,14 +101,6 @@ export default function Account() {
               </div>
             </div>
           </Link>
-          <Link href="/account/inbox">
-            <div className="block px-4 py-2 hover:bg-gray-100">
-              <div className="flex items-center space-x-2">
-                <EmailOutlinedIcon className="h-6" />
-                <span>Inbox</span>
-              </div>
-            </div>
-          </Link>
           <Link href="/account/Saveditems">
             <div className="block px-4 py-2 hover:bg-gray-100">
               <div className="flex items-center space-x-2">
@@ -117,17 +109,8 @@ export default function Account() {
               </div>
             </div>
           </Link>
-          <Link href="/account/Voucher">
-            <div className="block px-4 py-2 hover:bg-gray-100">
-              <div className="flex items-center space-x-2">
-                <LocalAtmIcon className="h-6" />
-                <span>Vouchers</span>
-              </div>
-            </div>
-          </Link>
-          {
-
-            userState ? <Button
+          {userState ? (
+            <Button
               type="submit"
               className="m-4 py-3 px-9 text-white"
               size="lg"
@@ -140,13 +123,14 @@ export default function Account() {
                     setLoading(false);
                     setUserState(null);
                   }, 3000);
-                })
+                });
               }}
             >
               SIGNOUT
             </Button>
-              : ""
-          }
+          ) : (
+            ""
+          )}
         </div>
       )}
     </div>

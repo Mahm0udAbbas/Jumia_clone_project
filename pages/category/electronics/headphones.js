@@ -3,25 +3,19 @@ import Sidebar from "@/components/Sidebar/Sidebar";
 import { Breadcrumbs } from "@material-tailwind/react";
 import MySpinner from "@/components/order/Spiner/Spinner";
 import CatProdList from "@/components/CatProdList/CatProdList";
-import {
-  getAllSubCategories,
-  getCategoryByName,
-  getProductsBySubCategoryId,
-  getSubCategoryByName,
-} from "@/firebase";
+import { getAllSubCategories, getProductsBySubCategoryId } from "@/firebase";
+import { catIds, subCatIds } from "@/data";
 
-export default function Labtop() {
+export default function Headphones() {
   const [loading, setLoading] = useState(true);
   const [catProducts, setCatProducts] = useState([]);
   const [subCats, setSubCats] = useState([]);
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const products = await getProductsBySubCategoryId(
-          "65527fdca8299445e5fe5e87"
-        );
+        const products = await getProductsBySubCategoryId(subCatIds.headphones);
 
-        const subCat = await getAllSubCategories("65527a31376a52ea210d9703");
+        const subCat = await getAllSubCategories(catIds.Electronics);
         setCatProducts(products);
         setSubCats(subCat);
       } catch (error) {
@@ -50,7 +44,14 @@ export default function Labtop() {
         </Breadcrumbs>
         <div className="grid grid-cols-12 gap-2">
           <div className="col-span-12   md:col-span-3">
-            <Sidebar catData="Electronics" subCats={subCats} />;
+            <Sidebar
+              catData="Electronics"
+              subCats={subCats}
+              setCatProducts={setCatProducts}
+              id={catIds.Electronics}
+              subCatId={subCatIds.headphones}
+            />
+            ;
           </div>
           <div className="col-span-12 md:col-span-9">
             <CatProdList

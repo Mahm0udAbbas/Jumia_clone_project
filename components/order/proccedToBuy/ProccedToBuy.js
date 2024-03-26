@@ -2,7 +2,9 @@
 import { Card } from "@material-tailwind/react";
 // import { Card } from "flowbite-react";
 import SaveButton from "../Save_button/SaveButton";
-function ProccedToBuy() {
+function ProccedToBuy({ cartProducts }) {
+  let total = Number();
+  // console.log(cartProducts);
   function handleSubmit() {
     console.log("submit");
   }
@@ -15,8 +17,13 @@ function ProccedToBuy() {
           </h5>
           <div className=" border-b-2 py-1 text-sm">
             <div className="flex flex-row justify-between items-center py-1  ">
-              <p className="">Items total (1)</p>
-              <p className="font-semibold ">EGP 1000</p>
+              <p className="">Items total ({cartProducts.length})</p>
+              <p className="font-semibold  ">
+                {cartProducts.map((product, index) => {
+                  total += product.product?.price * product.quantity;
+                })}
+                EGP {total}
+              </p>
             </div>
             <div className="flex flex-row justify-between items-center py-1 ">
               <span>Delivery fees</span>
@@ -25,7 +32,7 @@ function ProccedToBuy() {
           </div>
           <div className="flex flex-row justify-between items-center py-2">
             <span className="text-sm capitalize  font-medium">total</span>
-            <span className="text-xl">EGP 1035</span>
+            <span className="text-xl">EGP {total}</span>
           </div>
           <div>
             <SaveButton

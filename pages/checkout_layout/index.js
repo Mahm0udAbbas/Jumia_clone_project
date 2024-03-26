@@ -2,8 +2,26 @@ import Link from "next/link";
 import MyNavbar from "../../components/order/navbar/navbar";
 import ProccedToBuy from "../../components/order/proccedToBuy/ProccedToBuy";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth, firestore } from "@/firebase";
+import { useState } from "react";
+import { doc, onSnapshot } from "firebase/firestore";
 
 function CheckoutLayout({ children }) {
+  const [cartProducts, setCartProducts] = useState([]);
+  const [userState, setUserState] = useState(null);
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      setUserState(user);
+      onSnapshot(doc(firestore, "cart", user.uid), (snapShot) => {
+        setCartProducts(snapShot.data()?.products);
+      });
+    } else {
+      let productsFromLocalSorage = JSON.parse(localStorage.getItem("cart"));
+      setCartProducts(productsFromLocalSorage);
+    }
+  });
+  // console.log(cartProducts);
   return (
     <>
       <section className="min-h-screen">
@@ -13,7 +31,7 @@ function CheckoutLayout({ children }) {
             <div>{children}</div>
           </section>
           <div className="col-span-12 md:col-span-4  lg:col-span-3">
-            <ProccedToBuy />
+            <ProccedToBuy cartProducts={cartProducts} />
           </div>
           <div className="col-span-12 md:col-span-8 lg:col-span-9">
             <Link

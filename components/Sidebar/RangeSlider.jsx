@@ -2,79 +2,99 @@ import React, { useState } from "react";
 import Box from "@mui/material/Box";
 import Slider from "@mui/material/Slider";
 import Input from "@mui/material/Input";
+import Button from "@mui/material/Button";
+import NestedCat from "./NestedCat";
 import styles from "../../styles/RangeSlider.module.css";
-import { Button } from "@material-tailwind/react";
-import {
-  filterPrice,
-  getCheapestProduct,
-  getHighestPriceProduct,
-} from "@/firebase";
+import { getProductsByCategoryId } from "@/firebase";
 
 function valuetext(value) {
   return `${value}`;
 }
 
-export default function RangeSlider(catProducts) {
-  const [value, setValue] = useState([20, 37]);
+export default function RangeSlider({ setCatProducts, catId, subCatId }) {
+  const [value, setValue] = useState([20, 48000]);
+  const [appliedValue, setAppliedValue] = useState([20, 48000]);
+  const [loading, setLoading] = useState(true);
 
   const handleChange = (event, newValue) => {
-    setValue(newValue);
+    const updatedValue = Array.isArray(newValue)
+      ? newValue.map((v) => Math.min(Math.max(v, 0), 48000))
+      : Math.min(Math.max(newValue, 0), 10000);
+    setValue(updatedValue);
   };
 
   const handleInputChange = (index) => (event) => {
     const newValue = parseInt(event.target.value);
     const updatedValue = [...value];
-    updatedValue[index] = newValue;
+    updatedValue[index] = Math.min(Math.max(newValue, 0), 48000);
     setValue(updatedValue);
   };
-  let max = getHighestPriceProduct(catProducts);
-  let min = getCheapestProduct(catProducts);
+
+  const handleSubmit = () => {
+    setAppliedValue(value);
+    getData(appliedValue, subCatId);
+  };
+  async function getData(value, subCatId) {
+    // Receive value as a parameter
+    try {
+      const productsData = await getProductsByCategoryId(catId);
+      let data = productsData.filter(
+        (product) => product.price >= value[0] && product.price <= value[1]
+      ); // Filter products based on price range
+      if (subCatId) {
+        data = data.filter((product) => product.subCategoryId === subCatId);
+        console.log("hi");
+      }
+      console.log(data);
+      setCatProducts(data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  }
   return (
-    <>
-      <Box className="px-10">
-        <Slider
-          getAriaLabel={() => "Price range"}
-          value={value}
-          onChange={handleChange}
-          valueLabelDisplay="auto"
-          getAriaValueText={valuetext}
-          color="warning"
-          max={max}
-          min={min}
-        />
-        <Box sx={{ display: "flex", justifyContent: "space-evenly" }}>
-          <Input
-            className={`${styles.Input}`}
-            type="number"
-            value={value[0]}
-            onChange={handleInputChange(0)}
-            inputProps={{
-              "aria-label": "Start Point",
-              style: { textAlign: "center" },
-            }}
-          />
-          <p>_</p>
-          <Input
-            className={`${styles.Input}`}
-            type="number"
-            value={value[1]}
-            onChange={handleInputChange(1)}
-            inputProps={{
-              "aria-label": "End Point",
-              style: { textAlign: "center" },
-            }}
-          />
+    <Box>
+      <Box style={{ display: "flex", alignItems: "center", marginTop: "8px" }}>
+        <NestedCat>PRICE (EGP)</NestedCat>
+        <Box style={{ marginLeft: "auto" }}>
+          <Button variant="text" color="warning" onClick={handleSubmit}>
+            APPLY
+          </Button>
         </Box>
-        <Button
-          size="sm"
-          color="amber"
-          variant="outlined"
-          className="text-red-700 rounded-none flex mt-5"
-          onClick={() => filterPrice(catProducts, value)}
-        >
-          Apply
-        </Button>
       </Box>
-    </>
+      <Slider
+        className={`${styles.slider}`}
+        getAriaLabel={() => "Temperature range"}
+        value={value}
+        onChange={handleChange}
+        valueLabelDisplay="auto"
+        getAriaValueText={valuetext}
+        min={0}
+        max={48000}
+        color="warning"
+      />
+      <Box sx={{ display: "flex", justifyContent: "center", gap: "15px" }}>
+        <Input
+          className={`${styles.Input}`}
+          type="number"
+          value={value[0]}
+          onChange={handleInputChange(0)}
+          inputProps={{
+            "aria-label": "Start Point",
+            style: { textAlign: "center" },
+          }}
+        />
+        <p className={`${styles.underScore}`}>_</p>
+        <Input
+          className={`${styles.Input}`}
+          type="number"
+          value={value[1]}
+          onChange={handleInputChange(1)}
+          inputProps={{
+            "aria-label": "End Point",
+            style: { textAlign: "center" },
+          }}
+        />
+      </Box>
+    </Box>
   );
 }
