@@ -1,9 +1,7 @@
 import Link from "next/link";
 import React from "react";
 import EditIcon from "@mui/icons-material/Edit";
-
 import { AccountPageLayout } from "../../../components/Account_Layout";
-
 function Myaccount() {
   return (
     <>

@@ -4,11 +4,7 @@ import Slider from "@mui/material/Slider";
 import Input from "@mui/material/Input";
 import styles from "../../styles/RangeSlider.module.css";
 import { Button } from "@material-tailwind/react";
-import {
-  filterPrice,
-  getCheapestProduct,
-  getHighestPriceProduct,
-} from "@/firebase";
+import { filterPrice } from "@/firebase";
 
 function valuetext(value) {
   return `${value}`;
@@ -27,8 +23,7 @@ export default function RangeSlider(catProducts) {
     updatedValue[index] = newValue;
     setValue(updatedValue);
   };
-  let max = getHighestPriceProduct(catProducts);
-  let min = getCheapestProduct(catProducts);
+
   return (
     <>
       <Box className="px-10">
@@ -39,8 +34,8 @@ export default function RangeSlider(catProducts) {
           valueLabelDisplay="auto"
           getAriaValueText={valuetext}
           color="warning"
-          max={max}
-          min={min}
+          max={0}
+          min={50000}
         />
         <Box sx={{ display: "flex", justifyContent: "space-evenly" }}>
           <Input
