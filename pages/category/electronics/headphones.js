@@ -3,12 +3,7 @@ import Sidebar from "@/components/Sidebar/Sidebar";
 import { Breadcrumbs } from "@material-tailwind/react";
 import MySpinner from "@/components/order/Spiner/Spinner";
 import CatProdList from "@/components/CatProdList/CatProdList";
-import {
-  getAllSubCategories,
-  getCategoryByName,
-  getProductsBySubCategoryId,
-  getSubCategoryByName,
-} from "@/firebase";
+import { getAllSubCategories, getProductsBySubCategoryId } from "@/firebase";
 
 export default function Labtop() {
   const [loading, setLoading] = useState(true);

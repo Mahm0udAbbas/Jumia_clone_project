@@ -173,7 +173,7 @@ function EditAdressForm() {
               </div>
             </div>
             <div className="grid grid-cols-1">
-              <div className="flex items-center mb-2">
+              <div className="flex items-center mb-2 ">
                 <div className="me-2 text-xs">
                   <p>prefix</p>
                   <p>+20</p>
@@ -186,10 +186,10 @@ function EditAdressForm() {
                   value={formData.phone}
                   onChange={handleChange}
                 />
-                {errors.firstName && (
-                  <p className="text-xs text-red-600">{errors.firstName}</p>
-                )}
               </div>
+              {errors.phone && (
+                <p className="text-xs text-red-600">{errors.phone}</p>
+              )}
               <div className="flex items-center mb-2">
                 <div className="me-2 text-xs">
                   <p>prefix</p>

@@ -9,11 +9,11 @@ function AddressBook() {
   return (
     <>
       <div>
-        <header className="py-2 px-4 border-b flex text-center justify-between ">
-          <h1>AddressBook</h1>
+        <header className="py-2 px-4 border-b flex  justify-between items-center ">
+          <h1 className="font-bold">AddressBook</h1>
           <Link
-            className=" p-1  bg-amber-500 text-white px-2 hover:rounded-lg hover:brightness-90 rounded-lg"
-            href="/users/AddressBook/AddNewAddress"
+            className=" py-3   bg-amber-500 text-white text-sm  px-2  hover:bg-amber-300 rounded-sm"
+            href="/account/AddressBook/AddNewAddress"
           >
             ADD NEW ADDRESS
           </Link>
@@ -32,7 +32,7 @@ function AddressBook() {
                 </div>
               </article>
               <div className="p-2  flex justify-between box-border">
-                <button className="btn my-1 ml-2  " disabled>
+                <button className="btn my-1 ml-2 rounded-sm " disabled>
                   SET AS DEFAULT
                 </button>
                 <Link
@@ -45,8 +45,6 @@ function AddressBook() {
             </div>
           </div>
         </div>
-        {/* <EditOldAddress />
-        <AddNewAddress /> */}
       </div>
     </>
   );
