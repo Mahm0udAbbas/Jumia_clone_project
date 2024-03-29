@@ -5,6 +5,7 @@ import { auth, firestore } from "@/firebase";
 function addToCart(product) {
   const newCartProduct = { product, quantity: 1 };
   const localCart = JSON.parse(localStorage.getItem("cart"));
+  let spreadLocalCart = Array();
 
   onAuthStateChanged(auth, (user) => {
     if (user) {
@@ -12,8 +13,8 @@ function addToCart(product) {
       getDoc(doc(firestore, "cart", user.uid)).then((docSnap) => {
         let firebaseCart = docSnap.data()?.products || [];
         if (docSnap.exists() && firebaseCart.length) {
-          // If add product, but is exists add quantity by one.
           firebaseCart.find((item) => {
+            // If add product, but is exists increase quantity by one.
             if (item.product.proId == newCartProduct.product.proId) {
               ++item.quantity;
               setDoc(doc(firestore, "cart", user.uid), {
@@ -34,24 +35,17 @@ function addToCart(product) {
     } else {
       if (localCart && localCart.length) {
         localCart.find((item) => {
-          // If add product, but is exists add quantity by one.
-          let localProducts = [];
+          // If add product, but is exists increase quantity by one.
           if (item.product.proId == newCartProduct.product.proId) {
             ++item.quantity;
-            localProducts = [...localCart];
+            spreadLocalCart = [...localCart];
           } else {
-            localProducts = [...localCart, newCartProduct];
+            spreadLocalCart = [...localCart, newCartProduct];
           }
-          localStorage.setItem("cart", JSON.stringify(localProducts));
+          localStorage.setItem("cart", JSON.stringify(spreadLocalCart));
         });
       } else {
-        if (storageProducts) {
-          let localProducts = [];
-          localProducts = [...storageProducts, cartObject];
-          localStorage.setItem("cart", JSON.stringify(localProducts));
-        } else {
-          localStorage.setItem("cart", JSON.stringify([cartObject]));
-        }
+        localStorage.setItem("cart", JSON.stringify([newCartProduct]));
       }
     }
     return 0;

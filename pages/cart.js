@@ -99,7 +99,7 @@ function Cart() {
                           <Image
                             width={100}
                             height={100}
-                            src={product.product?.images[0]}
+                            src={product.product?.thumbnail}
                             alt={product.product?.en.title}
                             className="sm:h-38 sm:w-38 h-24 w-24 rounded-md object-contain object-center"
                           />
