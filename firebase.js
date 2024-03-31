@@ -8,14 +8,21 @@ import {
   getDocs,
   getFirestore,
   limit,
+  onSnapshot,
   query,
   setDoc,
   where,
 } from "firebase/firestore";
-import { getAuth } from "firebase/auth";
-import { categories, data } from "./data";
+import {
+  browserLocalPersistence,
+  browserSessionPersistence,
+  getAuth,
+  onAuthStateChanged,
+  setPersistence,
+} from "firebase/auth";
+import { data } from "./data";
 import SuperJSON from "superjson";
-import SubCategories from "./components/Product/subcategories";
+import { CollectionsRounded } from "@mui/icons-material";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -35,8 +42,8 @@ export const firebaseConfig = {
 export const app = initializeApp(firebaseConfig);
 export const firestore = getFirestore(app);
 export const auth = getAuth(app);
+setPersistence(auth, browserSessionPersistence);
 let products = data;
-// console.log(data);
 export const addNewProduct = async (product) => {
   const productDocRef = doc(firestore, "Products", product.proId);
   const productSnapshot = await getDoc(productDocRef);
@@ -80,11 +87,11 @@ export const addNewProduct = async (product) => {
 
   return productDocRef;
 };
-// addNewProduct(products);
+// Function to add products to the Firestore database
 async function addProducts(products) {
   try {
     for (const product of products) {
-      // console.log(product);
+      // Add each product to the "products" collection in Firestore
       const docRef = await addDoc(collection(firestore, "products"), product);
       console.log("Product written with ID: ", docRef.id);
     }
@@ -92,8 +99,9 @@ async function addProducts(products) {
     console.error("Error adding products: ", e);
   }
 }
-
 // addProducts(products);
+
+// Function to retrieve all products from the Firestore database
 let lastDocument = null;
 export const getAllProducts = async () => {
   try {
@@ -108,14 +116,14 @@ export const getAllProducts = async () => {
       id: doc.id,
       ...doc.data(),
     }));
-
     return productsData;
   } catch (error) {
     console.error("Error fetching products:", error);
   }
 };
+
+// Function to retrieve a product by its ID from the Firestore database
 export const getProductById = async (id) => {
-  // console.log(id);
   let productRef = doc(firestore, "products", id);
 
   let respose = await getDoc(productRef);
@@ -129,9 +137,11 @@ export const getProductById = async (id) => {
   }
 };
 
+// Function to add categories to the Firestore database
 async function addCategories(categories) {
   try {
     for (const category of categories) {
+      // Add each category to the "categories" collection in Firestore
       await setDoc(doc(firestore, "categories", category.id), {
         name: category.name,
         description: category.description,
@@ -143,9 +153,9 @@ async function addCategories(categories) {
     console.error("Error adding categories: ", e);
   }
 }
-
 // addCategories(categories);
 
+// Function to retrieve a category by its name from the Firestore database
 export const getCategoryByName = async (name) => {
   let querys1 = query(
     collection(firestore, "categories"),
@@ -156,10 +166,10 @@ export const getCategoryByName = async (name) => {
   respose.docs.forEach((cat) => {
     category = { id: cat.id, ...cat.data() };
   });
-
   return category;
 };
 
+// Function to retrieve a subcategory by its name and category ID from the Firestore database
 export const getSubCategoryByName = async (name, catid) => {
   try {
     const subcategoriesRef = collection(
@@ -188,6 +198,8 @@ export const getSubCategoryByName = async (name, catid) => {
     throw error;
   }
 };
+
+// Function to retrieve all subcategories under a specified category ID from the Firestore database
 export const getAllSubCategories = async (catid) => {
   try {
     const subcategoriesRef = collection(
@@ -196,19 +208,16 @@ export const getAllSubCategories = async (catid) => {
       catid,
       "Subcategories"
     );
-
     const querySnapshot = await getDocs(subcategoriesRef);
     console.log(querySnapshot);
     if (querySnapshot.empty) {
       console.log("No matching documents.");
       return [];
     }
-
     let category = [];
     querySnapshot.forEach((doc) => {
       category.push({ id: doc.id, ...doc.data() });
     });
-
     return category;
   } catch (error) {
     console.error("Error getting subcategory:", error);
@@ -216,6 +225,7 @@ export const getAllSubCategories = async (catid) => {
   }
 };
 
+// Function to retrieve products by their category ID from the Firestore database
 export const getProductsByCategoryId = async (id) => {
   let querys1 = query(
     collection(firestore, "products"),
@@ -228,6 +238,8 @@ export const getProductsByCategoryId = async (id) => {
   });
   return products;
 };
+
+// Function to retrieve products by their subcategory ID from the Firestore database
 export const getProductsBySubCategoryId = async (subId) => {
   let querys1 = query(
     collection(firestore, "products"),
@@ -241,30 +253,121 @@ export const getProductsBySubCategoryId = async (subId) => {
   return products;
 };
 
-export function filterPrice(products, min, max) {
-  products = products.filter((product) => {
-    return product.price > min && product.price < max;
+// Function to retrieve products from the user's cart
+export const fetchCartProducts = (user, setCartProducts) => {
+  try {
+    if (user) {
+      const cartRef = doc(firestore, "cart", user.uid);
+      onSnapshot(cartRef, (snapshot) => {
+        setCartProducts(snapshot.data()?.products || []);
+      });
+    } else {
+      const productsFromLocalStorage =
+        JSON.parse(localStorage.getItem("cart")) || [];
+      setCartProducts(productsFromLocalStorage);
+    }
+  } catch (error) {
+    console.error("Error fetching cart products:", error);
+  }
+};
+
+// Function to retrieve order details for a specified user
+export async function getOrderDetailsData(user) {
+  return new Promise((resolve, reject) => {
+    if (user) {
+      const orderDetailsRef = collection(firestore, "order-details");
+      const q = query(orderDetailsRef, where("userId", "==", user.uid));
+      getDocs(q)
+        .then((querySnapshot) => {
+          if (!querySnapshot.empty) {
+            let data = querySnapshot.docs[0].data();
+            resolve(data);
+          } else {
+            reject("No order details found for the user.");
+          }
+        })
+        .catch((error) => {
+          reject("Error fetching order details: " + error);
+        });
+    } else {
+      reject("User is not authenticated.");
+    }
   });
 }
-// export function getCheapestProduct(products) {
-//   if (products.length === 0) {
-//     return null;
-//   }
 
-//   return products.reduce((cheapestProduct, currentProduct) => {
-//     return currentProduct.price < cheapestProduct.price
-//       ? currentProduct
-//       : cheapestProduct;
-//   });
-// }
-// export function getHighestPriceProduct(products) {
-//   if (products.length === 0) {
-//     return null;
+// export const fetchOrderDetails = async (userId) => {
+//   console.log("this is userId :" + userId);
+//   if (userId) {
+//     const orderDetailsRef = collection(firestore, "order-details");
+//     const q = query(orderDetailsRef, where("userId", "==", userId));
+//     const querySnapshot = await getDocs(q);
+//     if (!querySnapshot.empty) {
+//       const data = querySnapshot.docs[0].data();
+//       console.log(data);
+//       return data;
+//     } else {
+//       console.log("No such document!");
+//       return undefined;
+//     }
 //   }
+// };
 
-//   return products.reduce((HighestPriceProduct, currentProduct) => {
-//     return currentProduct.price > HighestPriceProduct.price
-//       ? currentProduct
-//       : HighestPriceProduct;
-//   });
-// }
+export const fetchOrderDetails = async (userId) => {
+  console.log("this is userId :" + userId);
+  if (userId) {
+    const orderDetailsRef = collection(firestore, "order-details");
+    const q = query(orderDetailsRef, where("userId", "==", userId));
+    const querySnapshot = await getDocs(q);
+    if (!querySnapshot.empty) {
+      const orderDetailsData = querySnapshot.docs[0].data();
+      console.log(orderDetailsData);
+
+      // Retrieve orders subcollection
+      const ordersRef = collection(
+        firestore,
+        "order-details",
+        querySnapshot.docs[0].id,
+        "orders"
+      );
+      const ordersQuerySnapshot = await getDocs(ordersRef);
+      console.log(ordersQuerySnapshot);
+      const ordersData = [];
+      ordersQuerySnapshot.forEach((doc, index) => {
+        console.log(index);
+        ordersData.push({ ...doc.data(), No: `${index + 1}` });
+      });
+      // console.log(ordersData);
+
+      return { orderDetails: orderDetailsData, orders: ordersData };
+    } else {
+      console.log("No such document!");
+      return undefined;
+    }
+  }
+};
+
+async function getOrderSubcollection(userId) {
+  const orderDetailsRef = collection(firestore, "order-details");
+  const q = query(orderDetailsRef, where("userId", "==", userId));
+
+  try {
+    const querySnapshot = await getDocs(q);
+    if (!querySnapshot.empty) {
+      const docRef = querySnapshot.docs[0].ref;
+      const orderSubcollectionRef = collection(docRef, "orders");
+      const orderQuerySnapshot = await getDocs(orderSubcollectionRef);
+
+      const orders = [];
+      orderQuerySnapshot.forEach((doc) => {
+        orders.push({ id: doc.id, ...doc.data() });
+      });
+
+      return orders;
+    } else {
+      return []; // No orders found for the user
+    }
+  } catch (error) {
+    console.log("Error getting order subcollection:", error);
+    return null;
+  }
+}

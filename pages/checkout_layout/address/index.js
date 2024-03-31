@@ -2,7 +2,7 @@
 import Delivery from "@/components/order/DeliveryDetails/Delivery";
 import EditAdressForm from "@/components/order/EditAdressForm/EditAdressForm";
 import PaymentMethod from "@/components/order/PaymentMethod/PaymentMethod";
-import { CheckPageLayout } from "..";
+import { CheckPageLayout } from "../../../layouts/checkoutLayout";
 
 function Adress({ page }) {
   return (

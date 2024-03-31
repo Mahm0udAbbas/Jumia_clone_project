@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { firestore } from "../../../firebase";
-import { collection, getDocs } from "firebase/firestore";
+import { auth, firestore } from "../../../firebase";
+import { collection, getDocs, query, where } from "firebase/firestore";
 import { Card } from "flowbite-react";
 import Link from "next/link";
 import CustomerAdress from "@/components/order/customeradress/customeraddress";
@@ -8,29 +8,41 @@ import DeliveryDetailsForm from "@/components/order/deliveryDetailsForm/delivery
 import PaymentMethod from "@/components/order/PaymentMethod/PaymentMethod";
 import ListHeader from "@/components/order/ListHeader/ListHeader";
 import MySpinner from "@/components/order/Spiner/Spinner";
-import { CheckPageLayout } from "..";
+import { CheckPageLayout } from "../../../layouts/checkoutLayout";
+import { onAuthStateChanged } from "firebase/auth";
 function EditDelivery() {
-  const [addressdata, setAddressData] = useState([]);
+  const [addressData, setAddressData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
   useEffect(() => {
-    getData();
+    onAuthStateChanged(auth, (user) => {
+      getData(user);
+    });
   }, []);
-  async function getData() {
+
+  async function getData(user) {
     try {
-      const querySnapshot = await getDocs(
-        collection(firestore, "order-details")
-      );
-      const data = querySnapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
-      setAddressData(data);
-      setLoading(false);
+      if (user) {
+        const orderDetailsRef = collection(firestore, "order-details");
+        const q = query(orderDetailsRef, where("userId", "==", user.uid));
+        const querySnapshot = await getDocs(q);
+        if (!querySnapshot.empty) {
+          const data = querySnapshot.docs[0].data();
+          setAddressData(data);
+        } else {
+          setError("No data found for this user.");
+        }
+      } else {
+        setError("No user found.");
+      }
     } catch (error) {
       console.error("Error fetching data:", error);
+      setError("Error fetching data. Please try again later.");
+    } finally {
+      setLoading(false);
     }
   }
-  console.log(addressdata);
 
   if (loading) {
     return (
@@ -51,12 +63,14 @@ function EditDelivery() {
                 </span>
               </Link>
             </div>
+            {/* {addressData && addressData.shippingAddress && ( */}
             <CustomerAdress
-              title={`${addressdata[0].shippingAddress.firstName} ${addressdata[0].shippingAddress.lastName}`}
-              info={`${addressdata[0].shippingAddress.region} | ${addressdata[0].shippingAddress.city}  | ${addressdata[0].shippingAddress.address} | ${addressdata[0].shippingAddress.additionalInfo}`}
+              title={`${addressData.shippingAddress.firstName} ${addressData.shippingAddress.lastName}`}
+              info={`${addressData.shippingAddress.region} | ${addressData.shippingAddress.city} | ${addressData.shippingAddress.address} | ${addressData.shippingAddress.additionalInfo}`}
             />
+            {/* )} */}
           </Card>
-          <DeliveryDetailsForm />
+          <DeliveryDetailsForm orderData={addressData} />
           <div className="text-grey-100">
             <PaymentMethod />
           </div>

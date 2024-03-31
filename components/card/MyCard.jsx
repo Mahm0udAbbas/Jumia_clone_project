@@ -68,7 +68,9 @@ function CatProdCard({ cardData }) {
           className="  text-white invisible group-hover:visible"
           color="amber"
           fullWidth
-          onClick={addToCart(cardData)}
+          onClick={() => {
+            addToCart(cardData);
+          }}
         >
           {" "}
           Add to Card

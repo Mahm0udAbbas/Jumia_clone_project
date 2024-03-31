@@ -30,7 +30,7 @@ export default function Supermarket() {
     "https://eg.jumia.is/cms/Ramadan-24/CATs-UNs/Supermarket/Household-Cleaning/572x250EN.jpg",
   ];
   const imageUrls2 = [
-    "    https://eg.jumia.is/cms/Ramadan-24/CATs-UNs/Supermarket/Feminine-Care/572x250EN.png",
+    "https://eg.jumia.is/cms/Ramadan-24/CATs-UNs/Supermarket/Feminine-Care/572x250EN.png",
     "https://eg.jumia.is/cms/Ramadan-24/CATs-UNs/Supermarket/Farida/572x250EN.png",
   ];
   const [catProducts, setCatProducts] = useState([]);

@@ -1,82 +1,263 @@
-import { Modal } from "flowbite-react";
+import { Label, Modal, Select } from "flowbite-react";
 import ListHeader from "../ListHeader/ListHeader";
 import VolunteerActivismIcon from "@mui/icons-material/VolunteerActivism";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import MapIcon from "@mui/icons-material/Map";
 import Link from "next/link";
-import { useState } from "react";
-import SelectInputField from "../selectInput/SelectInputField";
+import { useEffect, useState } from "react";
 import SaveButton from "../Save_button/SaveButton";
 import CancelButton from "../Cancle_button/CancelButton";
 import LocalShippingIcon from "@mui/icons-material/LocalShipping";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { Card } from "@material-tailwind/react";
-const governorates = [
-  "Alexandria",
-  "Aswan",
-  "Asyut",
-  "Beheira",
-  "Beni Suef",
-  "Cairo",
-  "Dakahlia",
-  "Damietta",
-  "Faiyum",
-  "Gharbia",
-  "Giza",
-  "Ismailia",
-  "Kafr El Sheikh",
-  "Luxor",
-  "Matrouh",
-  "Minya",
-  "Monufia",
-  "New Valley",
-  "North Sinai",
-  "Port Said",
-  "Qalyubia",
-  "Qena",
-  "Red Sea",
-  "Sohag",
-  "South Sinai",
-  "Suez",
+import { auth, fetchCartProducts, firestore } from "@/firebase";
+import {
+  collection,
+  doc,
+  getDocs,
+  onSnapshot,
+  query,
+  updateDoc,
+  where,
+} from "firebase/firestore";
+const egyptGovernorates = [
+  {
+    name: "Cairo",
+    areas: [
+      "Nasr City",
+      "Heliopolis",
+      "Maadi",
+      "Zamalek",
+      "Dokki",
+      "New Cairo",
+      "Mohandessin",
+      "Helwan",
+      "6th of October City",
+      "Mokattam",
+      "Abbassiya",
+      "Hadayek El Kobba",
+      "El Marg",
+      "Shubra",
+      "El Zeitoun",
+      "Sayeda Zeinab",
+      "Waili",
+      "Manial",
+      "Boulaq",
+      "Bab El Shaareya",
+      "Matariya",
+      "Rod El Farag",
+      "Khalifa",
+      "Ain Shams",
+      "El-Ma'asara",
+      "El Khanka",
+      "Benha",
+      "Shubra El Kheima",
+    ],
+  },
+  {
+    name: "Alexandria",
+    areas: ["Gleem", "Montaza", "Smouha", "Sidi Gaber", "Stanley"],
+  },
+  {
+    name: "Aswan",
+    areas: ["Aswan City", "Elephantine Island", "New Kalabsha"],
+  },
+  {
+    name: "Asyut",
+    areas: ["Asyut City", "Al-Qusiya", "Dayrout"],
+  },
+  {
+    name: "Beheira",
+    areas: ["Damanhur", "Kafr El Dawwar", "Rosetta (Rashid)"],
+  },
+  {
+    name: "Beni Suef",
+    areas: ["Beni Suef City", "El Wasta", "Biba"],
+  },
+  {
+    name: "Dakahlia",
+    areas: ["Mansoura", "Mit Ghamr", "Talkha"],
+  },
+  {
+    name: "Damietta",
+    areas: ["Damietta City", "New Damietta", "Kafr Saad"],
+  },
+  {
+    name: "Faiyum",
+    areas: ["Faiyum City", "Tamiya", "Ibsheway"],
+  },
+  {
+    name: "Gharbia",
+    areas: ["Tanta", "Mahalla El Kubra", "Zifta"],
+  },
+  {
+    name: "Giza",
+    areas: ["6th of October City", "Sheikh Zayed City", "Haram"],
+  },
+  {
+    name: "Ismailia",
+    areas: ["Ismailia City", "Fayed", "Abu Sultan"],
+  },
+  {
+    name: "Kafr El Sheikh",
+    areas: ["Kafr El Sheikh City", "Desouk", "Baltim"],
+  },
+  {
+    name: "Luxor",
+    areas: ["Luxor City", "Karnak", "West Bank"],
+  },
+  {
+    name: "Matrouh",
+    areas: ["Marsa Matrouh", "Alamein", "Dabaa"],
+  },
+  {
+    name: "Minya",
+    areas: ["Minya City", "Mallawi", "Maghagha"],
+  },
+  {
+    name: "Monufia",
+    areas: ["Shibin El Kom", "Ashmoun", "Sadat City"],
+  },
+  {
+    name: "New Valley",
+    areas: ["Kharga Oasis", "Dakhla Oasis", "Farafra Oasis"],
+  },
+  {
+    name: "North Sinai",
+    areas: ["Al-Arish", "Sheikh Zuweid", "Rafah"],
+  },
+  {
+    name: "Port Said",
+    areas: ["Port Fouad", "East Port Said", "West Port Said"],
+  },
+  {
+    name: "Qalyubia",
+    areas: ["Banha", "Qalyub", "Shubra El Kheima"],
+  },
+  {
+    name: "Qena",
+    areas: ["Qena City", "Naga Hammadi", "Luxor East Bank"],
+  },
+  {
+    name: "Red Sea",
+    areas: ["Hurghada", "Marsa Alam", "El Gouna"],
+  },
+  {
+    name: "Sharqia",
+    areas: ["Zagazig", "Belbeis", "El Husseiniya"],
+  },
+  {
+    name: "Sohag",
+    areas: ["Sohag City", "Akhmim", "Girga"],
+  },
+  {
+    name: "South Sinai",
+    areas: ["Sharm El Sheikh", "Dahab", "Nuweiba"],
+  },
+  {
+    name: "Suez",
+    areas: ["Suez City", "Ataqah", "Ras Gharib"],
+  },
 ];
-const cairo_areas = [
-  "Nasr City",
-  "Heliopolis",
-  "Maadi",
-  "Zamalek",
-  "Dokki",
-  "New Cairo",
-  "Mohandessin",
-  "Helwan",
-  "6th of October City",
-  "Mokattam",
-  "Abbassiya",
-  "Hadayek El Kobba",
-  "El Marg",
-  "Shubra",
-  "El Zeitoun",
-  "Sayeda Zeinab",
-  "Waili",
-  "Manial",
-  "Boulaq",
-  "Bab El Shaareya",
-  "Matariya",
-  "Rod El Farag",
-  "Khalifa",
-  "Ain Shams",
-  "El-Ma'asara",
-  "El Khanka",
-  "Benha",
-  "Shubra El Kheima",
-];
-function DeliveryDetailsForm() {
+function DeliveryDetailsForm({ orderData }) {
   const [openModal, setOpenModal] = useState(false);
-  const handleSubmit = () => setOpenModal(false);
-  const cancel = () => setOpenModal(false);
+  const [cartProducts, setCartProducts] = useState([]);
+  const [addressData, setAddressData] = useState({});
+  const [loading, setLoading] = useState(true);
+  const [pickUpStation, setPickUpStation] = useState(null);
+  const [deliveryOption, setDeliveryOption] = useState("express");
+  const [selectedCity, setSelectedCity] = useState("");
+  const [selectedArea, setSelectedArea] = useState("");
   const router = useRouter();
-  const goToPayment = () => {
-    router.push("/checkout_layout/payment-methods");
+
+  // Fetch initial data
+  useEffect(() => {
+    fetchData();
+    fetchCartProducts(auth.currentUser, setCartProducts);
+  }, []);
+
+  // Fetch user data and set state
+  const fetchData = async () => {
+    try {
+      const user = auth.currentUser;
+      if (user) {
+        const orderDetailsRef = collection(firestore, "order-details");
+        const q = query(orderDetailsRef, where("userId", "==", user.uid));
+        const querySnapshot = await getDocs(q);
+        if (!querySnapshot.empty) {
+          const data = querySnapshot.docs[0].data();
+          setAddressData(data);
+        }
+      }
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+  // Handle city change
+  const handleCityChange = (e) => {
+    setSelectedCity(e.target.value);
+    setSelectedArea("");
+  };
+
+  // Handle area change
+  const handleAreaChange = (e) => {
+    setSelectedArea(e.target.value);
+  };
+
+  // Handle delivery option change
+  const handleDeliveryOptionChange = (event) => {
+    setDeliveryOption(event.target.value);
+  };
+
+  // Handle Modal submission
+  const handleSubmit = () => {
+    const updatedDeliveryOption = selectedCity ? "pick-up" : "express";
+    setDeliveryOption(updatedDeliveryOption);
+    setPickUpStation(
+      selectedCity ? { city: selectedCity, area: selectedArea } : null
+    );
+    setOpenModal(false);
+  };
+
+  // Cancel modal
+  const cancel = () => {
+    setOpenModal(false);
+  };
+
+  // Navigate to payment page
+  const goToPayment = async () => {
+    let updatedData;
+    const orderDetailsRef = collection(firestore, "order-details");
+    const q = query(
+      orderDetailsRef,
+      where("userId", "==", auth.currentUser.uid)
+    );
+    try {
+      const querySnapshot = await getDocs(q);
+      if (!querySnapshot.empty) {
+        const docData = querySnapshot.docs[0].data();
+        if (deliveryOption == "pick-up") {
+          updatedData = {
+            ...docData,
+            deliveryMethod: deliveryOption,
+            pickUpStation: pickUpStation,
+          }; // You can set the default method here
+        } else {
+          updatedData = {
+            ...docData,
+            deliveryMethod: deliveryOption,
+          };
+        }
+        const docRef = querySnapshot.docs[0].ref;
+        await updateDoc(docRef, updatedData);
+      }
+      router.push("/checkout_layout/payment-methods");
+    } catch (error) {
+      console.log("Error navigating to payment:", error);
+    }
   };
   return (
     <>
@@ -87,11 +268,14 @@ function DeliveryDetailsForm() {
             <div className="flex items-start h-5">
               <div>
                 <input
-                  id="helper-radio"
-                  aria-describedby="helper-radio-text"
+                  id="Pick-up"
+                  aria-describedby="door-delivery-text"
                   type="radio"
-                  value=""
-                  className="w-4 h-4 text-gray-200 bg-gray-100 border-gray-300 focus:text-orange-500  focus:ring-orange-500 dark:focus:ring-orange-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                  value="pick-up"
+                  name="delivery-option"
+                  checked={deliveryOption === "pick-up"}
+                  onChange={handleDeliveryOptionChange}
+                  className="w-4 h-4 text-orange-500  border-orange-300 focus:text-orange-500  focus:ring-orange-500 dark:focus:ring-orange-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                 />
               </div>
               <div className="ms-2 text-sm">
@@ -115,7 +299,7 @@ function DeliveryDetailsForm() {
             </div>
           </div>
         </div>
-        <Card className="p-6 my-5 ">
+        <Card className="p-6 my-5 border rounded-none " shadow={false}>
           <div className=" flex justify-between ">
             <span className="text-sm">Pickup Station</span>
             <Link
@@ -133,16 +317,44 @@ function DeliveryDetailsForm() {
                   <div className="text-base leading-relaxed text-gray-500 dark:text-gray-400">
                     <div className="grid grid-cols-2 gap-4 p-0">
                       <div className="   ">
-                        <SelectInputField
-                          governorates={governorates}
-                          lableValue={"Region"}
-                        />
+                        <Label htmlFor="citySelect">Select City:</Label>
+                        <Select
+                          id="citySelect"
+                          value={selectedCity}
+                          onChange={handleCityChange}
+                        >
+                          <option value="">Select City</option>
+                          {egyptGovernorates.map((governorate) => (
+                            <option
+                              key={governorate.name}
+                              value={governorate.name}
+                            >
+                              {governorate.name}
+                            </option>
+                          ))}
+                        </Select>
                       </div>
                       <div className="  mb-4 ">
-                        <SelectInputField
-                          governorates={cairo_areas}
-                          lableValue={"City"}
-                        />
+                        {" "}
+                        <Label htmlFor="areaSelect">Select Area:</Label>
+                        <Select
+                          id="areaSelect"
+                          value={selectedArea}
+                          onChange={handleAreaChange}
+                        >
+                          <option value="">Select Area</option>
+                          {selectedCity &&
+                            egyptGovernorates
+                              .find(
+                                (governorate) =>
+                                  governorate.name === selectedCity
+                              )
+                              .areas.map((area) => (
+                                <option key={area} value={area}>
+                                  {area}
+                                </option>
+                              ))}
+                        </Select>
                       </div>
                     </div>
                   </div>
@@ -161,10 +373,15 @@ function DeliveryDetailsForm() {
           <div className="flex justify-start items-center border rounded p-3">
             <MapIcon className="me-4 text-orange-500" />
             <div>
-              <p className="text-sm">No Pickup Station Selected</p>
+              <p className="text-sm">
+                {pickUpStation !== null && deliveryOption !== "express"
+                  ? "Your Pick-up station is:"
+                  : "No Pickup Station Selected"}
+              </p>
               <p className="text-xs">
-                To use this option, you will need to add a pickup station near
-                your location.
+                {pickUpStation !== null && deliveryOption !== "express"
+                  ? `${pickUpStation.city}: ${pickUpStation.area}`
+                  : "To use this option, you will need to add a pickup station near your location."}
               </p>
             </div>
           </div>
@@ -178,8 +395,11 @@ function DeliveryDetailsForm() {
                   id="door-delivery"
                   aria-describedby="door-delivery-text"
                   type="radio"
-                  value=""
-                  className="w-4 h-4 text-gray-200 bg-gray-100 border-gray-300 focus:text-orange-500  focus:ring-orange-500 dark:focus:ring-orange-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                  value="express"
+                  name="delivery-option"
+                  checked={deliveryOption === "express"}
+                  onChange={handleDeliveryOptionChange}
+                  className="w-4 h-4 text-orange-500  border-orange-300 focus:text-orange-500  focus:ring-orange-500 dark:focus:ring-orange-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                 />
               </div>
               <div className="ms-2 text-sm">
@@ -203,32 +423,46 @@ function DeliveryDetailsForm() {
             </div>
           </div>
         </div>
-        <div className="flex justify-between items-center pt-3">
-          <span className="text-sm font-semibold text-black dark:text-gray-300">
-            Shipment 1/1
+        <div className="flex justify-between items-center pt-3 pb-2">
+          <span className="text-sm  text-black dark:text-gray-300">
+            Shipment 1 / 1
           </span>
           <span className="text-xs text-gray-500 dark:text-gray-300">
             Fulfilled by Dream2000 EG Marketplace
           </span>
         </div>
-        <Card className="p-6 mb-2">
+        <Card className="p-6 mb-2 border rounded-none " shadow={false}>
           <div>
-            <p className="text-sm">Door Delivery</p>
+            <p className="text-sm font-semibold">
+              {deliveryOption == "express"
+                ? "Door Delivery"
+                : deliveryOption == "pick-up"
+                ? "Pick-up Station"
+                : ""}
+            </p>
             <p className="text-xs">Delivery between 10 March and 11 March</p>
           </div>
-          <hr></hr>
-          <div className="flex justify-start items-center ">
-            <div>
-              <Image src="" width={20} height={30} alt="product photo" />
-            </div>
-            <div className="ps-4">
-              <p className="text-sm">
-                Galaxy A14 - 6.6-inch 4GB/64GB Dual Sim 4G - Mobile Phone -
-                Light Green
-              </p>
-              <p className="text-xs">QTY: 1</p>
-            </div>
-          </div>
+          {cartProducts.map((cartProduct, index) => {
+            return (
+              <div key={index}>
+                <hr></hr>
+                <div className="flex justify-start items-center py-2 ">
+                  <div>
+                    <Image
+                      src={cartProduct.product.thumbnail}
+                      width={80}
+                      height={80}
+                      alt="product photo"
+                    />
+                  </div>
+                  <div className="ps-4">
+                    <p className="text-sm">{cartProduct.product.en.title}</p>
+                    <p className="text-xs">QTY: {cartProduct.quantity}</p>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
         </Card>
         <div className="flex jusitfy-start">
           <SaveButton
