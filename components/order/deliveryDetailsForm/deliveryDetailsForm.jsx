@@ -14,9 +14,7 @@ import { Card } from "@material-tailwind/react";
 import { auth, fetchCartProducts, firestore } from "@/firebase";
 import {
   collection,
-  doc,
   getDocs,
-  onSnapshot,
   query,
   updateDoc,
   where,
@@ -160,7 +158,7 @@ const egyptGovernorates = [
     areas: ["Suez City", "Ataqah", "Ras Gharib"],
   },
 ];
-function DeliveryDetailsForm({ orderData }) {
+function DeliveryDetailsForm() {
   const [openModal, setOpenModal] = useState(false);
   const [cartProducts, setCartProducts] = useState([]);
   const [addressData, setAddressData] = useState({});
@@ -169,6 +167,7 @@ function DeliveryDetailsForm({ orderData }) {
   const [deliveryOption, setDeliveryOption] = useState("express");
   const [selectedCity, setSelectedCity] = useState("");
   const [selectedArea, setSelectedArea] = useState("");
+  const [deliveryConfirmed, setDeliveryConfirmed] = useState(false);
   const router = useRouter();
 
   // Fetch initial data
@@ -255,10 +254,12 @@ function DeliveryDetailsForm({ orderData }) {
         await updateDoc(docRef, updatedData);
       }
       router.push("/checkout_layout/payment-methods");
+      setDeliveryConfirmed(true);
     } catch (error) {
       console.log("Error navigating to payment:", error);
     }
   };
+  console.log(deliveryConfirmed);
   return (
     <>
       <Card className="mt-3 p-6">

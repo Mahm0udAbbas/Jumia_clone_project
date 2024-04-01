@@ -12,7 +12,7 @@ import LocalShippingOutlinedIcon from "@mui/icons-material/LocalShippingOutlined
 import AssignmentReturnOutlinedIcon from "@mui/icons-material/AssignmentReturnOutlined";
 import { getProductById } from "@/firebase";
 import { Breadcrumbs } from "@mui/material";
-import addToCart from "@/services/addToCart";
+import useAddToCart from "@/services/addToCart";
 
 const data5 = [
   {
@@ -259,7 +259,7 @@ const ProductDetails = ({ product }) => {
                       cursor: "pointer",
                     }}
                     onClick={() => {
-                      addToCart(product);
+                      useAddToCart(product);
                       setToast(true);
                       setTimeout(() => setToast(false), 3000);
                     }}

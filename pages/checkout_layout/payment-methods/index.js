@@ -19,12 +19,12 @@ import {
   where,
 } from "firebase/firestore";
 import MySpinner from "@/components/order/Spiner/Spinner";
-import { Password } from "@mui/icons-material";
-function ChoosePaymant() {
+function ChoosePaymant({ setIsCard }) {
   const [addressData, setAddressData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [openModal, setOpenModal] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState("");
+  const [paymentMethodConfirmed, setPaymentMethodConfirmed] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -32,6 +32,11 @@ function ChoosePaymant() {
       getData(user);
     });
   });
+  if (paymentMethod === "card") {
+    setIsCard(true);
+  } else {
+    setIsCard(false);
+  }
   async function getData(user) {
     try {
       if (user) {
@@ -79,11 +84,12 @@ function ChoosePaymant() {
         await updateDoc(docRef, updatedData);
       }
       router.push("/checkout_layout/sammury");
+      setPaymentMethodConfirmed(true);
     } catch (error) {
       console.log("Error navigating to payment:", error);
     }
   };
-
+  console.log(paymentMethodConfirmed);
   return (
     <>
       <section className="bg-[#e5e5e580]">
