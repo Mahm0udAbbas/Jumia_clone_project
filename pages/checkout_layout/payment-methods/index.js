@@ -2,21 +2,88 @@ import { Modal } from "flowbite-react";
 import Link from "next/link";
 import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
 import LocalPoliceIcon from "@mui/icons-material/LocalPolice";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import ListHeader from "@/components/order/ListHeader/ListHeader";
 import SaveButton from "@/components/order/Save_button/SaveButton";
 import CustomerAdress from "@/components/order/customeradress/customeraddress";
-import { CheckPageLayout } from "..";
+import { CheckPageLayout } from "../../../layouts/checkoutLayout";
 import { Card } from "@material-tailwind/react";
+import { auth, firestore, getOrderDetailsData } from "@/firebase";
+import { onAuthStateChanged } from "firebase/auth";
+import {
+  collection,
+  getDocs,
+  query,
+  updateDoc,
+  where,
+} from "firebase/firestore";
+import MySpinner from "@/components/order/Spiner/Spinner";
+import { Password } from "@mui/icons-material";
 function ChoosePaymant() {
+  const [addressData, setAddressData] = useState(null);
+  const [loading, setLoading] = useState(true);
   const [openModal, setOpenModal] = useState(false);
-  const handleSubmit = () => setOpenModal(false);
-  const cancel = () => setOpenModal(false);
+  const [paymentMethod, setPaymentMethod] = useState("");
   const router = useRouter();
-  const goToSammry = () => {
-    router.push("/checkout_layout/sammury");
+
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      getData(user);
+    });
+  });
+  async function getData(user) {
+    try {
+      if (user) {
+        const orderDetailsRef = collection(firestore, "order-details");
+        const q = query(orderDetailsRef, where("userId", "==", user.uid));
+        const querySnapshot = await getDocs(q);
+        if (!querySnapshot.empty) {
+          const data = querySnapshot.docs[0].data();
+          setAddressData(data);
+        } else {
+          setError("No data found for this user.");
+        }
+      } else {
+        setError("No user found.");
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      setError("Error fetching data. Please try again later.");
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  // Handle Payment Method change
+  const handlePaymentMethodChange = (event) => {
+    setPaymentMethod(event.target.value);
+    console.log(paymentMethod);
   };
+  const handleSubmit = () => setOpenModal(false);
+  const goToSammry = async () => {
+    const orderDetailsRef = collection(firestore, "order-details");
+    const q = query(
+      orderDetailsRef,
+      where("userId", "==", auth.currentUser.uid)
+    );
+    try {
+      const querySnapshot = await getDocs(q);
+      if (!querySnapshot.empty) {
+        const docData = querySnapshot.docs[0].data();
+        const updatedData = {
+          ...docData,
+          paymentMethod: paymentMethod,
+        }; // You can set the default method here
+        const docRef = querySnapshot.docs[0].ref;
+        await updateDoc(docRef, updatedData);
+      }
+      router.push("/checkout_layout/sammury");
+    } catch (error) {
+      console.log("Error navigating to payment:", error);
+    }
+  };
+
   return (
     <>
       <section className="bg-[#e5e5e580]">
@@ -27,10 +94,14 @@ function ChoosePaymant() {
               <span className="ms-2 text-blue-900 hover:underline">Change</span>
             </Link>
           </div>
-          <CustomerAdress
-            title={"Mahmoud abbas"}
-            info={"elmaady | Cairo - Maadi-Ashanat El Maadi | +02 1281935436"}
-          />
+          {addressData && addressData.shippingAddress ? (
+            <CustomerAdress
+              title={`${addressData.shippingAddress.firstName} ${addressData.shippingAddress.lastName}`}
+              info={`${addressData.shippingAddress.region} | ${addressData.shippingAddress.city} | ${addressData.shippingAddress.address} | ${addressData.shippingAddress.additionalInfo}`}
+            />
+          ) : (
+            <MySpinner />
+          )}
         </Card>
         <Card className="mt-3 p-6">
           <div className="flex justify-between items-center ">
@@ -39,10 +110,18 @@ function ChoosePaymant() {
               <span className="ms-2 text-blue-900 hover:underline">Change</span>
             </Link>
           </div>
-          <CustomerAdress
-            title={" Door Delivery"}
-            info={"delivery between 7 March and 10 March"}
-          />
+          {addressData ? (
+            <CustomerAdress
+              title={
+                addressData.deliveryMethod == "express"
+                  ? "Door Delivery"
+                  : "Pick-up Station"
+              }
+              info="Delivery Sheduled on 30 March"
+            />
+          ) : (
+            <MySpinner />
+          )}
         </Card>
 
         <div className="text-grey-100">
@@ -56,11 +135,14 @@ function ChoosePaymant() {
                 <div className="flex items-start ">
                   <div>
                     <input
-                      id="helper-radio"
+                      id="cash"
                       aria-describedby="helper-radio-text"
                       type="radio"
-                      value=""
-                      className="w-4 h-4 text-gray-200 bg-gray-100 border-gray-300 focus:text-orange-500  focus:ring-orange-500 dark:focus:ring-orange-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                      value="cash"
+                      name="payment-method"
+                      checked={paymentMethod === "cash"}
+                      onChange={handlePaymentMethodChange}
+                      className="w-4 h-4 text-orange-500  border-orange-300 focus:text-orange-500  focus:ring-orange-500 dark:focus:ring-orange-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                     />
                   </div>
                   <div className="ms-2 text-sm ">
@@ -149,8 +231,11 @@ function ChoosePaymant() {
                       id="helper-radio"
                       aria-describedby="helper-radio-text"
                       type="radio"
-                      value=""
-                      className="w-4 h-4 text-gray-200 bg-gray-100 border-gray-300 focus:text-orange-500  focus:ring-orange-500 dark:focus:ring-orange-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                      value="card"
+                      name="payment-method"
+                      checked={paymentMethod === "card"}
+                      onChange={handlePaymentMethodChange}
+                      className="w-4 h-4 text-orange-500  border-orange-300 focus:text-orange-500  focus:ring-orange-500 dark:focus:ring-orange-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                     />
                   </div>
                   <div className="ms-2 text-sm">

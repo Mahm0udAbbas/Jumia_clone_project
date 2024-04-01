@@ -2,11 +2,22 @@ import SelectInputField from "../selectInput/SelectInputField";
 import ListHeader from "../ListHeader/ListHeader";
 import SaveButton from "../Save_button/SaveButton";
 import CancelButton from "../Cancle_button/CancelButton";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { firestore } from "../../../firebase";
-import { collection, addDoc } from "firebase/firestore";
+import { auth, firestore } from "../../../firebase";
+import {
+  collection,
+  addDoc,
+  setDoc,
+  where,
+  query,
+  getDocs,
+  updateDoc,
+} from "firebase/firestore";
 import { Card, Input } from "@material-tailwind/react";
+import { Toast } from "flowbite-react";
+import { onAuthStateChanged } from "firebase/auth";
+import { useDispatch, useSelector } from "react-redux";
 const governorates = [
   "Alexandria",
   "Aswan",
@@ -78,7 +89,8 @@ function EditAdressForm() {
     additionalInfo: "",
   });
   const [errors, setErrors] = useState({});
-
+  const dispatch = useDispatch();
+  const isConfirmed = useSelector((state) => state.confirmation.confirmed);
   const router = useRouter();
   const validateForm = () => {
     const errors = {};
@@ -105,25 +117,69 @@ function EditAdressForm() {
   const handleSubmit = async () => {
     console.log();
     const errors = validateForm();
+    // Form is valid, submit the data
     if (Object.keys(errors).length === 0) {
-      // Form is valid, submit the data
-      console.log("Form data:", formData);
-      try {
-        // Add form data to Firestore
-        const docRef = await addDoc(collection(firestore, "order-details"), {
-          shippingAddress: formData,
-        });
-        console.log("Form data added to Firestore");
-      } catch (error) {
-        console.error("Error adding form data to Firestore: ", error);
-      }
-      // Navigate to the next page
-      router.push("/checkout_layout/shipping-options");
+      onAuthStateChanged(auth, (user) => {
+        if (user) {
+          console.log(user);
+          // Query Firestore to find documents with the user's ID
+          const orderDetailsRef = collection(firestore, "order-details");
+          const q = query(orderDetailsRef, where("userId", "==", user.uid));
+          getDocs(q)
+            .then((querySnapshot) => {
+              if (!querySnapshot.empty) {
+                // If documents matching the user ID exist, update the first one
+                const docRef = querySnapshot.docs[0].ref;
+                updateDoc(docRef, {
+                  shippingAddress: formData,
+                })
+                  .then(() => {
+                    console.log("Form data updated in Firestore");
+                    router.push("/checkout_layout/shipping-options");
+                    // dispatch(confirm());
+                  })
+                  .catch((error) => {
+                    console.error(
+                      "Error updating form data in Firestore: ",
+                      error
+                    );
+                    // Handle error updating the document
+                  });
+              } else {
+                // If no documents matching the user ID exist, add a new one
+                addDoc(orderDetailsRef, {
+                  shippingAddress: formData,
+                  userId: user.uid,
+                })
+                  .then(() => {
+                    console.log("Form data added to Firestore");
+                    router.push("/checkout_layout/shipping-options");
+                    // dispatch(confirm());
+                  })
+                  .catch((error) => {
+                    console.error(
+                      "Error adding form data to Firestore: ",
+                      error
+                    );
+                    // Handle error adding the document
+                  });
+              }
+            })
+            .catch((error) => {
+              console.error("Error querying documents: ", error);
+              // Handle error querying documents
+            });
+        } else {
+          // Handle unauthenticated user, e.g., display a toast notification
+          setShowToast(true);
+        }
+      });
     } else {
       // Set errors state to display validation errors
       setErrors(errors);
     }
   };
+
   const handleChange = (e) => {
     setFormData({
       ...formData,
@@ -137,6 +193,29 @@ function EditAdressForm() {
       });
     }
   };
+
+  // Function to fetch existing data from Firestore and populate the form fields
+  const fetchAndPopulateFormData = async (userId) => {
+    const orderDetailsRef = collection(firestore, "order-details");
+    const q = query(orderDetailsRef, where("userId", "==", userId));
+    try {
+      const querySnapshot = await getDocs(q);
+      if (!querySnapshot.empty) {
+        const docData = querySnapshot.docs[0].data();
+        // Populate form fields with existing data
+        setFormData(docData.shippingAddress);
+      }
+    } catch (error) {
+      console.error("Error fetching and populating form data: ", error);
+    }
+  };
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      fetchAndPopulateFormData(user.uid);
+    });
+    // Cleanup function to unsubscribe from onAuthStateChanged
+    return () => unsubscribe();
+  }, []);
   return (
     <>
       <Card className=" rounded p-3">
@@ -147,9 +226,9 @@ function EditAdressForm() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 py-2">
               <div>
                 <Input
-                  variant="outlined"
-                  color="orange"
-                  placeholder="Outlined"
+                  // variant="outlined"
+                  color="amber"
+                  placeholder="FirstName"
                   label="FirstName"
                   name="firstName"
                   value={formData.firstName}
@@ -161,7 +240,7 @@ function EditAdressForm() {
               </div>
               <div>
                 <Input
-                  color="orange"
+                  color="amber"
                   label="LastName"
                   name="lastName"
                   value={formData.lastName}
@@ -179,7 +258,7 @@ function EditAdressForm() {
                   <p>+20</p>
                 </div>
                 <Input
-                  color="orange"
+                  color="amber"
                   type="number"
                   label="Phone Number"
                   name="phone"
@@ -196,7 +275,7 @@ function EditAdressForm() {
                   <p>+20</p>
                 </div>
                 <Input
-                  color="orange"
+                  color="amber"
                   type="number"
                   label="Additional Phone Number"
                   name="otherPhone"
@@ -209,7 +288,7 @@ function EditAdressForm() {
             <div className="py-2">
               <div>
                 <Input
-                  color="orange"
+                  color="amber"
                   label="Address"
                   name="address"
                   value={formData.address}
@@ -222,7 +301,7 @@ function EditAdressForm() {
             </div>
             <div className="py-2">
               <Input
-                color="orange"
+                color="amber"
                 label="Additional Information"
                 name="additionalInfo"
                 value={formData.additionalInfo}

@@ -2,12 +2,64 @@
 import { Card } from "@material-tailwind/react";
 // import { Card } from "flowbite-react";
 import SaveButton from "../Save_button/SaveButton";
+import {
+  Timestamp,
+  addDoc,
+  collection,
+  getDocs,
+  query,
+  updateDoc,
+  where,
+} from "firebase/firestore";
+import { auth, firestore } from "@/firebase";
 function ProccedToBuy({ cartProducts }) {
+  let timeStamp = Timestamp.now();
+  let jsDate = timeStamp.toDate();
+  let orderDate = `${jsDate.getDate()} / ${
+    jsDate.getMonth() + 1
+  } / ${jsDate.getFullYear()}`;
   let total = Number();
-  // console.log(cartProducts);
-  function handleSubmit() {
-    console.log("submit");
+  async function handleSubmit() {
+    const orderDetailsRef = collection(firestore, "order-details");
+    const q = query(
+      orderDetailsRef,
+      where("userId", "==", auth.currentUser.uid)
+    );
+    try {
+      const querySnapshot = await getDocs(q);
+      if (!querySnapshot.empty) {
+        const docRef = querySnapshot.docs[0].ref;
+        const docData = querySnapshot.docs[0].data();
+        if (
+          docData.paymentMethod &&
+          docData.deliveryMethod &&
+          docData.shippingAddress &&
+          docData.pickUpStation
+        ) {
+          const orderSubcollectionRef = collection(docRef, "orders");
+          const newOrderDocRef = await addDoc(orderSubcollectionRef, {
+            items: cartProducts,
+            timestamp: orderDate,
+            status: "order-placed",
+          });
+          console.log("New order document added with ID: ", newOrderDocRef.id);
+          await updateDoc(docRef, {
+            ...docData,
+            confirmed: true,
+          });
+        } else {
+          await updateDoc(docRef, {
+            ...docData,
+            confirmed: false,
+          });
+        }
+        alert("Your order is done");
+      }
+    } catch (error) {
+      console.log("Error navigating to payment:", error);
+    }
   }
+
   return (
     <>
       <Card className="p-6">

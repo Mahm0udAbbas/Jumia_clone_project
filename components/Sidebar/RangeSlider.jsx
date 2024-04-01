@@ -13,8 +13,6 @@ function valuetext(value) {
 
 export default function RangeSlider({ setCatProducts, catId, subCatId }) {
   const [value, setValue] = useState([20, 48000]);
-  const [appliedValue, setAppliedValue] = useState([20, 48000]);
-  const [loading, setLoading] = useState(true);
 
   const handleChange = (event, newValue) => {
     const updatedValue = Array.isArray(newValue)
@@ -31,8 +29,7 @@ export default function RangeSlider({ setCatProducts, catId, subCatId }) {
   };
 
   const handleSubmit = () => {
-    setAppliedValue(value);
-    getData(appliedValue, subCatId);
+    getData(value, subCatId);
   };
   async function getData(value, subCatId) {
     // Receive value as a parameter

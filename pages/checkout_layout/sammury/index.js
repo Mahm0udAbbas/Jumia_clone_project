@@ -1,36 +1,62 @@
 import { useEffect, useState } from "react";
-import { getDocs, collection } from "firebase/firestore";
-import { firestore } from "../../../firebase";
+import {
+  getDocs,
+  collection,
+  where,
+  query,
+  doc,
+  onSnapshot,
+} from "firebase/firestore";
+import {
+  auth,
+  fetchCartProducts,
+  firestore,
+  getCartproducts,
+} from "../../../firebase";
 // import { Card } from "flowbite-react";
 import Image from "next/image";
 import Link from "next/link";
 import MySpinner from "@/components/order/Spiner/Spinner";
 import ListHeader from "@/components/order/ListHeader/ListHeader";
 import CustomerAdress from "@/components/order/customeradress/customeraddress";
-import { CheckPageLayout } from "..";
+import { CheckPageLayout } from "../../../layouts/checkoutLayout";
 import { Card } from "@material-tailwind/react";
+import { onAuthStateChanged } from "firebase/auth";
 function Summery() {
-  const [addressdata, setAddressData] = useState([]);
+  const [addressData, setAddressData] = useState(null);
+  const [cartProducts, setCartProducts] = useState([]);
+
   const [loading, setLoading] = useState(true);
   useEffect(() => {
-    getData();
+    onAuthStateChanged(auth, (user) => {
+      getData(user);
+      fetchCartProducts(user, setCartProducts);
+    });
   }, []);
-  async function getData() {
+
+  async function getData(user) {
     try {
-      const querySnapshot = await getDocs(
-        collection(firestore, "order-details")
-      );
-      const data = querySnapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
-      setAddressData(data);
-      setLoading(false);
+      if (user) {
+        const orderDetailsRef = collection(firestore, "order-details");
+        const q = query(orderDetailsRef, where("userId", "==", user.uid));
+        const querySnapshot = await getDocs(q);
+        if (!querySnapshot.empty) {
+          const data = querySnapshot.docs[0].data();
+          setAddressData(data);
+        } else {
+          setError("No data found for this user.");
+        }
+      } else {
+        setError("No user found.");
+      }
     } catch (error) {
       console.error("Error fetching data:", error);
+      setError("Error fetching data. Please try again later.");
+    } finally {
+      setLoading(false);
     }
   }
-  console.log(addressdata);
+
   if (loading) {
     return (
       <div className="flex justify-center items-center h-screen">
@@ -50,10 +76,14 @@ function Summery() {
                 </span>
               </Link>
             </div>
-            <CustomerAdress
-              title={`${addressdata[0].shippingAddress.firstName} ${addressdata[0].shippingAddress.lastName}`}
-              info={`${addressdata[0].shippingAddress.region} | ${addressdata[0].shippingAddress.city}  | ${addressdata[0].shippingAddress.address} | ${addressdata[0].shippingAddress.additionalInfo}`}
-            />
+            {addressData && addressData.shippingAddress ? (
+              <CustomerAdress
+                title={`${addressData.shippingAddress.firstName} ${addressData.shippingAddress.lastName}`}
+                info={`${addressData.shippingAddress.region} | ${addressData.shippingAddress.city} | ${addressData.shippingAddress.address} | ${addressData.shippingAddress.additionalInfo}`}
+              />
+            ) : (
+              <MySpinner />
+            )}
           </Card>
           <Card className="mt-3 p-6">
             <div className="flex justify-between items-center">
@@ -64,10 +94,18 @@ function Summery() {
                 </span>
               </Link>
             </div>
-            <CustomerAdress
-              title={" Door Delivery"}
-              info={"delivery between 7 March and 10 March"}
-            />
+            {addressData ? (
+              <CustomerAdress
+                title={
+                  addressData.deliveryMethod == "express"
+                    ? "Door Delivery"
+                    : "Pick-up Station"
+                }
+                info="Delivery Sheduled on 30 March"
+              />
+            ) : (
+              <MySpinner />
+            )}
             <div className="flex justify-between items-center pt-3">
               <span className="text-sm font-semibold text-black dark:text-gray-300">
                 Shipment 1/1
@@ -76,26 +114,40 @@ function Summery() {
                 Fulfilled by Dream2000 EG Marketplace
               </span>
             </div>
-            <Card className="p-6">
+            <Card className="p-6 border rounded-none" shadow={false}>
               <div>
-                <p className="text-sm">Door Delivery</p>
+                <p className="text-sm">
+                  {addressData.deliveryMethod == "express"
+                    ? "Door Delivery"
+                    : "Pick-up Station"}
+                </p>
                 <p className="text-xs">
                   Delivery between 10 March and 11 March
                 </p>
               </div>
-              <hr></hr>
-              <div className="flex justify-start items-center ">
-                <div>
-                  <Image src="" width={20} height={30} alt="product photo" />
-                </div>
-                <div className="ps-4">
-                  <p className="text-sm">
-                    Galaxy A14 - 6.6-inch 4GB/64GB Dual Sim 4G - Mobile Phone -
-                    Light Green
-                  </p>
-                  <p className="text-xs">QTY: 1</p>
-                </div>
-              </div>
+              {cartProducts.map((cartProduct, index) => {
+                return (
+                  <div key={index}>
+                    <hr></hr>
+                    <div className="flex justify-start items-center py-2 ">
+                      <div>
+                        <img
+                          src={cartProduct.product.thumbnail}
+                          width={80}
+                          height={80}
+                          alt="product photo"
+                        />
+                      </div>
+                      <div className="ps-4">
+                        <p className="text-sm">
+                          {cartProduct.product.en.title}
+                        </p>
+                        <p className="text-xs">QTY: {cartProduct.quantity}</p>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
             </Card>
           </Card>
 
@@ -109,12 +161,18 @@ function Summery() {
                   </span>
                 </Link>
               </div>
-              <CustomerAdress
-                title={"Cash On Delivery"}
-                info={
-                  "For more secure and contactless delivery and to get a 10 EGP discount we recommend using Pay by Card"
-                }
-              />
+              {addressData ? (
+                <CustomerAdress
+                  title={
+                    addressData.paymentMethod == "cash"
+                      ? "Cash on delivery"
+                      : "Pay with card"
+                  }
+                  info="Delivery Sheduled on 30 March"
+                />
+              ) : (
+                <MySpinner />
+              )}
             </Card>
           </div>
         </section>

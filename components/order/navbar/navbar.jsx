@@ -66,8 +66,8 @@ export function MyNavbar() {
 
   return (
     <Navbar
-      fullWidth="true"
-      shadow="false"
+      fullWidth={true}
+      shadow={false}
       className=" mx-auto  px-4 py-3 round-0 mb-2  max-w-screen-xl px-6 py-3 max-w-full"
     >
       <div className="flex items-center justify-between text-blue-gray-900">
@@ -77,7 +77,7 @@ export function MyNavbar() {
           variant="h6"
           className="mr-4 ml-2 cursor-pointer py-1.5"
         >
-          <Image
+          <img
             src="/jumia.png"
             height={40}
             width={180}
