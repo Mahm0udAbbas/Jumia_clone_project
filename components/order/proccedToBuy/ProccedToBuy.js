@@ -1,6 +1,5 @@
 "use client";
 import { Card } from "@material-tailwind/react";
-// import { Card } from "flowbite-react";
 import SaveButton from "../Save_button/SaveButton";
 import {
   Timestamp,
@@ -12,7 +11,10 @@ import {
   where,
 } from "firebase/firestore";
 import { auth, firestore } from "@/firebase";
-function ProccedToBuy({ cartProducts }) {
+import { useRouter } from "next/router";
+function ProccedToBuy({ cartProducts, isCard }) {
+  console.log(isCard);
+  const router = useRouter();
   let timeStamp = Timestamp.now();
   let jsDate = timeStamp.toDate();
   let orderDate = `${jsDate.getDate()} / ${
@@ -54,6 +56,9 @@ function ProccedToBuy({ cartProducts }) {
           });
         }
         alert("Your order is done");
+        if (isCard === true) {
+          router.push("/paypal");
+        }
       }
     } catch (error) {
       console.log("Error navigating to payment:", error);

@@ -5,6 +5,7 @@ import PaymentMethod from "@/components/order/PaymentMethod/PaymentMethod";
 import { CheckPageLayout } from "../../../layouts/checkoutLayout";
 
 function Adress({ page }) {
+  console.log("hi");
   return (
     <>
       <div>

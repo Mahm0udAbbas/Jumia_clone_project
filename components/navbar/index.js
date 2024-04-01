@@ -7,7 +7,6 @@ import Help from "./help";
 import { useState } from "react";
 import { getSearch } from "@/firebase";
 import Link from "next/link";
-import { useSelector } from "react-redux";
 
 export default function Navbar() {
   const router = useRouter();
@@ -17,21 +16,20 @@ export default function Navbar() {
   function handleSearch(value) {
     setInputValue(value);
     if (value.length) {
-      getSearch(value).then(data => setProductsSearch([...data]));
+      getSearch(value).then((data) => setProductsSearch([...data]));
     } else {
       setProductsSearch([]);
     }
-  };
+  }
 
   function goToAllProducts(e) {
     if (inputValue) {
       router.push({
         pathname: "/category/allProducts",
-        query: { queryString: inputValue }
+        query: { queryString: inputValue },
       });
       setProductsSearch([]);
-    }
-    else {
+    } else {
       e.preventDefault();
     }
   }
@@ -64,16 +62,32 @@ export default function Navbar() {
               placeholder="Search Products"
               className="input input-bordered input-warning bg-white w-full outline-none max-w-md  my-auto hidden lg:inline"
             />
-            <div hidden={productsSearch.length == 0 ? true : false} className="bg-white rounded-sm shadow-xl p-3 max-w-md z-10 absolute">
-              {
-                productsSearch.map((item) => {
-                  const product = item.data();
-                  return <Link key={item.id} href={`/ProductDetails/${item.id}`} onClick={() => setProductsSearch([])} className="text-sm p-1 block hover:bg-gray-200">{product.en.title}</Link>
-                })
-              }
+            <div
+              hidden={productsSearch.length == 0 ? true : false}
+              className="bg-white rounded-sm shadow-xl p-3 max-w-md z-10 absolute"
+            >
+              {productsSearch.map((item) => {
+                const product = item.data();
+                return (
+                  <Link
+                    key={item.id}
+                    href={`/ProductDetails/${item.id}`}
+                    onClick={() => setProductsSearch([])}
+                    className="text-sm p-1 block hover:bg-gray-200"
+                  >
+                    {product.en.title}
+                  </Link>
+                );
+              })}
             </div>
           </div>
-          <button onClick={(e) => { goToAllProducts(e) }} type="submit" className="btn btn-warning rounded-2 text-white hidden lg:inline">
+          <button
+            onClick={(e) => {
+              goToAllProducts(e);
+            }}
+            type="submit"
+            className="btn btn-warning rounded-2 text-white hidden lg:inline"
+          >
             Search
           </button>
           <Account />

@@ -12,8 +12,7 @@ import LocalShippingOutlinedIcon from "@mui/icons-material/LocalShippingOutlined
 import AssignmentReturnOutlinedIcon from "@mui/icons-material/AssignmentReturnOutlined";
 import { getProductById } from "@/firebase";
 import { Breadcrumbs } from "@mui/material";
-import addToCart from "@/services/addToCart";
-import { data5 } from "@/data";
+import useAddToCart from "@/services/addToCart";
 
 export const getServerSideProps = async (context) => {
   const { id } = context.params;
@@ -25,7 +24,6 @@ export const getServerSideProps = async (context) => {
       props: { product },
     };
   } catch (e) {
-
     return {
       props: { product: null },
     };
@@ -51,9 +49,7 @@ const ProductDetails = ({ product }) => {
                 Home
               </a>
               <a href="">{product.categoryId}</a>
-              <a >
-                {product.en.description}
-              </a>
+              <a>{product.en.description}</a>
             </Breadcrumbs>
           </div>
 
@@ -152,7 +148,7 @@ const ProductDetails = ({ product }) => {
                       cursor: "pointer",
                     }}
                     onClick={() => {
-                      addToCart(product);
+                      useAddToCart(product);
                       setToast(true);
                       setTimeout(() => setToast(false), 3000);
                     }}
@@ -400,10 +396,15 @@ export default ProductDetails;
 function Toast() {
   return (
     <div className="toast toast-top toast-center">
-
       <div className="alert alert-success">
         <div className="inline-flex items-center justify-center flex-shrink-0 w-8 h-8 text-green-500 bg-green-100 rounded-lg dark:bg-green-800 dark:text-green-200">
-          <svg className="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+          <svg
+            className="w-5 h-5"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="currentColor"
+            viewBox="0 0 20 20"
+          >
             <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z" />
           </svg>
           <span className="sr-only">Check icon</span>

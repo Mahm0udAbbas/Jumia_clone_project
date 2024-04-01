@@ -8,7 +8,7 @@ import {
 import Image from "next/image";
 import logoExpress from "@/public/Logo-express.png";
 import StarIcon from "@mui/icons-material/Star";
-import addToCart from "@/services/addToCart";
+import useAddToCart from "@/services/addToCart";
 
 function CatProdCard({ cardData }) {
   return (
@@ -69,7 +69,7 @@ function CatProdCard({ cardData }) {
           color="amber"
           fullWidth
           onClick={() => {
-            addToCart(cardData);
+            useAddToCart(cardData);
           }}
         >
           {" "}

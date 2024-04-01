@@ -8,16 +8,13 @@ import { auth, firestore } from "../../../firebase";
 import {
   collection,
   addDoc,
-  setDoc,
   where,
   query,
   getDocs,
   updateDoc,
 } from "firebase/firestore";
 import { Card, Input } from "@material-tailwind/react";
-import { Toast } from "flowbite-react";
 import { onAuthStateChanged } from "firebase/auth";
-import { useDispatch, useSelector } from "react-redux";
 const governorates = [
   "Alexandria",
   "Aswan",
@@ -89,8 +86,6 @@ function EditAdressForm() {
     additionalInfo: "",
   });
   const [errors, setErrors] = useState({});
-  const dispatch = useDispatch();
-  const isConfirmed = useSelector((state) => state.confirmation.confirmed);
   const router = useRouter();
   const validateForm = () => {
     const errors = {};
@@ -115,7 +110,6 @@ function EditAdressForm() {
     setFormData({ ...formData, city: e.target.value });
   };
   const handleSubmit = async () => {
-    console.log();
     const errors = validateForm();
     // Form is valid, submit the data
     if (Object.keys(errors).length === 0) {
@@ -136,7 +130,7 @@ function EditAdressForm() {
                   .then(() => {
                     console.log("Form data updated in Firestore");
                     router.push("/checkout_layout/shipping-options");
-                    // dispatch(confirm());
+                    setAddressConfirmed(true);
                   })
                   .catch((error) => {
                     console.error(
@@ -154,7 +148,6 @@ function EditAdressForm() {
                   .then(() => {
                     console.log("Form data added to Firestore");
                     router.push("/checkout_layout/shipping-options");
-                    // dispatch(confirm());
                   })
                   .catch((error) => {
                     console.error(
@@ -179,7 +172,7 @@ function EditAdressForm() {
       setErrors(errors);
     }
   };
-
+  // console.log(addressConfirmed);
   const handleChange = (e) => {
     setFormData({
       ...formData,
