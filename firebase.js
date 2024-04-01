@@ -371,3 +371,23 @@ async function getOrderSubcollection(userId) {
     return null;
   }
 }
+
+
+let result = null;
+export async function getSearch(query) {
+  let data = Array();
+  if (result) {
+    data = result.docs.filter((doc) => {
+      const product = doc.data();
+      const title = product.en.title.toLowerCase();
+      const matchingSearch = title.includes(query.toLowerCase());
+      if (matchingSearch) {
+        return doc;
+      }
+    });
+  }
+  else {
+    result = await getDocs(collection(firestore, "products"));
+  }
+  return data;
+}

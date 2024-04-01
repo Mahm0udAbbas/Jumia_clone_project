@@ -28,9 +28,9 @@ export default function Electronics() {
       <div className="carousel carousel-center w-full bg-white shadow-lg rounded-lg">
         {!loading ? (
           products.map((product) => (
-            <Link href={`/ProductDetails/${product.id}`}>
+            <Link key={product.proId} href={`/ProductDetails/${product.proId}`}>
               <div
-                key={product.id}
+
                 className="carousel-item flex flex-col w-[150px] md:w-[200px]"
               >
                 <img

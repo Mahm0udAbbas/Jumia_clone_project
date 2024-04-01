@@ -100,8 +100,8 @@ function Cart() {
                             <Image
                               width={100}
                               height={100}
-                              src={product.product?.images[0]}
-                              alt={product.product?.en.title}
+                              src={product.product.thumbnail}
+                              alt={product.product.en.title}
                               className="sm:h-38 sm:w-38 h-24 w-24 rounded-md object-contain object-center"
                             />
                           </div>
@@ -110,10 +110,10 @@ function Cart() {
                               <div className="flex justify-between">
                                 <h3 className="text-sm">
                                   <a
-                                    href={product.product?.thumbnail}
+                                    href={product.product.thumbnail}
                                     className=" text-black"
                                   >
-                                    {product.product?.en.title}
+                                    {product.product.en.title}
                                   </a>
                                 </h3>
                               </div>
@@ -125,7 +125,7 @@ function Cart() {
                             </div>
                             <div className="flex justify-between">
                               <p className="text-xs text-orange-500">
-                                {product.product?.quantityInStock} units left
+                                {product.product.quantityInStock} units left
                               </p>
                               <div className="flex">
                                 <p className="text-lg font-medium text-gray-500 line-through">
@@ -135,7 +135,7 @@ function Cart() {
                                 <p className="text-md text-orange-700 px-2 rounded bg-orange-700/10">
                                   -
                                   {Math.floor(
-                                    product.product?.discountPercentage
+                                    product.product.discountPercentage
                                   )}
                                   %
                                 </p>
@@ -154,7 +154,10 @@ function Cart() {
                           <div className="flex">
                             <button
                               type="button"
-                              className="flex rounded p-2 items-center space-x-2 hover:bg-orange-500/25 "
+                              className="flex rounded p-2 items-center space-x-2 hover:bg-orange-500/25"
+                              onClick={() => {
+                                removeProductFromCart(index);
+                              }}
                             >
                               <DeleteForeverIcon
                                 size={18}
@@ -162,9 +165,7 @@ function Cart() {
                               />
                               <span
                                 className="text-sm font-medium text-orange-500"
-                                onClick={() => {
-                                  removeProductFromCart(index);
-                                }}
+
                               >
                                 REMOVE
                               </span>
@@ -213,8 +214,7 @@ function Cart() {
                 </div>
                 <div className="flex justify-between p-3">
                   <CheckCircleOutlineIcon
-                    className="text-3xl me-1"
-                    color="green"
+                    className="text-3xl me-1 text-green-600"
                   />
                   <p className="p-0 m-0 text-sm">
                     Jumia Express items are eligible for free delivery.

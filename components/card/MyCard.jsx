@@ -12,7 +12,7 @@ import addToCart from "@/services/addToCart";
 
 function CatProdCard({ cardData }) {
   return (
-    <Card className="items-between justify-between  shadow-none group hover:shadow-2xl">
+    <Card key={cardData.proId} className="items-between justify-between  shadow-none group hover:shadow-2xl">
       <div className="flex items-center justify-center p-2">
         <img
           width={100}

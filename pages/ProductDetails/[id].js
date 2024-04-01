@@ -13,116 +13,8 @@ import AssignmentReturnOutlinedIcon from "@mui/icons-material/AssignmentReturnOu
 import { getProductById } from "@/firebase";
 import { Breadcrumbs } from "@mui/material";
 import addToCart from "@/services/addToCart";
+import { data5 } from "@/data";
 
-const data5 = [
-  {
-    id: 1,
-    name: 'XIAOMI Redmi Note 13 6.67" 6GB RAM/128GB ROM Android 12 - Black',
-    newPrice: "EGP 214,000",
-    oldPrice: "EGP 230,500",
-    imageUrl:
-      "https://ng.jumia.is/unsafe/fit-in/500x500/filters:fill(white)/product/55/3476082/1.jpg?5801",
-  },
-
-  {
-    id: 2,
-    name: 'itel S23 6.6" 8GB RAM/256GB ROM Android 12 - Sky Blue',
-    newPrice: "EGP 99,990",
-    oldPrice: "EGP 150,000",
-    imageUrl:
-      "https://ng.jumia.is/unsafe/fit-in/500x500/filters:fill(white)/product/68/3355072/1.jpg?5389",
-  },
-
-  {
-    id: 3,
-    name: 'UMIDIGI G1 6.52" 2GB RAM/32GB ROM Android 12 - Galaxy Blue',
-    newPrice: "EGP 66,800",
-    oldPrice: "EGP 98,420",
-    imageUrl:
-      "https://ng.jumia.is/unsafe/fit-in/500x500/filters:fill(white)/product/33/7833241/1.jpg?3144",
-  },
-
-  {
-    id: 4,
-    name: "Infinix Hot 30i 6.6 HD+, 4+4GB RAM /128GB ROM Android 12 - Blue",
-    newPrice: "EGP 132,355",
-    oldPrice: "EGP 139,000",
-    imageUrl:
-      "https://ng.jumia.is/unsafe/fit-in/500x500/filters:fill(white)/product/17/3425342/1.jpg?3784",
-  },
-
-  {
-    id: 5,
-    name: 'itel A70 6.6" HD+, 128GB ROM + 3GB RAM, 5000mAh, 13MP + 8MP, 4G',
-    newPrice: "EGP 97,990",
-    oldPrice: "EGP 100,000",
-    imageUrl:
-      "https://ng.jumia.is/unsafe/fit-in/500x500/filters:fill(white)/product/97/1194962/1.jpg?1450",
-  },
-
-  {
-    id: 6,
-    name: 'XIAOMI Redmi Note 13 Pro 6.67" 8GB RAM/256 GB ROM Android 12 -Black + Free Smart Light Sound Speaker',
-    newPrice: "EGP 344,500",
-    oldPrice: "EGP 365,000",
-    imageUrl:
-      "https://ng.jumia.is/unsafe/fit-in/500x500/filters:fill(white)/product/77/2086082/1.jpg?9356",
-  },
-
-  {
-    id: 7,
-    name: "AGM PG001 Dual SIM, Torchlight, Wireless FM,SOS Function-Red",
-    newPrice: "EGP 15,680",
-    oldPrice: "EGP 19,100",
-    imageUrl:
-      "https://ng.jumia.is/unsafe/fit-in/500x500/filters:fill(white)/product/95/8379422/1.jpg?0527",
-  },
-
-  {
-    id: 8,
-    name: 'Samsung Galaxy A03 Core 6.5" 2GB RAM/ 32GB ROM Android 11- Onyx Black',
-    newPrice: "EGP 89,940",
-    oldPrice: "EGP 94,740",
-    imageUrl:
-      "https://ng.jumia.is/unsafe/fit-in/500x500/filters:fill(white)/product/39/4927521/1.jpg?8740",
-  },
-
-  {
-    id: 9,
-    name: "itel ICC-81 Car Charger, MP3 Player",
-    newPrice: "EGP 5,290",
-    oldPrice: "EGP 8,000",
-    imageUrl:
-      "https://ng.jumia.is/unsafe/fit-in/500x500/filters:fill(white)/product/05/8619381/1.jpg?3983",
-  },
-
-  {
-    id: 10,
-    name: 'Samsung Galaxy A34 5G 6.4" 6GB RAM/128GB ROM Android 13 - Green',
-    newPrice: "EGP 353,300",
-    oldPrice: "EGP 485,000",
-    imageUrl:
-      "https://ng.jumia.is/unsafe/fit-in/500x500/filters:fill(white)/product/78/6317722/1.jpg?7922",
-  },
-
-  {
-    id: 11,
-    name: "AGM PG001 Louder Speaker, FM Radio,SOS, Dual SIM Torch-Black",
-    newPrice: "EGP 15,680",
-    oldPrice: "EGP 19,100",
-    imageUrl:
-      "https://ng.jumia.is/unsafe/fit-in/500x500/filters:fill(white)/product/53/2379422/1.jpg?1352",
-  },
-
-  {
-    id: 12,
-    name: 'Samsung Galaxy A25 5G 6.5" 8GB RAM/256GB ROM Android 14 - Light Blue',
-    newPrice: "EGP 347,550",
-    oldPrice: "EGP 390,000",
-    imageUrl:
-      "https://ng.jumia.is/unsafe/fit-in/500x500/filters:fill(white)/product/31/6439772/1.jpg?9332",
-  },
-];
 export const getServerSideProps = async (context) => {
   const { id } = context.params;
 
@@ -133,7 +25,7 @@ export const getServerSideProps = async (context) => {
       props: { product },
     };
   } catch (e) {
-    console.log(e);
+
     return {
       props: { product: null },
     };
@@ -149,6 +41,7 @@ const ProductDetails = ({ product }) => {
   let result = date.toLocaleDateString();
   return (
     <>
+      {toast ? <Toast /> : ""}
       <div className="container mx-auto">
         <h1></h1>
         <div>
@@ -157,8 +50,8 @@ const ProductDetails = ({ product }) => {
               <a href="/" className="opacity-60">
                 Home
               </a>
-              <a href="">coffee</a>
-              <a href={`/ProductDetails/${product.id}`}>
+              <a href="">{product.categoryId}</a>
+              <a >
                 {product.en.description}
               </a>
             </Breadcrumbs>
@@ -506,47 +399,17 @@ export default ProductDetails;
 
 function Toast() {
   return (
-    <div
-      id="toast-success"
-      class="flex items-center w-full max-w-xs p-4 mb-4 text-gray-500 bg-white rounded-lg shadow dark:text-gray-400 dark:bg-gray-800"
-      role="alert"
-    >
-      <div class="inline-flex items-center justify-center flex-shrink-0 w-8 h-8 text-green-500 bg-green-100 rounded-lg dark:bg-green-800 dark:text-green-200">
-        <svg
-          class="w-5 h-5"
-          aria-hidden="true"
-          xmlns="http://www.w3.org/2000/svg"
-          fill="currentColor"
-          viewBox="0 0 20 20"
-        >
-          <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z" />
-        </svg>
-        <span class="sr-only">Check icon</span>
+    <div className="toast toast-top toast-center">
+
+      <div className="alert alert-success">
+        <div className="inline-flex items-center justify-center flex-shrink-0 w-8 h-8 text-green-500 bg-green-100 rounded-lg dark:bg-green-800 dark:text-green-200">
+          <svg className="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z" />
+          </svg>
+          <span className="sr-only">Check icon</span>
+        </div>
+        <span>Item added successfully.</span>
       </div>
-      <div class="ms-3 text-sm font-normal">Item increased successfully.</div>
-      <button
-        type="button"
-        class="ms-auto -mx-1.5 -my-1.5 bg-white text-gray-400 hover:text-gray-900 rounded-lg focus:ring-2 focus:ring-gray-300 p-1.5 hover:bg-gray-100 inline-flex items-center justify-center h-8 w-8 dark:text-gray-500 dark:hover:text-white dark:bg-gray-800 dark:hover:bg-gray-700"
-        data-dismiss-target="#toast-success"
-        aria-label="Close"
-      >
-        <span class="sr-only">Close</span>
-        <svg
-          class="w-3 h-3"
-          aria-hidden="true"
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 14 14"
-        >
-          <path
-            stroke="currentColor"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
-          />
-        </svg>
-      </button>
     </div>
   );
 }

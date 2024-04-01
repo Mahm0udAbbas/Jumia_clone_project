@@ -16,7 +16,7 @@ function CatProdList({ catProducts, catData, subCatData }) {
           <hr />
           <div className="grid lg:grid-cols-4 lg:gap-4 md:grid-cols-2 md:gap-2 sm:grid-cols-1 sm:gap-1">
             {catProducts.map((product) => {
-              return <CatProdCard key={product.id} cardData={product} />;
+              return <CatProdCard key={product.proId} cardData={product} />;
             })}
           </div>
         </div>

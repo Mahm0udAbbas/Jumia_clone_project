@@ -4,18 +4,37 @@ import Elementthree from "./elementthree";
 import Shoppingcart from "./shoppingcart";
 import Account from "./account";
 import Help from "./help";
-
+import { useState } from "react";
+import { getSearch } from "@/firebase";
+import Link from "next/link";
+import { useSelector } from "react-redux";
 
 export default function Navbar() {
   const router = useRouter();
+  const [productsSearch, setProductsSearch] = useState([]);
+  const [inputValue, setInputValue] = useState("");
 
-  const handleSearch = (event) => {
-    event.preventDefault();
+  function handleSearch(value) {
+    setInputValue(value);
+    if (value.length) {
+      getSearch(value).then(data => setProductsSearch([...data]));
+    } else {
+      setProductsSearch([]);
+    }
   };
 
-  const handleReset = () => {
-
-  };
+  function goToAllProducts(e) {
+    if (inputValue) {
+      router.push({
+        pathname: "/category/allProducts",
+        query: { queryString: inputValue }
+      });
+      setProductsSearch([]);
+    }
+    else {
+      e.preventDefault();
+    }
+  }
 
   return (
     <>
@@ -27,10 +46,10 @@ export default function Navbar() {
           />
         </div>
       </div>
-      <div className="bg-white align-middle">
+      <div className="bg-white align-middle relative">
         <div className="md:max-w-7xl mx-auto flex py-3 flex-row justify-between space-x-2 ">
           <span className="flex space-x-2">
-            <Elementthree/>
+            <Elementthree />
             <img
               src="/jumia.png"
               className="h-[40px] pt-3 cursor-pointer"
@@ -38,51 +57,30 @@ export default function Navbar() {
               onClick={() => router.push("/")}
             />
           </span>
-          <input
-            type="text"
-            placeholder="SEARCH"
-            className="input input-bordered input-warning w-full outline-none max-w-md  my-auto hidden lg:inline"
-          />
-           <button type="submit" className="btn btn-warning rounded-2 text-white hidden lg:inline">
-        Search
-      </button>
-          {/* <form id="search" method="get" className="flex items-center space-x-4" action="/catalog/" data-track-onsubmit="search" onSubmit={handleSearch}>
-      <div className="flex items-center space-x-2">
-        <svg viewBox="0 0 24 24" className="w-6 h-6 text-gray-500">
-          <use xlinkHref="https://www.jumia.com.eg/assets_he/images/i-icons.a66628fd.svg#search"></use>
-        </svg>
-        <input
-          type="text"
-          name="q"
-          id="fi-q"
-          placeholder="Search products, brands and categories"
-          aria-label="Search"
-          autoComplete="off"
-          required
-          className="input input-bordered input-warning w-96 outline-none max-w-md  my-auto hidden lg:inline"
-        />
-        <button type="button" className="text-gray-500" aria-label="Reset" >
-          <svg viewBox="0 0 24 24" className="w-6 h-6">
-            <use xlinkHref="https://www.jumia.com.eg/assets_he/images/i-icons.a66628fd.svg#close"></use>
-          </svg>
-        </button>
+          <div className="w-full outline-none max-w-md my-auto hidden lg:inline">
+            <input
+              onChange={(e) => handleSearch(e.target.value)}
+              type="text"
+              placeholder="Search Products"
+              className="input input-bordered input-warning bg-white w-full outline-none max-w-md  my-auto hidden lg:inline"
+            />
+            <div hidden={productsSearch.length == 0 ? true : false} className="bg-white rounded-sm shadow-xl p-3 max-w-md z-10 absolute">
+              {
+                productsSearch.map((item) => {
+                  const product = item.data();
+                  return <Link key={item.id} href={`/ProductDetails/${item.id}`} onClick={() => setProductsSearch([])} className="text-sm p-1 block hover:bg-gray-200">{product.en.title}</Link>
+                })
+              }
+            </div>
+          </div>
+          <button onClick={(e) => { goToAllProducts(e) }} type="submit" className="btn btn-warning rounded-2 text-white hidden lg:inline">
+            Search
+          </button>
+          <Account />
+          <Help />
+          <Shoppingcart />
+        </div>
       </div>
-      <button type="submit" className="btn btn-warning rounded-2 text-white">
-        Search
-      </button>
-    </form> */}
-          {/* <span className="hidden md:inline">
-           
-              <button  className="btn btn-outline btn-warning">
-                LOGIN/ SIGN UP
-              </button>
-          </span> */}
-          <Account/>
-          <Help/>
-          <Shoppingcart/>
-
-          </div>
-          </div>
     </>
   );
 }
