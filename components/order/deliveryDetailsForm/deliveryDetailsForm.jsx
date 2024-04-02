@@ -158,7 +158,7 @@ const egyptGovernorates = [
     areas: ["Suez City", "Ataqah", "Ras Gharib"],
   },
 ];
-function DeliveryDetailsForm() {
+function DeliveryDetailsForm({ setDeliveryConfirm }) {
   const [openModal, setOpenModal] = useState(false);
   const [cartProducts, setCartProducts] = useState([]);
   const [addressData, setAddressData] = useState({});
@@ -167,7 +167,7 @@ function DeliveryDetailsForm() {
   const [deliveryOption, setDeliveryOption] = useState("express");
   const [selectedCity, setSelectedCity] = useState("");
   const [selectedArea, setSelectedArea] = useState("");
-  const [deliveryConfirmed, setDeliveryConfirmed] = useState(false);
+  // const [deliveryConfirmed, setDeliveryConfirmed] = useState(false);
   const router = useRouter();
 
   // Fetch initial data
@@ -253,13 +253,12 @@ function DeliveryDetailsForm() {
         const docRef = querySnapshot.docs[0].ref;
         await updateDoc(docRef, updatedData);
       }
+      setDeliveryConfirm(true);
       router.push("/checkout_layout/payment-methods");
-      setDeliveryConfirmed(true);
     } catch (error) {
       console.log("Error navigating to payment:", error);
     }
   };
-  console.log(deliveryConfirmed);
   return (
     <>
       <Card className="mt-3 p-6">
@@ -470,6 +469,7 @@ function DeliveryDetailsForm() {
             label="CONFIRM DELIVERY DETAILS"
             color="amber"
             handleSubmit={goToPayment}
+            disabled={!pickUpStation && deliveryOption === "pick-up"}
           />
         </div>
       </Card>

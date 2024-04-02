@@ -13,6 +13,10 @@ function CheckoutLayout({ children }) {
   const [cartProducts, setCartProducts] = useState([]);
   const [userState, setUserState] = useState(null);
   const [isCard, setIsCard] = useState(true);
+  const [adressConfirm, setAddressConfirm] = useState(false);
+  const [paymentConfirm, setPaymentConfirm] = useState(false);
+  const [deliveryConfirm, setDeliveryConfirm] = useState(false);
+  console.log(paymentConfirm, deliveryConfirm, adressConfirm);
   const router = useRouter();
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -54,6 +58,9 @@ function CheckoutLayout({ children }) {
                   if (React.isValidElement(child)) {
                     return React.cloneElement(child, {
                       setIsCard: setIsCard,
+                      setDeliveryConfirm: setDeliveryConfirm,
+                      setPaymentConfirm: setPaymentConfirm,
+                      setAddressConfirm: setAddressConfirm,
                     });
                   }
                   return child;
@@ -61,7 +68,13 @@ function CheckoutLayout({ children }) {
               </div>
             </section>
             <div className="col-span-12 md:col-span-4  lg:col-span-3">
-              <ProccedToBuy cartProducts={cartProducts} isCard={isCard} />
+              <ProccedToBuy
+                cartProducts={cartProducts}
+                isCard={isCard}
+                adressConfirm={adressConfirm}
+                deliveryConfirm={deliveryConfirm}
+                paymentConfirm={paymentConfirm}
+              />
             </div>
             <div className="col-span-12 md:col-span-8 lg:col-span-9">
               <Link

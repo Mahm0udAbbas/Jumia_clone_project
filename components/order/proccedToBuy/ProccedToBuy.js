@@ -12,8 +12,22 @@ import {
 } from "firebase/firestore";
 import { auth, firestore } from "@/firebase";
 import { useRouter } from "next/router";
-function ProccedToBuy({ cartProducts, isCard }) {
+import { useState } from "react";
+function ProccedToBuy({
+  cartProducts,
+  isCard,
+  paymentConfirm,
+  deliveryConfirm,
+  adressConfirm,
+}) {
   console.log(isCard);
+  let paymentMethod;
+  if (isCard == true) {
+    paymentMethod = "card";
+  } else {
+    paymentMethod = "cash";
+  }
+
   const router = useRouter();
   let timeStamp = Timestamp.now();
   let jsDate = timeStamp.toDate();
@@ -33,7 +47,6 @@ function ProccedToBuy({ cartProducts, isCard }) {
         const docRef = querySnapshot.docs[0].ref;
         const docData = querySnapshot.docs[0].data();
         if (
-          docData.paymentMethod &&
           docData.deliveryMethod &&
           docData.shippingAddress &&
           docData.pickUpStation
@@ -43,11 +56,12 @@ function ProccedToBuy({ cartProducts, isCard }) {
             items: cartProducts,
             timestamp: orderDate,
             status: "order-placed",
+            paymentMethod: paymentMethod,
+            confirmed: true,
           });
           console.log("New order document added with ID: ", newOrderDocRef.id);
           await updateDoc(docRef, {
             ...docData,
-            confirmed: true,
           });
         } else {
           await updateDoc(docRef, {
@@ -58,13 +72,15 @@ function ProccedToBuy({ cartProducts, isCard }) {
         alert("Your order is done");
         if (isCard === true) {
           router.push("/paypal");
+        } else {
+          router.push("/account/Orders");
         }
       }
     } catch (error) {
       console.log("Error navigating to payment:", error);
     }
   }
-
+  console.log(paymentConfirm, deliveryConfirm, adressConfirm);
   return (
     <>
       <Card className="p-6">
@@ -96,6 +112,13 @@ function ProccedToBuy({ cartProducts, isCard }) {
               label="confirm order"
               handleSubmit={handleSubmit}
               color="amber"
+              disabled={
+                paymentConfirm == true &&
+                deliveryConfirm == true &&
+                adressConfirm == true
+                  ? ""
+                  : "disabled"
+              }
             />
           </div>
         </div>

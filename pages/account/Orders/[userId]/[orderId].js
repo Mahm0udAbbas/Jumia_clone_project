@@ -1,21 +1,8 @@
 import { AccountPageLayout } from "@/components/Account_Layout";
 import MySpinner from "@/components/order/Spiner/Spinner";
-import {
-  CancelOrderById,
-  auth,
-  fetchOrderDetails,
-  firestore,
-  getOrderById,
-} from "@/firebase";
+import { CancelOrderById, fetchOrderDetails, getOrderById } from "@/firebase";
 import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
 import { Link } from "@mui/material";
-import {
-  collection,
-  getDocs,
-  query,
-  updateDoc,
-  where,
-} from "firebase/firestore";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 export const getServerSideProps = async (context) => {
@@ -40,7 +27,7 @@ function OrderDetails({ orderObject }) {
   const [orderDetails, setOrderDetails] = useState(null);
   let total = Number();
   const router = useRouter();
-
+  console.log(orderObject);
   useEffect(() => {
     async function getData() {
       setOrderDetails(await fetchOrderDetails(router.query.userId));
@@ -167,7 +154,7 @@ function OrderDetails({ orderObject }) {
             <div className="mt-3 mb-5 py-2 px-3 capitalize">
               <p className="  font-semibold mb-2">payment method</p>
               <p className="text-sm text-gray-500 ">
-                {orderDetails.paymentMethod == "cash"
+                {orderObject.paymentMethod == "cash"
                   ? "cash on delivery"
                   : "pay by card"}
               </p>

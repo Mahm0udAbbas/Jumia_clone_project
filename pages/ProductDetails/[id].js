@@ -158,7 +158,6 @@ const ProductDetails = ({ product }) => {
               <a href="/" className="opacity-60">
                 Home
               </a>
-              <a href="">coffee</a>
               <a href={`/ProductDetails/${product.id}`}>
                 {product.en.description}
               </a>

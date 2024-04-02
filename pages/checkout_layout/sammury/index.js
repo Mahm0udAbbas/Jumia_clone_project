@@ -22,10 +22,11 @@ import CustomerAdress from "@/components/order/customeradress/customeraddress";
 import { CheckPageLayout } from "../../../layouts/checkoutLayout";
 import { Card } from "@material-tailwind/react";
 import { onAuthStateChanged } from "firebase/auth";
-function Summery() {
+import { useRouter } from "next/router";
+function Summery({ setPaymentConfirm, setAddressConfirm, setDeliveryConfirm }) {
   const [addressData, setAddressData] = useState(null);
   const [cartProducts, setCartProducts] = useState([]);
-
+  const router = useRouter();
   const [loading, setLoading] = useState(true);
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
@@ -70,11 +71,16 @@ function Summery() {
           <Card className="p-6">
             <div className="flex justify-between items-center">
               <ListHeader value="customer Adress" color="text-green-900" />
-              <Link href="/checkout_layout/address">
+              <button
+                onClick={() => {
+                  setAddressConfirm(false);
+                  router.push("/checkout_layout/address");
+                }}
+              >
                 <span className="ms-2 text-blue-900 hover:underline">
                   Change
                 </span>
-              </Link>
+              </button>
             </div>
             {addressData && addressData.shippingAddress ? (
               <CustomerAdress
@@ -88,11 +94,16 @@ function Summery() {
           <Card className="mt-3 p-6">
             <div className="flex justify-between items-center">
               <ListHeader value="delivery details" color="text-green-900" />
-              <Link href="/checkout_layout/shipping-options">
+              <button
+                onClick={() => {
+                  setDeliveryConfirm(false);
+                  router.push("/checkout_layout/shipping-options");
+                }}
+              >
                 <span className="ms-2 text-blue-900 hover:underline">
                   Change
                 </span>
-              </Link>
+              </button>
             </div>
             {addressData ? (
               <CustomerAdress
@@ -155,11 +166,16 @@ function Summery() {
             <Card className="p-6">
               <div className="flex justify-between items-center">
                 <ListHeader value="Payment method" color="text-green-900" />
-                <Link href="/checkout_layout/payment-methods">
+                <button
+                  onClick={() => {
+                    setPaymentConfirm(false);
+                    router.push("/checkout_layout/payment-methods");
+                  }}
+                >
                   <span className="ms-2 text-blue-900 hover:underline">
                     Change
                   </span>
-                </Link>
+                </button>
               </div>
               {addressData ? (
                 <CustomerAdress

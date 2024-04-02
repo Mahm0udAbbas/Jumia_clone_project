@@ -74,7 +74,8 @@ const cairo_areas = [
   "Shubra El Kheima",
 ];
 
-function EditAdressForm() {
+function EditAdressForm({ setAddressConfirm }) {
+  console.log(setAddressConfirm);
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -129,8 +130,8 @@ function EditAdressForm() {
                 })
                   .then(() => {
                     console.log("Form data updated in Firestore");
+                    setAddressConfirm(true);
                     router.push("/checkout_layout/shipping-options");
-                    setAddressConfirmed(true);
                   })
                   .catch((error) => {
                     console.error(
@@ -147,6 +148,7 @@ function EditAdressForm() {
                 })
                   .then(() => {
                     console.log("Form data added to Firestore");
+                    setAddressConfirm(true);
                     router.push("/checkout_layout/shipping-options");
                   })
                   .catch((error) => {

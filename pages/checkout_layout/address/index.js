@@ -4,12 +4,12 @@ import EditAdressForm from "@/components/order/EditAdressForm/EditAdressForm";
 import PaymentMethod from "@/components/order/PaymentMethod/PaymentMethod";
 import { CheckPageLayout } from "../../../layouts/checkoutLayout";
 
-function Adress({ page }) {
+function Adress({ setAddressConfirm }) {
   console.log("hi");
   return (
     <>
       <div>
-        <EditAdressForm />
+        <EditAdressForm setAddressConfirm={setAddressConfirm} />
       </div>
       <div className="text-grey-100">
         <Delivery />
