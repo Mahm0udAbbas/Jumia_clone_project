@@ -18,28 +18,8 @@ export default async function Handler(req, res) {
       {
         amount: {
           currency_code: "USD",
-          value: "100.00",
-          breakdown: {
-            item_total: {
-              currency_code: "USD",
-              value: "100.00",
-            },
-          },
+          value: req.body.myTotal,
         },
-        items: [
-          {
-            name: "Book of React",
-            description: "A book about react",
-            quantity: "1",
-            unit_amount: { currency_code: "USD", value: "50.00" },
-          },
-          {
-            name: "Book of next",
-            description: "A book about next",
-            quantity: "1",
-            unit_amount: { currency_code: "USD", value: "50.00" },
-          },
-        ],
       },
     ],
   });

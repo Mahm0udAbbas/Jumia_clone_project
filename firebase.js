@@ -4,6 +4,7 @@ import {
   addDoc,
   collection,
   doc,
+  documentId,
   getDoc,
   getDocs,
   getFirestore,
@@ -11,6 +12,7 @@ import {
   onSnapshot,
   query,
   setDoc,
+  updateDoc,
   where,
 } from "firebase/firestore";
 import {
@@ -295,25 +297,7 @@ export async function getOrderDetailsData(user) {
   });
 }
 
-// export const fetchOrderDetails = async (userId) => {
-//   console.log("this is userId :" + userId);
-//   if (userId) {
-//     const orderDetailsRef = collection(firestore, "order-details");
-//     const q = query(orderDetailsRef, where("userId", "==", userId));
-//     const querySnapshot = await getDocs(q);
-//     if (!querySnapshot.empty) {
-//       const data = querySnapshot.docs[0].data();
-//       console.log(data);
-//       return data;
-//     } else {
-//       console.log("No such document!");
-//       return undefined;
-//     }
-//   }
-// };
-
 export const fetchOrderDetails = async (userId) => {
-  console.log("this is userId :" + userId);
   if (userId) {
     const orderDetailsRef = collection(firestore, "order-details");
     const q = query(orderDetailsRef, where("userId", "==", userId));
@@ -323,22 +307,22 @@ export const fetchOrderDetails = async (userId) => {
       console.log(orderDetailsData);
 
       // Retrieve orders subcollection
-      const ordersRef = collection(
-        firestore,
-        "order-details",
-        querySnapshot.docs[0].id,
-        "orders"
-      );
-      const ordersQuerySnapshot = await getDocs(ordersRef);
-      console.log(ordersQuerySnapshot);
-      const ordersData = [];
-      ordersQuerySnapshot.forEach((doc, index) => {
-        console.log(index);
-        ordersData.push({ ...doc.data(), No: `${index + 1}` });
-      });
+      // const ordersRef = collection(
+      //   firestore,
+      //   "order-details",
+      //   querySnapshot.docs[0].id,
+      //   "orders"
+      // );
+      // const ordersQuerySnapshot = await getDocs(ordersRef);
+      // console.log(ordersQuerySnapshot);
+      // const ordersData = [];
+      // ordersQuerySnapshot.forEach((doc, index) => {
+      //   console.log(index);
+      //   ordersData.push({ ...doc.data(), No: `${index + 1}` });
+      // });
       // console.log(ordersData);
 
-      return { orderDetails: orderDetailsData, orders: ordersData };
+      return orderDetailsData;
     } else {
       console.log("No such document!");
       return undefined;
@@ -346,10 +330,34 @@ export const fetchOrderDetails = async (userId) => {
   }
 };
 
-async function getOrderSubcollection(userId) {
+// async function getOrderSubcollection(userId) {
+//   const orderDetailsRef = collection(firestore, "order-details");
+//   const q = query(orderDetailsRef, where("userId", "==", userId));
+
+//   try {
+//     const querySnapshot = await getDocs(q);
+//     if (!querySnapshot.empty) {
+//       const docRef = querySnapshot.docs[0].ref;
+//       const orderSubcollectionRef = collection(docRef, "orders");
+//       const orderQuerySnapshot = await getDocs(orderSubcollectionRef);
+
+//       const orders = [];
+//       orderQuerySnapshot.forEach((doc) => {
+//         orders.push({ id: doc.id, ...doc.data() });
+//       });
+
+//       return orders;
+//     } else {
+//       return []; // No orders found for the user
+//     }
+//   } catch (error) {
+//     console.log("Error getting order subcollection:", error);
+//     return null;
+//   }
+// }
+export async function getOrderSubcollection(userId) {
   const orderDetailsRef = collection(firestore, "order-details");
   const q = query(orderDetailsRef, where("userId", "==", userId));
-
   try {
     const querySnapshot = await getDocs(q);
     if (!querySnapshot.empty) {
@@ -362,13 +370,55 @@ async function getOrderSubcollection(userId) {
         orders.push({ id: doc.id, ...doc.data() });
       });
 
-      return orders;
+      return orders; // Return the orders
     } else {
+      console.log("No orders found for the user");
       return []; // No orders found for the user
     }
   } catch (error) {
     console.log("Error getting order subcollection:", error);
-    return null;
+    throw error; // Propagate the error
+  }
+}
+export async function CancelOrderById(userId, id) {
+  const orderDetailsRef = collection(firestore, "order-details");
+  const q = query(orderDetailsRef, where("userId", "==", userId));
+  try {
+    const querySnapshot = await getDocs(q);
+    if (!querySnapshot.empty) {
+      const docRef = querySnapshot.docs[0].ref;
+      const orderSubcollectionRef = doc(docRef, "orders", id);
+      const orderQuerySnapshot = await getDoc(orderSubcollectionRef);
+      console.log(orderQuerySnapshot.data());
+
+      await updateDoc(orderSubcollectionRef, {
+        ...orderQuerySnapshot.data(),
+        status: "Cancelled",
+      });
+      console.log("Your order Updated");
+    } else {
+      console.log("No order found");
+    }
+  } catch (err) {
+    console.log("Error getting order:" + err);
+  }
+}
+export async function getOrderById(userId, id) {
+  const orderDetailsRef = collection(firestore, "order-details");
+  const q = query(orderDetailsRef, where("userId", "==", userId));
+  try {
+    const querySnapshot = await getDocs(q);
+    if (!querySnapshot.empty) {
+      const docRef = querySnapshot.docs[0].ref;
+      const orderSubcollectionRef = doc(docRef, "orders", id);
+      const orderQuerySnapshot = await getDoc(orderSubcollectionRef);
+      console.log(orderQuerySnapshot.data());
+      return orderQuerySnapshot.data();
+    } else {
+      console.log("No order found");
+    }
+  } catch (err) {
+    console.log("Error getting order:" + err);
   }
 }
 

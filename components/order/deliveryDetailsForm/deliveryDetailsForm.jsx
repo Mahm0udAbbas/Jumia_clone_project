@@ -14,9 +14,7 @@ import { Card } from "@material-tailwind/react";
 import { auth, fetchCartProducts, firestore } from "@/firebase";
 import {
   collection,
-  doc,
   getDocs,
-  onSnapshot,
   query,
   updateDoc,
   where,
@@ -160,7 +158,7 @@ const egyptGovernorates = [
     areas: ["Suez City", "Ataqah", "Ras Gharib"],
   },
 ];
-function DeliveryDetailsForm({ orderData }) {
+function DeliveryDetailsForm({ setDeliveryConfirm }) {
   const [openModal, setOpenModal] = useState(false);
   const [cartProducts, setCartProducts] = useState([]);
   const [addressData, setAddressData] = useState({});
@@ -169,6 +167,7 @@ function DeliveryDetailsForm({ orderData }) {
   const [deliveryOption, setDeliveryOption] = useState("express");
   const [selectedCity, setSelectedCity] = useState("");
   const [selectedArea, setSelectedArea] = useState("");
+  // const [deliveryConfirmed, setDeliveryConfirmed] = useState(false);
   const router = useRouter();
 
   // Fetch initial data
@@ -254,6 +253,7 @@ function DeliveryDetailsForm({ orderData }) {
         const docRef = querySnapshot.docs[0].ref;
         await updateDoc(docRef, updatedData);
       }
+      setDeliveryConfirm(true);
       router.push("/checkout_layout/payment-methods");
     } catch (error) {
       console.log("Error navigating to payment:", error);
@@ -469,6 +469,7 @@ function DeliveryDetailsForm({ orderData }) {
             label="CONFIRM DELIVERY DETAILS"
             color="amber"
             handleSubmit={goToPayment}
+            disabled={!pickUpStation && deliveryOption === "pick-up"}
           />
         </div>
       </Card>

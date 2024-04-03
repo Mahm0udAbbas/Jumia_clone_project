@@ -20,7 +20,7 @@ function allProducts() {
       setAllQueryProducts([...convertQuerySnapshotToProducts]);
       setLoading(false);
     });
-  }, [queryString])
+  }, [queryString]);
 
   if (loading) {
     return (
@@ -38,14 +38,11 @@ function allProducts() {
           <a>All Products</a>
         </Breadcrumbs>
         <div className="grid grid-cols-12 gap-2">
-          <div className="col-span-12   md:col-span-3">
-            <Sidebar
+          <div className=" col-span-12 md:col-span-12 py-2">
+            <CatProdList
+              catProducts={allQueryProducts}
               catData="All Products"
-              setCatProducts={setAllQueryProducts}
             />
-          </div>
-          <div className=" col-span-12 md:col-span-9 py-2">
-            <CatProdList catProducts={allQueryProducts} catData="All Products" />
           </div>
         </div>
       </main>

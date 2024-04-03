@@ -19,8 +19,12 @@ import {
   where,
 } from "firebase/firestore";
 import MySpinner from "@/components/order/Spiner/Spinner";
-import { Password } from "@mui/icons-material";
-function ChoosePaymant() {
+function ChoosePaymant({
+  setIsCard,
+  setPaymentConfirm,
+  setAddressConfirm,
+  setDeliveryConfirm,
+}) {
   const [addressData, setAddressData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [openModal, setOpenModal] = useState(false);
@@ -32,6 +36,11 @@ function ChoosePaymant() {
       getData(user);
     });
   });
+  if (paymentMethod === "card") {
+    setIsCard(true);
+  } else {
+    setIsCard(false);
+  }
   async function getData(user) {
     try {
       if (user) {
@@ -62,37 +71,23 @@ function ChoosePaymant() {
   };
   const handleSubmit = () => setOpenModal(false);
   const goToSammry = async () => {
-    const orderDetailsRef = collection(firestore, "order-details");
-    const q = query(
-      orderDetailsRef,
-      where("userId", "==", auth.currentUser.uid)
-    );
-    try {
-      const querySnapshot = await getDocs(q);
-      if (!querySnapshot.empty) {
-        const docData = querySnapshot.docs[0].data();
-        const updatedData = {
-          ...docData,
-          paymentMethod: paymentMethod,
-        }; // You can set the default method here
-        const docRef = querySnapshot.docs[0].ref;
-        await updateDoc(docRef, updatedData);
-      }
-      router.push("/checkout_layout/sammury");
-    } catch (error) {
-      console.log("Error navigating to payment:", error);
-    }
+    router.push("/checkout_layout/sammury");
+    setPaymentConfirm(true);
   };
-
   return (
     <>
       <section className="bg-[#e5e5e580]">
         <Card className="p-6">
           <div className="flex justify-between items-center">
             <ListHeader value="customer Adress" color="text-green-900" />
-            <Link href="/checkout_layout/address">
+            <button
+              onClick={() => {
+                setAddressConfirm(false);
+                router.push("/checkout_layout/address");
+              }}
+            >
               <span className="ms-2 text-blue-900 hover:underline">Change</span>
-            </Link>
+            </button>
           </div>
           {addressData && addressData.shippingAddress ? (
             <CustomerAdress
@@ -106,9 +101,14 @@ function ChoosePaymant() {
         <Card className="mt-3 p-6">
           <div className="flex justify-between items-center ">
             <ListHeader value="Delivery Options" color="text-green-900" />
-            <Link href="/checkout_layout/shipping-options">
+            <button
+              onClick={() => {
+                setDeliveryConfirm(false);
+                router.push("/checkout_layout/shipping-options");
+              }}
+            >
               <span className="ms-2 text-blue-900 hover:underline">Change</span>
-            </Link>
+            </button>
           </div>
           {addressData ? (
             <CustomerAdress
@@ -264,6 +264,7 @@ function ChoosePaymant() {
                 label="confirm Payment Details"
                 color="amber"
                 handleSubmit={goToSammry}
+                disabled={!paymentMethod}
               />
             </div>
           </Card>

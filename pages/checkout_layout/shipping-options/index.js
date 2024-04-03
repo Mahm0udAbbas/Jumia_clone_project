@@ -10,11 +10,12 @@ import ListHeader from "@/components/order/ListHeader/ListHeader";
 import MySpinner from "@/components/order/Spiner/Spinner";
 import { CheckPageLayout } from "../../../layouts/checkoutLayout";
 import { onAuthStateChanged } from "firebase/auth";
-function EditDelivery() {
+import { useRouter } from "next/router";
+function EditDelivery({ setDeliveryConfirm, setAddressConfirm }) {
   const [addressData, setAddressData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
+  const router = useRouter();
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
       getData(user);
@@ -57,11 +58,16 @@ function EditDelivery() {
           <Card>
             <div className="flex justify-between items-center">
               <ListHeader value="customer Adress" color="text-green-900" />
-              <Link href="/checkout_layout/address">
+              <button
+                onClick={() => {
+                  setAddressConfirm(false);
+                  router.push("/checkout_layout/address");
+                }}
+              >
                 <span className="ms-2 text-blue-900 hover:underline">
                   Change
                 </span>
-              </Link>
+              </button>
             </div>
             {/* {addressData && addressData.shippingAddress && ( */}
             <CustomerAdress
@@ -70,7 +76,10 @@ function EditDelivery() {
             />
             {/* )} */}
           </Card>
-          <DeliveryDetailsForm orderData={addressData} />
+          <DeliveryDetailsForm
+            orderData={addressData}
+            setDeliveryConfirm={setDeliveryConfirm}
+          />
           <div className="text-grey-100">
             <PaymentMethod />
           </div>

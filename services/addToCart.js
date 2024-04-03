@@ -2,7 +2,7 @@ import { getDoc, setDoc, doc, arrayUnion, updateDoc } from "firebase/firestore";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth, firestore } from "@/firebase";
 
-function addToCart(product) {
+export default function useAddToCart(product) {
   const newCartProduct = { product, quantity: 1 };
   const localCart = JSON.parse(localStorage.getItem("cart"));
   let spreadLocalCart = Array();
@@ -51,5 +51,3 @@ function addToCart(product) {
     return 0;
   });
 }
-
-export default addToCart;

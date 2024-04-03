@@ -4,24 +4,40 @@ import ProccedToBuy from "../components/order/proccedToBuy/ProccedToBuy";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth, firestore } from "@/firebase";
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { doc, onSnapshot } from "firebase/firestore";
 import MySpinner from "@/components/order/Spiner/Spinner";
+import { useRouter } from "next/router";
 
 function CheckoutLayout({ children }) {
   const [cartProducts, setCartProducts] = useState([]);
   const [userState, setUserState] = useState(null);
-  onAuthStateChanged(auth, (user) => {
-    if (user) {
-      setUserState(user);
-      onSnapshot(doc(firestore, "cart", user.uid), (snapShot) => {
-        setCartProducts(snapShot.data()?.products);
-      });
-    } else {
-      let productsFromLocalSorage = JSON.parse(localStorage.getItem("cart"));
-      setCartProducts(productsFromLocalSorage);
-    }
-  });
+  const [isCard, setIsCard] = useState(true);
+  const [adressConfirm, setAddressConfirm] = useState(false);
+  const [paymentConfirm, setPaymentConfirm] = useState(false);
+  const [deliveryConfirm, setDeliveryConfirm] = useState(false);
+  console.log(paymentConfirm, deliveryConfirm, adressConfirm);
+  const router = useRouter();
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setUserState(user);
+        const unsubscribeSnapshot = onSnapshot(
+          doc(firestore, "cart", user.uid),
+          (snapShot) => {
+            setCartProducts(snapShot.data()?.products || []);
+          }
+        );
+        return () => unsubscribeSnapshot();
+      } else {
+        const productsFromLocalStorage = JSON.parse(
+          localStorage.getItem("cart")
+        );
+        setCartProducts(productsFromLocalStorage || []);
+      }
+    });
+    return () => unsubscribe();
+  }, []);
   if (cartProducts === null) {
     return (
       <div className="flex justify-center items-center h-screen">
@@ -35,10 +51,30 @@ function CheckoutLayout({ children }) {
           <MyNavbar />
           <section className="container mx-auto  grid grid-cols-12 gap-6 ">
             <section className=" col-span-12 md:col-span-8 lg:col-span-9  p-0 ">
-              <div>{children}</div>
+              <div>
+                {" "}
+                {/* Pass cartProducts as props to children */}
+                {React.Children.map(children, (child) => {
+                  if (React.isValidElement(child)) {
+                    return React.cloneElement(child, {
+                      setIsCard: setIsCard,
+                      setDeliveryConfirm: setDeliveryConfirm,
+                      setPaymentConfirm: setPaymentConfirm,
+                      setAddressConfirm: setAddressConfirm,
+                    });
+                  }
+                  return child;
+                })}
+              </div>
             </section>
             <div className="col-span-12 md:col-span-4  lg:col-span-3">
-              <ProccedToBuy cartProducts={cartProducts} />
+              <ProccedToBuy
+                cartProducts={cartProducts}
+                isCard={isCard}
+                adressConfirm={adressConfirm}
+                deliveryConfirm={deliveryConfirm}
+                paymentConfirm={paymentConfirm}
+              />
             </div>
             <div className="col-span-12 md:col-span-8 lg:col-span-9">
               <Link

@@ -1,106 +1,37 @@
 import { AccountPageLayout } from "@/components/Account_Layout";
 import MySpinner from "@/components/order/Spiner/Spinner";
-import { auth, firestore, getOrderSubcollection } from "@/firebase";
+import { auth, fetchOrderDetails, getOrderSubcollection } from "@/firebase";
 import { onAuthStateChanged } from "firebase/auth";
-import { collection, getDocs, query, where } from "firebase/firestore";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
-
 function Orders() {
-  const [shippingData, setShippingData] = useState(null);
   const [orderData, setOrderData] = useState(null);
+  const [orderDetails, setOrderDetails] = useState(null);
+  const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
-        fetchOrderData(user);
-        getOrderSubcollection(user.uid)
-          .then((orders) => {
-            setOrderData(orders);
-          })
-          .catch((error) => {
-            console.log("Error fetching order subcollection:", error);
-          });
+        setUser(user);
+        try {
+          // Fetch data from both functions concurrently using Promise.all
+          const [orderDetails, orderSubcollection] = await Promise.all([
+            fetchOrderDetails(user.uid),
+            getOrderSubcollection(user.uid),
+          ]);
+          // Set the fetched data in state
+          setOrderDetails(orderDetails);
+          setOrderData(orderSubcollection);
+          setLoading(false); // Set loading state to false
+        } catch (error) {
+          console.log("Error fetching data:", error);
+        }
       }
     });
-
     return () => unsubscribe();
   }, []);
-
-  // async function getOrderSubcollection(userId) {
-  //   const orderDetailsRef = collection(firestore, "order-details");
-  //   const q = query(orderDetailsRef, where("userId", "==", userId));
-
-  //   try {
-  //     const querySnapshot = await getDocs(q);
-  //     if (!querySnapshot.empty) {
-  //       const docRef = querySnapshot.docs[0].ref;
-  //       const orderSubcollectionRef = collection(docRef, "orders");
-  //       const orderQuerySnapshot = await getDocs(orderSubcollectionRef);
-
-  //       const orders = [];
-  //       orderQuerySnapshot.forEach((doc) => {
-  //         orders.push({ id: doc.id, ...doc.data() });
-  //       });
-  //       setOrderData(orders);
-  //     } else {
-  //       return []; // No orders found for the user
-  //     }
-  //   } catch (error) {
-  //     console.log("Error getting order subcollection:", error);
-  //     return null;
-  //   }
-  // }
-
-  async function getOrderSubcollection(userId) {
-    const orderDetailsRef = collection(firestore, "order-details");
-    const q = query(orderDetailsRef, where("userId", "==", userId));
-
-    try {
-      const querySnapshot = await getDocs(q);
-      if (!querySnapshot.empty) {
-        const docRef = querySnapshot.docs[0].ref;
-        const orderSubcollectionRef = collection(docRef, "orders");
-        const orderQuerySnapshot = await getDocs(orderSubcollectionRef);
-
-        const orders = [];
-        orderQuerySnapshot.forEach((doc) => {
-          orders.push({ id: doc.id, ...doc.data() });
-        });
-        setLoading(false);
-        return orders; // Return the orders
-      } else {
-        console.log("No orders found for the user");
-        return []; // No orders found for the user
-      }
-    } catch (error) {
-      console.log("Error getting order subcollection:", error);
-      throw error; // Propagate the error
-    }
-  }
-
-  async function fetchOrderData(user) {
-    try {
-      if (user) {
-        const orderDetailsRef = collection(firestore, "order-details");
-        const q = query(orderDetailsRef, where("userId", "==", user.uid));
-        const querySnapshot = await getDocs(q);
-        if (!querySnapshot.empty) {
-          const data = querySnapshot.docs[0].data();
-          // console.log(data);
-
-          setShippingData(data);
-        } else {
-          console.log("Ther is no order for this user");
-        }
-      } else {
-        console.log("There is no user");
-      }
-    } catch (error) {
-      console.log("Error Fetching data : " + error);
-    }
-  }
-
+  console.log(orderDetails);
+  console.log(orderData);
   if (loading) {
     return (
       <div className="flex justify-center items-center h-screen">
@@ -125,17 +56,20 @@ function Orders() {
 
               {orderData.map((order, index) => {
                 return (
-                  <div className=" p-3 border my-2 " key={index}>
-                    <Link
-                      href={`/account/Orders/${shippingData.userId}`}
-                      className="text-amber-500  rounded-md py-1 px-2  uppercase hover:bg-red-200"
-                    >
-                      see details
-                    </Link>
+                  <div key={index} className=" p-3 border my-2 ">
+                    <div className="flex justify-between items-center">
+                      {" "}
+                      <Link
+                        href={`/account/Orders/${user.uid}/${order.id}`}
+                        className="text-amber-500  rounded-md py-1 px-2  uppercase hover:bg-red-200"
+                      >
+                        see details
+                      </Link>
+                    </div>
                     {order.items.map((item, index) => {
                       return (
                         <>
-                          <div key={index}>
+                          <div key={item.product.prodId}>
                             <div className="flex justify-between items-start p-3 border-b my-2 flex-col md:flex-row">
                               <img
                                 src={item.product.thumbnail}
@@ -153,7 +87,7 @@ function Orders() {
                                       ? "bg-blue-800"
                                       : order.status === "deliverd"
                                       ? "bg-green-700"
-                                      : order.status === "canceled"
+                                      : order.status === "Cancelled"
                                       ? "bg-red-500"
                                       : "bg-blue-500"
                                   }w-fit py-1 px-2 rounded-md text-sm`}
