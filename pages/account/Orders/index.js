@@ -1,17 +1,9 @@
 import { AccountPageLayout } from "@/components/Account_Layout";
 import MySpinner from "@/components/order/Spiner/Spinner";
-import {
-  auth,
-  fetchOrderData,
-  fetchOrderDetails,
-  firestore,
-  getOrderSubcollection,
-} from "@/firebase";
+import { auth, fetchOrderDetails, getOrderSubcollection } from "@/firebase";
 import { onAuthStateChanged } from "firebase/auth";
-import { collection, getDocs, query, where } from "firebase/firestore";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
-
 function Orders() {
   const [orderData, setOrderData] = useState(null);
   const [orderDetails, setOrderDetails] = useState(null);
@@ -64,7 +56,7 @@ function Orders() {
 
               {orderData.map((order, index) => {
                 return (
-                  <div className=" p-3 border my-2 " key={index}>
+                  <div key={index} className=" p-3 border my-2 ">
                     <div className="flex justify-between items-center">
                       {" "}
                       <Link
@@ -77,7 +69,7 @@ function Orders() {
                     {order.items.map((item, index) => {
                       return (
                         <>
-                          <div key={index}>
+                          <div key={item.product.prodId}>
                             <div className="flex justify-between items-start p-3 border-b my-2 flex-col md:flex-row">
                               <img
                                 src={item.product.thumbnail}
