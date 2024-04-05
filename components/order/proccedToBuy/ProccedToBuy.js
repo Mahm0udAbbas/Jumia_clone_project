@@ -27,7 +27,7 @@ function ProccedToBuy({
   } else {
     paymentMethod = "cash";
   }
-
+  console.log(cartProducts);
   const router = useRouter();
   let timeStamp = Timestamp.now();
   let jsDate = timeStamp.toDate();
@@ -46,11 +46,7 @@ function ProccedToBuy({
       if (!querySnapshot.empty) {
         const docRef = querySnapshot.docs[0].ref;
         const docData = querySnapshot.docs[0].data();
-        if (
-          docData.deliveryMethod &&
-          docData.shippingAddress &&
-          docData.pickUpStation
-        ) {
+        if (docData.deliveryMethod && docData.shippingAddress) {
           const orderSubcollectionRef = collection(docRef, "orders");
           const newOrderDocRef = await addDoc(orderSubcollectionRef, {
             items: cartProducts,
@@ -63,13 +59,14 @@ function ProccedToBuy({
           await updateDoc(docRef, {
             ...docData,
           });
+          alert("Your order did not complete");
         } else {
           await updateDoc(docRef, {
             ...docData,
             confirmed: false,
           });
         }
-        alert("Your order is done");
+        alert("Your order did not complete");
         if (isCard === true) {
           router.push("/paypal");
         } else {

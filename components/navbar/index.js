@@ -7,6 +7,7 @@ import Help from "./help";
 import { useState } from "react";
 import { getSearch } from "@/firebase";
 import Link from "next/link";
+import LangToggel from "../langToggel/LangToggel";
 
 export default function Navbar() {
   const router = useRouter();
@@ -36,7 +37,7 @@ export default function Navbar() {
 
   return (
     <>
-      <div className="bg-orange-500 mb-3">
+      <div className="bg-orange-500 ">
         <div className=" .mx-auto w-full align-middle  md:max-w-7xl mx-auto">
           <img
             src="https://ng.jumia.is/cms/0-1-cpr/2023/new-top-strip/free-delivery-top-strip_1.gif"
@@ -44,6 +45,7 @@ export default function Navbar() {
           />
         </div>
       </div>
+      <LangToggel />
       <div className="bg-white align-middle relative">
         <div className="md:max-w-7xl mx-auto flex py-3 flex-row justify-between space-x-2 ">
           <span className="flex space-x-2">
