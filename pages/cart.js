@@ -9,11 +9,15 @@ import logoExpress from "@/public/Logo-express.png";
 import cartEmpty from "@/public/cartEmpty.svg";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth, firestore } from "@/firebase";
+import { useTranslation } from "next-i18next";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
 function Cart() {
   const router = useRouter();
   const [cartProducts, setCartProducts] = useState([]);
   const [userState, setUserState] = useState(null);
+  const { t } = useTranslation("cart");
+  const { locale } = useRouter();
   let separateProducts = Array();
   let total = Number();
   useEffect(() => {
@@ -113,33 +117,23 @@ function Cart() {
                                     href={product.product.thumbnail}
                                     className=" text-black"
                                   >
-                                    {product.product.en.title}
+                                    {locale === "en"
+                                      ? product.product.en.title
+                                      : product.product.ar.title}
                                   </a>
                                 </h3>
                               </div>
                               <div className="flex justify-end">
                                 <p className="text-xl font-medium text-gray-900">
-                                  EGP {product.product?.price}.00
+                                  {t("EGP")} {product.product?.price}.00
                                 </p>
                               </div>
                             </div>
                             <div className="flex justify-between">
                               <p className="text-xs text-orange-500">
-                                {product.product.quantityInStock} units left
+                                {product.product.quantityInStock}{" "}
+                                {t("units left")}
                               </p>
-                              <div className="flex">
-                                <p className="text-lg font-medium text-gray-500 line-through">
-                                  EGP 507.00
-                                </p>
-                                <p className="mx-1"></p>
-                                <p className="text-md text-orange-700 px-2 rounded bg-orange-700/10">
-                                  -
-                                  {Math.floor(
-                                    product.product.discountPercentage
-                                  )}
-                                  %
-                                </p>
-                              </div>
                             </div>
                             <Image
                               width={100}
@@ -163,11 +157,8 @@ function Cart() {
                                 size={18}
                                 className="text-orange-500"
                               />
-                              <span
-                                className="text-sm font-medium text-orange-500"
-
-                              >
-                                REMOVE
+                              <span className="text-sm font-medium text-orange-500">
+                                {t("REMOVE")}
                               </span>
                             </button>
                           </div>
@@ -201,23 +192,21 @@ function Cart() {
               </section>
               <section className="mt-16 rounded-md bg-white lg:col-span-4 lg:mt-0 lg:p-0">
                 <div className=" flex items-center p-3">
-                  <h2 className="m-0 p-0">CART SUMMARY</h2>
+                  <h2 className="m-0 p-0">{t("CART SUMMARY")}</h2>
                 </div>
 
                 <div className="flex justify-between border-y my-2  p-3">
                   <div className="text-base font-medium text-gray-900">
-                    Subtotel
+                    {t("Subtotal")}
                   </div>
                   <div className="text-base font-medium text-gray-900">
-                    EGP {total}.00
+                    {t("EGP")} {total}.00
                   </div>
                 </div>
                 <div className="flex justify-between p-3">
-                  <CheckCircleOutlineIcon
-                    className="text-3xl me-1 text-green-600"
-                  />
+                  <CheckCircleOutlineIcon className="text-3xl me-1 text-green-600" />
                   <p className="p-0 m-0 text-sm">
-                    Jumia Express items are eligible for free delivery.
+                    {t("Jumia Express items are eligible for free delivery")}
                   </p>
                 </div>
                 <Image
@@ -241,7 +230,7 @@ function Cart() {
                       fullWidth
                     >
                       {" "}
-                      Checkout ({total}.00)
+                      {t("Checkout")} ({total}.00)
                     </Button>
                   </div>
                 </div>
@@ -259,16 +248,16 @@ function Cart() {
                   src={cartEmpty}
                   alt="Cart empty logo"
                 />
-                <p className="my-4">Your cart is empty!</p>
+                <p className="my-4"> </p>
                 <p className="text-xs mb-4">
-                  Browse our categories and discover our best deals!
+                  {t("Browse our categories and discover our best deals!")}
                 </p>
                 <Button
                   onClick={() => router.push("/")}
                   className="text-xs text-white"
                   color="amber"
                 >
-                  START SHOPPING
+                  {t("START SHOPPING")}
                 </Button>
               </div>
             </section>
@@ -280,3 +269,11 @@ function Cart() {
 }
 
 export default Cart;
+export async function getStaticProps({ locale }) {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, ["cart"])),
+      // Will be passed to the page component as props
+    },
+  };
+}
