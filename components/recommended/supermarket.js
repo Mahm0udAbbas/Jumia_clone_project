@@ -3,11 +3,13 @@ import RecomHeader from "../Product/header";
 import { getProductsByCategoryId } from "@/firebase";
 import Link from "next/link";
 import MySpinner from "../order/Spiner/Spinner";
-
+import { useRouter } from "next/router";
+import { useTranslation } from "next-i18next";
 export default function Supermarket() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
-
+  const { locale } = useRouter();
+  const { t } = useTranslation("home");
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -26,24 +28,21 @@ export default function Supermarket() {
   return (
     <div className="pt-5">
       <RecomHeader
-        title="Recommended Supermarket Products"
+        title={t("Recommended Supermarket Products")}
         color="bg-yellow-300 "
       />
       <div className="carousel carousel-center w-full bg-white shadow-lg rounded-lg">
         {!loading ? (
           products.map((product) => (
             <Link key={product.proId} href={`/ProductDetails/${product.proId}`}>
-              <div
-              
-                className="carousel-item flex flex-col w-[150px] md:w-[200px]"
-              >
+              <div className="carousel-item flex flex-col w-[150px] md:w-[200px]">
                 <img
                   src={product.thumbnail}
                   className="rounded-box w-full h-40 md:h-48 p-10"
                   alt={`Product ${product.en.title}`}
                 />
                 <span className="justify-center text-center">
-                  {product.en.title}
+                  {locale == "en" ? product.en.title : product.ar.title}
                 </span>
               </div>
             </Link>

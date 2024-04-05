@@ -12,7 +12,7 @@ function LangToggel() {
     push("", undefined, { locale: ar });
   }
   return (
-    <div className="flex justify-between container mx-auto px-3 items-center h-[30px] py-2">
+    <div className="flex justify-between container mx-auto px-6 items-center h-[30px] py-2">
       <div className="flex items-center">
         <Image src="/JMIA.svg" width={20} height={20} alt="jumia pay logo" />
         <p className="ms-2 text-sm font-bold capitalize text-amber-500 cursor-pointer hover:underline">
@@ -24,15 +24,25 @@ function LangToggel() {
       </div>
       <div className="flex items-center">
         <div>
-          <button onClick={handleEn} className="flex items-center">
+          <button
+            onClick={handleEn}
+            className={`flex items-center ${
+              locale == "ar" ? "text-gray-400" : "text-black"
+            } `}
+            disabled={locale == "en"}
+          >
             <img src="/EnglandFlag.jpg" width={20} height={20} />{" "}
-            <span className="ms-2 me-4 pe-3 border-r border-gray-300 ">
-              English
-            </span>
+            <span className="ms-2 me-4 pe-3  border-gray-300">English</span>
           </button>
         </div>
         <div>
-          <button onClick={handleAr} className="flex items-center">
+          <button
+            onClick={handleAr}
+            className={`flex items-center ${
+              locale == "en" ? "text-gray-400" : "text-black"
+            } `}
+            disabled={locale == "ar"}
+          >
             <img
               src="/FlagEgypt.png"
               width={20}

@@ -6,7 +6,8 @@ import Supermarket from "@/components/recommended/supermarket";
 import HealthPersonalCare from "@/components/recommended/HealthPersonalCare";
 import OfficeSupplies from "@/components/recommended/OfficeSupplies";
 import Watches from "@/components/recommended/watches";
-import LangToggel from "@/components/langToggel/LangToggel";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+
 export default function Home() {
   return (
     <main className="md:max-w-7xl mx-auto p-2">
@@ -20,4 +21,13 @@ export default function Home() {
       <OfficeSupplies />
     </main>
   );
+}
+
+export async function getStaticProps({ locale }) {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, ["home"])),
+      // Will be passed to the page component as props
+    },
+  };
 }

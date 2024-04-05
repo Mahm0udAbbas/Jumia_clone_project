@@ -1,8 +1,7 @@
-import React from 'react';
-
-
+import React from "react";
+import { useTranslation } from "next-i18next";
 export default function Recommended() {
-
+  const { t } = useTranslation("home");
   return (
     <div className="pt-5">
       <div className="carousel carousel-center w-full bg-white shadow-lg rounded-lg">
@@ -13,7 +12,9 @@ export default function Recommended() {
             alt="image"
           />
 
-          <span className="justify-center text-center">Phones & Tablets</span>
+          <span className="justify-center text-center">
+            {t("Phones & Tablets")}
+          </span>
         </div>
         <div className="carousel-item flex flex-col w-[150px] md:w-[200px]">
           <img
@@ -21,7 +22,9 @@ export default function Recommended() {
             className="rounded-box"
             alt="image"
           />
-          <span className="justify-center text-center">Up to 30% off</span>
+          <span className="justify-center text-center">
+            {t("Up to 30% off")}
+          </span>
         </div>
         <div className="carousel-item flex flex-col w-[150px] md:w-[200px]">
           <img
@@ -29,7 +32,7 @@ export default function Recommended() {
             className="rounded-box"
             alt="image"
           />
-          <span className="justify-center text-center">Television</span>
+          <span className="justify-center text-center">{t("Television")}</span>
         </div>
         <div className="carousel-item flex flex-col w-[150px] md:w-[200px]">
           <img
@@ -37,7 +40,7 @@ export default function Recommended() {
             className="rounded-box"
             alt="image"
           />
-          <span className="justify-center text-center">Groceries</span>
+          <span className="justify-center text-center">{t("Groceries")}</span>
         </div>
         <div className="carousel-item flex flex-col w-[150px] md:w-[200px]">
           <img
@@ -45,7 +48,9 @@ export default function Recommended() {
             className="rounded-box"
             alt="image"
           />
-          <span className="justify-center text-center">Refrigerators</span>
+          <span className="justify-center text-center">
+            {t("Refrigerators")}
+          </span>
         </div>
         <div className="carousel-item flex flex-col w-[150px] md:w-[200px]">
           <img
@@ -53,7 +58,10 @@ export default function Recommended() {
             className="rounded-box"
             alt="image"
           />
-          <span className="justify-center text-center">Electronics</span>
+          <span className="justify-center text-center">
+            {" "}
+            {t("Electronics")}
+          </span>
         </div>
         <div className="carousel-item flex flex-col w-[150px] md:w-[200px]">
           <img
@@ -61,7 +69,10 @@ export default function Recommended() {
             className="rounded-box"
             alt="image"
           />
-          <span className="justify-center text-center">Best Sellers</span>
+          <span className="justify-center text-center">
+            {" "}
+            {t("Best Sellers")}
+          </span>
         </div>
       </div>
     </div>

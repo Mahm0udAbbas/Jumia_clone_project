@@ -2,11 +2,14 @@ import React, { useState, useEffect } from "react";
 import db, { getProductsByCategoryId } from "../../firebase";
 import RecomHeader from "../Product/header";
 import MySpinner from "../order/Spiner/Spinner";
+import { useRouter } from "next/router";
+import { useTranslation } from "next-i18next";
 
 export default function HealthPersonalCare() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
-
+  const { locale } = useRouter();
+  const { t } = useTranslation("home");
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -25,8 +28,7 @@ export default function HealthPersonalCare() {
   return (
     <div className="pt-5">
       <RecomHeader
-        title="Recommended Health & Personal Care
-"
+        title={t("Recommended Health & Personal Care")}
         color="bg-yellow-300 "
       />
       <div className="carousel carousel-center w-full bg-white shadow-lg rounded-lg">
@@ -42,7 +44,7 @@ export default function HealthPersonalCare() {
                 alt={`Product ${product.en.title}`}
               />
               <span className="justify-center text-center">
-                {product.en.title}
+                {locale == "en" ? product.en.title : product.ar.title}
               </span>
             </div>
           ))

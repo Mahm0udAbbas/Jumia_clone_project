@@ -12,8 +12,8 @@ import LocalShippingOutlinedIcon from "@mui/icons-material/LocalShippingOutlined
 import AssignmentReturnOutlinedIcon from "@mui/icons-material/AssignmentReturnOutlined";
 import { getProductById } from "@/firebase";
 import { Breadcrumbs } from "@mui/material";
-import addToCart from "@/services/addToCart";
 import useAddToCart from "@/services/addToCart";
+import { useTranslation } from "next-i18next";
 
 const data5 = [
   {
@@ -142,6 +142,7 @@ export const getServerSideProps = async (context) => {
 };
 
 const ProductDetails = ({ product }) => {
+  const { t } = useTranslation("home");
   product = product.json;
   let date = new Date();
   const [toast, setToast] = useState(false);
@@ -170,7 +171,7 @@ const ProductDetails = ({ product }) => {
                 <div className="col-span-4">
                   <img src={product.thumbnail} alt="" />
                   <p className="ps-12 text-sm pt-1 text-gray-700 mx-2me-2 hover:text-gray-900 text-decoration-none">
-                    SHARE THIS PRODUCT
+                    {t("SHARE THIS PRODUCT")}
                   </p>
                   <div className="flex mx-2 ps-20">
                     <div className="flex items-center justify-center mx-1 text-gray-700 border border-gray-700 rounded-full border-1 hover:text-gray-900">
