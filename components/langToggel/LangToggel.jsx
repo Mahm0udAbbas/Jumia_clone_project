@@ -30,7 +30,7 @@ function LangToggel() {
           <button
             onClick={handleEn}
             className={`flex items-center ${
-              locale == "ar" ? "text-gray-400" : "text-black"
+              locale == "en" ? "text-gray-400" : "text-black"
             } `}
             disabled={locale == "en"}
           >
@@ -42,7 +42,7 @@ function LangToggel() {
           <button
             onClick={handleAr}
             className={`flex items-center ${
-              locale == "en" ? "text-gray-400" : "text-black"
+              locale == "ar" ? "text-gray-400" : "text-black"
             } `}
             disabled={locale == "ar"}
           >

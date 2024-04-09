@@ -38,7 +38,7 @@ export default function Navbar() {
 
   return (
     <>
-      <div className="bg-orange-500 ">
+      <div className="bg-orange-500   ">
         <div className=" .mx-auto w-full align-middle  md:max-w-7xl mx-auto">
           <img
             src="https://ng.jumia.is/cms/0-1-cpr/2023/new-top-strip/free-delivery-top-strip_1.gif"
@@ -48,8 +48,8 @@ export default function Navbar() {
       </div>
       <LangToggel />
       <div className="bg-white align-middle relative">
-        <div className="md:max-w-7xl mx-auto flex py-3 flex-row justify-between space-x-2 ">
-          <span className="flex space-x-2">
+        <div className="md:max-w-7xl mx-auto flex py-3 flex-row justify-between items-center flex-wrap lg:flex-nowrap space-y-3 space-x-2 ">
+          <span className="flex space-x-2 ">
             <Elementthree />
             <img
               src="/jumia.png"
@@ -93,6 +93,7 @@ export default function Navbar() {
           >
             {t("Search")}
           </button>
+
           <Account />
           <Help />
           <Shoppingcart />
