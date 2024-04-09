@@ -2,14 +2,17 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 
 function LangToggel() {
-  const { locale, locales, push } = useRouter();
+  const { locale, locales, push, query, asPath } = useRouter();
+  console.log(useRouter());
   const [en, ar] = locales;
   function handleEn() {
     console.log("hello");
-    push("", undefined, { locale: en });
+    const route = query.id ? `${asPath}` : "";
+    push(route, undefined, { locale: en });
   }
   function handleAr() {
-    push("", undefined, { locale: ar });
+    const route = query.id ? `${asPath}` : "";
+    push(route, undefined, { locale: ar });
   }
   return (
     <div className="flex justify-between container mx-auto px-6 items-center h-[30px] py-2">

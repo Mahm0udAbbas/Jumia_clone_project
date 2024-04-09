@@ -3,7 +3,6 @@ import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
 import { Provider } from "react-redux";
 import store from "@/redux/store";
-import LangToggel from "@/components/langToggel/LangToggel";
 import { appWithTranslation } from "next-i18next";
 import { useEffect } from "react";
 import { useRouter } from "next/router";
@@ -31,6 +30,7 @@ const App = ({ Component, pageProps }) => {
         </Provider>
       ) : (
         <>
+          {" "}
           <Navbar />
           <MyLayout Component={Component} pageProps={pageProps} />
           <Footer />

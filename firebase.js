@@ -4,7 +4,6 @@ import {
   addDoc,
   collection,
   doc,
-  documentId,
   getDoc,
   getDocs,
   getFirestore,
@@ -422,7 +421,6 @@ export async function getOrderById(userId, id) {
   }
 }
 
-
 let result = null;
 export async function getSearch(query) {
   let data = Array();
@@ -435,8 +433,7 @@ export async function getSearch(query) {
         return doc;
       }
     });
-  }
-  else {
+  } else {
     result = await getDocs(collection(firestore, "products"));
   }
   return data;

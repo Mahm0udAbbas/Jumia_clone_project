@@ -29,7 +29,7 @@ export default function Leftside() {
           text={t("Office Supplies")}
           Icon={HomeWorkIcon}
         />
-        <SidebarMenuItem link="watches" text="Watches" Icon={WatchIcon} />
+        <SidebarMenuItem link="watches" text={t("Watches")} Icon={WatchIcon} />
         <SidebarMenuItem
           link="perfumes"
           text={t("Perfumes")}

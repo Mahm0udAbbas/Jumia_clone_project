@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import FeedbackList from "../../components/ProductDetails/CustomerFeedback/index";
 import ProductSection from "../../components/ProductDetails/ProductSection/index";
 import StarIcon from "@mui/icons-material/Star";
@@ -14,7 +14,9 @@ import { getProductById } from "@/firebase";
 import { Breadcrumbs } from "@mui/material";
 import useAddToCart from "@/services/addToCart";
 import { useTranslation } from "next-i18next";
-
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { useRouter } from "next/router";
+import Link from "next/link";
 const data5 = [
   {
     id: 1,
@@ -124,14 +126,16 @@ const data5 = [
       "https://ng.jumia.is/unsafe/fit-in/500x500/filters:fill(white)/product/31/6439772/1.jpg?9332",
   },
 ];
-export const getServerSideProps = async (context) => {
-  const { id } = context.params;
+export const getServerSideProps = async ({ params, locale }) => {
+  const { id } = params;
 
   try {
     const product = await getProductById(id);
-
+    const translations = await serverSideTranslations(locale, [
+      "productdetails",
+    ]);
     return {
-      props: { product },
+      props: { ...translations, product },
     };
   } catch (e) {
     console.log(e);
@@ -142,13 +146,11 @@ export const getServerSideProps = async (context) => {
 };
 
 const ProductDetails = ({ product }) => {
-  const { t } = useTranslation("home");
+  const { t } = useTranslation("productdetails");
+  const { locale } = useRouter();
   product = product.json;
   let date = new Date();
   const [toast, setToast] = useState(false);
-  let day = date.toLocaleDateString();
-  date.setDate(date.getDate() + 3);
-  let result = date.toLocaleDateString();
   return (
     <>
       <div className="container mx-auto">
@@ -157,10 +159,12 @@ const ProductDetails = ({ product }) => {
           <div className="pt-4 text-md p-2.5">
             <Breadcrumbs separator=">">
               <a href="/" className="opacity-60">
-                Home
+                {t("Home")}
               </a>
               <a href={`/ProductDetails/${product.id}`}>
-                {product.en.description}
+                {locale == "en"
+                  ? product.en.description
+                  : product.ar.description}
               </a>
             </Breadcrumbs>
           </div>
@@ -170,10 +174,10 @@ const ProductDetails = ({ product }) => {
               <div className="grid grid-cols-12  gap-4 mt-3">
                 <div className="col-span-4">
                   <img src={product.thumbnail} alt="" />
-                  <p className="ps-12 text-sm pt-1 text-gray-700 mx-2me-2 hover:text-gray-900 text-decoration-none">
+                  <p className="text-center text-sm pt-1 text-gray-700 mx-2me-2 hover:text-gray-900 text-decoration-none">
                     {t("SHARE THIS PRODUCT")}
                   </p>
-                  <div className="flex mx-2 ps-20">
+                  <div className="flex items-center justify-center mx-2 ">
                     <div className="flex items-center justify-center mx-1 text-gray-700 border border-gray-700 rounded-full border-1 hover:text-gray-900">
                       <FacebookRoundedIcon />
                     </div>
@@ -185,21 +189,25 @@ const ProductDetails = ({ product }) => {
 
                 <div className="col-span-8 p-2.5">
                   <h3 className="text-gray-700 hover:text-gray-900 text-xl">
-                    {product.en.title}
+                    {locale == "en" ? product.en.title : product.ar.title}
                   </h3>
-                  <h4 className="text-sm">brand:{product.en.brand} </h4>
+                  <h4 className="text-sm">
+                    {t("brand:")}
+                    {locale == "en" ? product.en.brand : product.ar.brand}{" "}
+                  </h4>
                   <div className="w-full border-b border-gray-200"></div>
                   <div className="flex items-end">
                     <p className="text-gray-700 me-1  text-2xl font-bold hover:text-gray-900">
-                      EGP {product.price}
+                      {t("EGP")} {product.price}
                     </p>
                   </div>
                   <p className="text-gray-700 text-[12px]  hover:text-gray-900">
                     {product.quantityInStock} units left
                   </p>
                   <p className="text-gray-700 text-[12px] hover:text-gray-900">
-                    Delivery fees from EGP 35.00 to Minya. Save 10 EGP on
-                    shipping with prepaid payment
+                    {t(
+                      "Delivery fees from EGP 35.00 to Minya. Save 10 EGP on shipping with prepaid payment"
+                    )}
                   </p>
                   <div className="flex items-center">
                     <div className="flex">
@@ -240,12 +248,12 @@ const ProductDetails = ({ product }) => {
                       />
                     </div>
                     <div className="mt-1 ms-1 text-sm font-medium text-gray-700 hover:text-gray-900 text-sm color-blue-900">
-                      {product.ratingQuantity} verified ratings
+                      {product.ratingQuantity} {t("verified ratings")}
                     </div>
                   </div>
                   <div className="w-full my-2 border-b border-gray-200 "></div>
                   <p className="text-gray-700 hover:text-gray-900">
-                    VARIATION AVAILABLE
+                    {t("VARIATION AVAILABLE")}
                   </p>
                   <div className=" border border-amber-500 rounded-none text-center w-[60px]  py-1 text-amber-500 text-sm uppercase">
                     black
@@ -268,21 +276,21 @@ const ProductDetails = ({ product }) => {
                     <div className="self-center mx-2">
                       <AddShoppingCartOutlinedIcon />
                     </div>
-                    <p className="text-center">ADD TO CART</p>
+                    <p className="text-center">{t("ADD TO CART")}</p>
                   </button>
 
                   <div className="w-full my-3 border-b border-gray-200"></div>
 
                   <div>
                     <div className="text-gray-700 hover:text-gray-900">
-                      PROMOTIONS
+                      {t("PROMOTIONS")}
                     </div>
                     <div className="flex items-center mb-6">
                       <div className="text-amber-500 text-xl">
                         <StarHalfIcon />
                       </div>
                       <p className="text-sm text-blue-700 mt-1 ms-2">
-                        Check All Our Installments Offers from here{" "}
+                        {t("Check All Our Installments Offers from here")}{" "}
                       </p>
                     </div>
                     {toast ? <Toast /> : ""}
@@ -290,14 +298,14 @@ const ProductDetails = ({ product }) => {
                 </div>
               </div>
               <p className="text-sm  mt-64 ms-2">
-                report incorrect product information
+                {t("report incorrect product information")}
               </p>
             </div>
 
             <section className="col-span-12 md:col-span-3">
               <div className="rounded text-black bg-white px-2 mt-2 pt-2">
                 <div className="text-sm">
-                  <p>DELIVERY RETURNS</p>
+                  <p>{t("DELIVERY RETURNS")}</p>
                 </div>
                 <div className="w-full my-2 border-b border-gray-200"></div>
                 <div>
@@ -306,7 +314,7 @@ const ProductDetails = ({ product }) => {
                     alt=""
                   />
                   <p className="text-center">
-                    Free delivery on thousands of products
+                    {t("Free delivery on thousands of products")}
                   </p>
                 </div>
                 <div className="w-full my-2 border-b border-gray-200"></div>
@@ -315,19 +323,19 @@ const ProductDetails = ({ product }) => {
                     className="my-3 form-select"
                     aria-label="Default select example"
                   >
-                    <option>Al Minya</option>
-                    <option value="1">Cairo</option>
-                    <option value="2">Giza</option>
-                    <option value="3">Alexandria</option>
+                    <option>{t("Al Minya")}</option>
+                    <option value="1">{t("Cairo")}</option>
+                    <option value="2">{t("Giza")}</option>
+                    <option value="3">{t("Alexandria")}</option>
                   </select>
                   <select
                     className="my-2 form-select"
                     aria-label="Default select example"
                   >
-                    <option>Minya</option>
-                    <option value="1">Magaha</option>
-                    <option value="2">Malawi</option>
-                    <option value="3">Samalot</option>
+                    <option>{t("Minya")}</option>
+                    <option value="1">{t("Magaha")}</option>
+                    <option value="2">{t("Malawi")}</option>
+                    <option value="3">{t("Samalot")}</option>
                   </select>
                 </div>
                 <div>
@@ -337,13 +345,16 @@ const ProductDetails = ({ product }) => {
                     </div>
                     <div>
                       <div className="flex justify-between w-full ">
-                        <p className="text-sm ">Pickup Station</p>
-                        <p className=" text-xs text-blue-700">Details</p>
+                        <p className="text-sm ">{t("Pickup Station")}</p>
+                        <Link href="" className=" text-xs text-blue-700">
+                          {t("Details")}
+                        </Link>
                       </div>
-                      <p className="text-xs ">Delivery EGP 250</p>
+                      <p className="text-xs ">{t("Delivery EGP 35")}</p>
                       <p className="text-xs ">
-                        Arriving at pickup station between 26 February & 27
-                        February when you order within next 5hrs 15mins
+                        {t(
+                          "Arriving at pickup station in three Days from confirmation"
+                        )}
                       </p>
                     </div>
                   </div>
@@ -355,13 +366,16 @@ const ProductDetails = ({ product }) => {
                     </div>
                     <div>
                       <div className="flex justify-between w-full">
-                        <p className="text-sm ">Door Delivery</p>
-                        <p className=" text-xs text-blue-700">Details</p>
+                        <p className="text-sm ">{t("Door Delivery")}</p>
+                        <Link href="" className=" text-xs text-blue-700">
+                          {t("Details")}
+                        </Link>
                       </div>
-                      <p className="text-xs ">Delivery </p>
+                      <p className="text-xs ">{t("Delivery")} </p>
                       <p className="text-xs ">
-                        Ready for delivery between{day}& {result} when you order
-                        within next 3hrs 24mins
+                        {t(
+                          "Ready for delivery in three Days from confirmation"
+                        )}
                       </p>
                     </div>
                   </div>
@@ -374,14 +388,13 @@ const ProductDetails = ({ product }) => {
                     </div>
                     <div>
                       <div className="flex justify-between w-full">
-                        <p className="text-sm ">Return Policy</p>
+                        <p className="text-sm ">{t("Return Policy")}</p>
                       </div>
 
                       <p className="text-xs ">
-                        Free return within the legal return period from 14 to 30
-                        days, and if they meet the terms & conditions, with the
-                        need to report any apparent defect within 48 hours. For
-                        more details about return policy.Details
+                        {t(
+                          "Free return within the legal return period from 14 to 30 days, and if they meet the terms & conditions, with the need to report any apparent defect within 48 hours. For more details about return policy."
+                        )}
                       </p>
                     </div>
                   </div>
@@ -393,12 +406,14 @@ const ProductDetails = ({ product }) => {
           <div className="grid grid-cols-12 gap-4 px-2">
             <div className="bg-white bg-white mt-2 col-span-12 md:col-span-9 rounded p-5 ">
               <p className="text-gray-700 hover:text-gray-900 font-semibold text-xl">
-                Product details
+                {t("Product details")}
               </p>
               <div className="w-full my-4 border-b border-gray-100"></div>
               <ul>
                 <li className="text-gray-700 text-sm ">
-                  {product.en.description}
+                  {locale == "en"
+                    ? product.en.description
+                    : product.ar.description}
                 </li>
               </ul>
             </div>
@@ -408,17 +423,17 @@ const ProductDetails = ({ product }) => {
             <section className="  bg-white mt-2 col-span-12 md:col-span-9 rounded p-5 text-xl ">
               <div className="bg-white ">
                 <p className="text-gray-700 hover:text-gray-900 font-semibold text-xl">
-                  Specifications
+                  {t("Specifications")}
                 </p>
                 <div className="my-4 border-b border-gray-100"></div>
                 <div className="flex  justify-center pt-6">
                   <div className="rounded-none border p-5">
                     <p className="text-center font-semibold text-sm p-3.5 text-gray-700 hover:text-gray-900">
-                      SPECIFICATIONS
+                      {t("SPECIFICATIONS")}
                     </p>
                     <ul className="list-disc list-inside p-1">
                       <li className="text-base text-gray-700 text-sm font-medium py-1 ">
-                        SKU: {product.sku}
+                        {t("SKU:")} {product.sku}
                       </li>
                     </ul>
                   </div>
@@ -430,7 +445,7 @@ const ProductDetails = ({ product }) => {
           <div className="grid grid-cols-12 gap-4 px-2 ">
             <div className="bg-white mt-2 col-span-12 md:col-span-9 p-5 rounded">
               <p className="text-gray-700 hover:text-gray-900 font-medium text-xl">
-                Customers who viewed this also viewed
+                {t("Customers who viewed this also viewed")}
               </p>
               <ProductSection
                 data={data5}
@@ -453,7 +468,7 @@ const ProductDetails = ({ product }) => {
           <div className="grid grid-cols-12 gap-4 px-2">
             <div className="bg-white mt-2 col-span-12 md:col-span-9 rounded p-5 ">
               <p className="text-gray-700 hover:text-gray-900 text-xl font-meduims">
-                You may also like
+                {t("You may also like")}
               </p>
               <ProductSection
                 data={data5}
@@ -468,7 +483,7 @@ const ProductDetails = ({ product }) => {
         <div className="grid grid-cols-10 gap-4 px-2">
           <div className="bg-white mt-2 col-span-10  rounded p-5">
             <p className="text-gray-700 hover:text-gray-900 font-medium text-xl">
-              More items from this seller
+              {t("More items from this seller")}
             </p>
             <ProductSection
               data={data5}
@@ -482,11 +497,11 @@ const ProductDetails = ({ product }) => {
           <section className="bg-white mt-2 col-span-10  rounded p-5">
             <div className="flex justify-between items-center w-full">
               <h3 className="text-gray-700 hover:text-gray-900 font-medium text-xl">
-                Recently Viewed
+                {t("Recently Viewed")}
               </h3>
               <div className="border-b border-gray-300"></div>
               <button className="flex text-amber-500  bg-transparent items-center ">
-                SEE ALL{" "}
+                {t("SEE ALL")}{" "}
                 <ArrowForwardIosIcon className="text-sm text-amber-500" />
               </button>
             </div>

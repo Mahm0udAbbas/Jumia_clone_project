@@ -1,4 +1,3 @@
-"use client";
 import { Card } from "@material-tailwind/react";
 import SaveButton from "../Save_button/SaveButton";
 import {
@@ -12,7 +11,7 @@ import {
 } from "firebase/firestore";
 import { auth, firestore } from "@/firebase";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useTranslation } from "next-i18next";
 function ProccedToBuy({
   cartProducts,
   isCard,
@@ -29,6 +28,8 @@ function ProccedToBuy({
   }
   console.log(cartProducts);
   const router = useRouter();
+  const { t } = useTranslation("order");
+
   let timeStamp = Timestamp.now();
   let jsDate = timeStamp.toDate();
   let orderDate = `${jsDate.getDate()} / ${
@@ -59,19 +60,22 @@ function ProccedToBuy({
           await updateDoc(docRef, {
             ...docData,
           });
-          alert("Your order did not complete");
+          alert("Your order has been completed");
+          if (isCard === true) {
+            router.push("/paypal");
+          } else {
+            router.push("/account/Orders");
+          }
         } else {
+          alert(
+            "Your order has not been completed,Please complete your information"
+          );
           await updateDoc(docRef, {
             ...docData,
             confirmed: false,
           });
         }
-        alert("Your order did not complete");
-        if (isCard === true) {
-          router.push("/paypal");
-        } else {
-          router.push("/account/Orders");
-        }
+        return;
       }
     } catch (error) {
       console.log("Error navigating to payment:", error);
@@ -83,30 +87,36 @@ function ProccedToBuy({
       <Card className="p-6">
         <div>
           <h5 className=" border-b-2 py-1 font-semibold text-sm ">
-            Order summary
+            {t("Order summary")}
           </h5>
           <div className=" border-b-2 py-1 text-sm">
             <div className="flex flex-row justify-between items-center py-1  ">
-              <p className="">Items total ({cartProducts.length})</p>
+              <p className="">
+                {t("Items total")} ({cartProducts.length})
+              </p>
               <p className="font-semibold  ">
                 {cartProducts.map((product, index) => {
                   total += product.product?.price * product.quantity;
                 })}
-                EGP {total}
+                {t("EGP")} {total}
               </p>
             </div>
             <div className="flex flex-row justify-between items-center py-1 ">
-              <span>Delivery fees</span>
-              <span className="font-semibold ">EGP 35</span>
+              <span>{t("Delivery fees")}</span>
+              <span className="font-semibold ">{t("EGP")} 35</span>
             </div>
           </div>
           <div className="flex flex-row justify-between items-center py-2">
-            <span className="text-sm capitalize  font-medium">total</span>
-            <span className="text-xl">EGP {total}</span>
+            <span className="text-sm capitalize  font-medium">
+              {t("total")}
+            </span>
+            <span className="text-xl">
+              {t("EGP")} {total}
+            </span>
           </div>
           <div>
             <SaveButton
-              label="confirm order"
+              label={t("CONFIRM ORDER")}
               handleSubmit={handleSubmit}
               color="amber"
               disabled={

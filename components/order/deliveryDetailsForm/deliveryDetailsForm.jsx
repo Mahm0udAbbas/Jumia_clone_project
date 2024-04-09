@@ -19,6 +19,8 @@ import {
   updateDoc,
   where,
 } from "firebase/firestore";
+import { useTranslation } from "next-i18next";
+
 const egyptGovernorates = [
   {
     name: "Cairo",
@@ -167,8 +169,10 @@ function DeliveryDetailsForm({ setDeliveryConfirm }) {
   const [deliveryOption, setDeliveryOption] = useState("express");
   const [selectedCity, setSelectedCity] = useState("");
   const [selectedArea, setSelectedArea] = useState("");
+  const { locale } = useRouter();
   // const [deliveryConfirmed, setDeliveryConfirmed] = useState(false);
   const router = useRouter();
+  const { t } = useTranslation("order");
 
   // Fetch initial data
   useEffect(() => {
@@ -262,7 +266,7 @@ function DeliveryDetailsForm({ setDeliveryConfirm }) {
   return (
     <>
       <Card className="mt-3 p-6">
-        <ListHeader value={"delevriy details"} />
+        <ListHeader value={t("DELEVRIY DETAILS")} />
         <div>
           <div className="flex justify-between">
             <div className="flex items-start h-5">
@@ -283,14 +287,14 @@ function DeliveryDetailsForm({ setDeliveryConfirm }) {
                   htmlFor="helper-radio"
                   className="font-medium text-gray-900 dark:text-gray-300"
                 >
-                  <span className="font-semibold ">Pick-up station</span>
-                  <span>(from EGP 20.00)</span>
+                  <span className="font-semibold ">{t("Pick-up station")}</span>
+                  <span>({t("from EGP")} 20.00)</span>
                 </label>
                 <p
                   id="helper-radio-text"
                   className="text-xs font-normal text-gray-500 dark:text-gray-300"
                 >
-                  Delivery between 07 March and 10 March
+                  {t("Delivery in three days")}
                 </p>
               </div>
             </div>
@@ -301,23 +305,27 @@ function DeliveryDetailsForm({ setDeliveryConfirm }) {
         </div>
         <Card className="p-6 my-5 border rounded-none " shadow={false}>
           <div className=" flex justify-between ">
-            <span className="text-sm">Pickup Station</span>
+            <span className="text-sm">{t("Pickup Station")}</span>
             <Link
               href={""}
               className="text-blue-900 mt-2 flex justify-start items-center"
               onClick={() => setOpenModal(true)}
             >
               <ArrowBackIosNewIcon className="text-sm me-1" />
-              <span className="hover:underline">Select pickup station</span>
+              <span className="hover:underline">
+                {t("Select pickup station")}
+              </span>
             </Link>
             <Modal show={openModal} onClose={() => setOpenModal(false)}>
-              <Modal.Header>Select a Pick-up station close to you</Modal.Header>
+              <Modal.Header>
+                {t("Select a Pick-up station close to you")}
+              </Modal.Header>
               <Modal.Body>
                 <div className="space-y-6">
                   <div className="text-base leading-relaxed text-gray-500 dark:text-gray-400">
                     <div className="grid grid-cols-2 gap-4 p-0">
                       <div className="   ">
-                        <Label htmlFor="citySelect">Select City:</Label>
+                        <Label htmlFor="citySelect">{t("Select City:")}</Label>
                         <Select
                           id="citySelect"
                           value={selectedCity}
@@ -336,7 +344,7 @@ function DeliveryDetailsForm({ setDeliveryConfirm }) {
                       </div>
                       <div className="  mb-4 ">
                         {" "}
-                        <Label htmlFor="areaSelect">Select Area:</Label>
+                        <Label htmlFor="areaSelect">{t("Select Area:")}</Label>
                         <Select
                           id="areaSelect"
                           value={selectedArea}
@@ -363,10 +371,10 @@ function DeliveryDetailsForm({ setDeliveryConfirm }) {
               <Modal.Footer>
                 <SaveButton
                   handleSubmit={handleSubmit}
-                  label="save"
+                  label={t("SAVE")}
                   color="amber"
                 />
-                <CancelButton handleSubmit={cancel} label="save" />
+                <CancelButton handleSubmit={cancel} label={t("CANCEL")} />
               </Modal.Footer>
             </Modal>
           </div>
@@ -375,13 +383,15 @@ function DeliveryDetailsForm({ setDeliveryConfirm }) {
             <div>
               <p className="text-sm">
                 {pickUpStation !== null && deliveryOption !== "express"
-                  ? "Your Pick-up station is:"
-                  : "No Pickup Station Selected"}
+                  ? t("Your Pick-up station is:")
+                  : t("No Pickup Station Selected")}
               </p>
               <p className="text-xs">
                 {pickUpStation !== null && deliveryOption !== "express"
                   ? `${pickUpStation.city}: ${pickUpStation.area}`
-                  : "To use this option, you will need to add a pickup station near your location."}
+                  : t(
+                      "To use this option, you will need to add a pickup station near your location."
+                    )}
               </p>
             </div>
           </div>
@@ -407,14 +417,14 @@ function DeliveryDetailsForm({ setDeliveryConfirm }) {
                   htmlFor="door-delivery"
                   className="font-medium text-gray-900 dark:text-gray-300"
                 >
-                  <span className="text-semi ">Door delivery</span>
-                  <span>(from EGP 35.00)</span>
+                  <span className="text-semi ">{t("Door delivery")}</span>
+                  <span>({t("from EGP")} 35.00)</span>
                 </label>
                 <p
                   id="helper-radio-text"
                   className="text-xs font-normal text-gray-500 dark:text-gray-300"
                 >
-                  Delivery between 07 March and 10 March
+                  {t("Delivery in three days")}
                 </p>
               </div>
             </div>
@@ -425,22 +435,22 @@ function DeliveryDetailsForm({ setDeliveryConfirm }) {
         </div>
         <div className="flex justify-between items-center pt-3 pb-2">
           <span className="text-sm  text-black dark:text-gray-300">
-            Shipment 1 / 1
+            {t("Shipment 1 / 1")}
           </span>
           <span className="text-xs text-gray-500 dark:text-gray-300">
-            Fulfilled by Dream2000 EG Marketplace
+            {t("Fulfilled by Dream2000 EG Marketplace")}
           </span>
         </div>
         <Card className="p-6 mb-2 border rounded-none " shadow={false}>
           <div>
             <p className="text-sm font-semibold">
               {deliveryOption == "express"
-                ? "Door Delivery"
+                ? t("Door Delivery")
                 : deliveryOption == "pick-up"
-                ? "Pick-up Station"
+                ? t("Pick-up Station")
                 : ""}
             </p>
-            <p className="text-xs">Delivery between 10 March and 11 March</p>
+            <p className="text-xs">{t("Delivery in three days")}</p>
           </div>
           {cartProducts.map((cartProduct, index) => {
             return (
@@ -456,8 +466,14 @@ function DeliveryDetailsForm({ setDeliveryConfirm }) {
                     />
                   </div>
                   <div className="ps-4">
-                    <p className="text-sm">{cartProduct.product.en.title}</p>
-                    <p className="text-xs">QTY: {cartProduct.quantity}</p>
+                    <p className="text-sm">
+                      {locale == "en"
+                        ? cartProduct.product.en.title
+                        : cartProduct.product.ar.title}
+                    </p>
+                    <p className="text-xs">
+                      {t("QTY")}: {cartProduct.quantity}
+                    </p>
                   </div>
                 </div>
               </div>
@@ -466,7 +482,7 @@ function DeliveryDetailsForm({ setDeliveryConfirm }) {
         </Card>
         <div className="flex jusitfy-start">
           <SaveButton
-            label="CONFIRM DELIVERY DETAILS"
+            label={t("CONFIRM DELIVERY DETAILS")}
             color="amber"
             handleSubmit={goToPayment}
             disabled={!pickUpStation && deliveryOption === "pick-up"}

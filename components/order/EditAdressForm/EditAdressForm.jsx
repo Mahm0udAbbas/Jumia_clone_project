@@ -15,6 +15,7 @@ import {
 } from "firebase/firestore";
 import { Card, Input } from "@material-tailwind/react";
 import { onAuthStateChanged } from "firebase/auth";
+import { useTranslation } from "next-i18next";
 const governorates = [
   "Alexandria",
   "Aswan",
@@ -75,7 +76,7 @@ const cairo_areas = [
 ];
 
 function EditAdressForm({ setAddressConfirm }) {
-  console.log(setAddressConfirm);
+  const { t } = useTranslation("order");
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -214,17 +215,17 @@ function EditAdressForm({ setAddressConfirm }) {
   return (
     <>
       <Card className=" rounded p-3">
-        <ListHeader value={"1.customer adress"} />
+        <ListHeader value={t("1.CUSTOMER ADRESS")} />
         <form>
           <section className="px-0 ">
-            <h6 className="uppercase mt-4 mb-2 text-xs ">edit adress</h6>
+            <h6 className="uppercase mt-4 mb-2 text-xs ">{t("EDIT ADRESS")}</h6>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 py-2">
               <div>
                 <Input
                   // variant="outlined"
                   color="amber"
-                  placeholder="FirstName"
-                  label="FirstName"
+                  placeholder={t("FirstName")}
+                  label={t("FirstName")}
                   name="firstName"
                   value={formData.firstName}
                   onChange={handleChange}
@@ -236,7 +237,8 @@ function EditAdressForm({ setAddressConfirm }) {
               <div>
                 <Input
                   color="amber"
-                  label="LastName"
+                  label={t("LastName")}
+                  placeholder={t("LastName")}
                   name="lastName"
                   value={formData.lastName}
                   onChange={handleChange}
@@ -249,13 +251,14 @@ function EditAdressForm({ setAddressConfirm }) {
             <div className="grid grid-cols-1">
               <div className="flex items-center mb-2 ">
                 <div className="me-2 text-xs">
-                  <p>prefix</p>
+                  <p>{t("prefix")}</p>
                   <p>+20</p>
                 </div>
                 <Input
                   color="amber"
                   type="number"
-                  label="Phone Number"
+                  placeholder={t("Phone Number")}
+                  label={t("Phone Number")}
                   name="phone"
                   value={formData.phone}
                   onChange={handleChange}
@@ -266,13 +269,14 @@ function EditAdressForm({ setAddressConfirm }) {
               )}
               <div className="flex items-center mb-2">
                 <div className="me-2 text-xs">
-                  <p>prefix</p>
+                  <p>{t("prefix")}</p>
                   <p>+20</p>
                 </div>
                 <Input
                   color="amber"
                   type="number"
-                  label="Additional Phone Number"
+                  placeholder={t("Additional Phone Number")}
+                  label={t("Additional Phone Number")}
                   name="otherPhone"
                   value={formData.otherPhone}
                   onChange={handleChange}
@@ -284,7 +288,8 @@ function EditAdressForm({ setAddressConfirm }) {
               <div>
                 <Input
                   color="amber"
-                  label="Address"
+                  label={t("Address")}
+                  placeholder={t("Address")}
                   name="address"
                   value={formData.address}
                   onChange={handleChange}
@@ -297,7 +302,8 @@ function EditAdressForm({ setAddressConfirm }) {
             <div className="py-2">
               <Input
                 color="amber"
-                label="Additional Information"
+                label={t("Additional Information")}
+                placeholder={t("Additional Information")}
                 name="additionalInfo"
                 value={formData.additionalInfo}
                 onChange={handleChange}
@@ -307,7 +313,7 @@ function EditAdressForm({ setAddressConfirm }) {
               <div>
                 <SelectInputField
                   governorates={governorates}
-                  lableValue={"Region"}
+                  lableValue={t("City")}
                   name={"region"}
                   value={formData.region}
                   onChange={handleGovernorateChange}
@@ -316,7 +322,7 @@ function EditAdressForm({ setAddressConfirm }) {
               <div className="  mb-4 ">
                 <SelectInputField
                   governorates={cairo_areas}
-                  lableValue={"City"}
+                  lableValue={t("Region")}
                   name={"city"}
                   value={formData.city}
                   onChange={handleCityChange}
@@ -325,10 +331,9 @@ function EditAdressForm({ setAddressConfirm }) {
             </div>
           </section>
           <div className="flex flex-row justify-items-center items-center  pt-2  ">
-            <CancelButton />
             <SaveButton
               handleSubmit={handleSubmit}
-              label="save"
+              label={t("save")}
               color="amber"
             />
           </div>

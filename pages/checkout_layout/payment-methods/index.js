@@ -11,13 +11,9 @@ import { CheckPageLayout } from "../../../layouts/checkoutLayout";
 import { Card } from "@material-tailwind/react";
 import { auth, firestore, getOrderDetailsData } from "@/firebase";
 import { onAuthStateChanged } from "firebase/auth";
-import {
-  collection,
-  getDocs,
-  query,
-  updateDoc,
-  where,
-} from "firebase/firestore";
+import { collection, getDocs, query, where } from "firebase/firestore";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { useTranslation } from "next-i18next";
 import MySpinner from "@/components/order/Spiner/Spinner";
 function ChoosePaymant({
   setIsCard,
@@ -29,8 +25,9 @@ function ChoosePaymant({
   const [loading, setLoading] = useState(true);
   const [openModal, setOpenModal] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState("");
+  const [errors, setError] = useState("");
   const router = useRouter();
-
+  const { t } = useTranslation("order");
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
       getData(user);
@@ -55,15 +52,16 @@ function ChoosePaymant({
         }
       } else {
         setError("No user found.");
+        alert("You shoud login first");
+        router.push("/identification");
       }
     } catch (error) {
       console.error("Error fetching data:", error);
-      setError("Error fetching data. Please try again later.");
     } finally {
       setLoading(false);
     }
   }
-
+  console.log(addressData);
   // Handle Payment Method change
   const handlePaymentMethodChange = (event) => {
     setPaymentMethod(event.target.value);
@@ -79,14 +77,16 @@ function ChoosePaymant({
       <section className="bg-[#e5e5e580]">
         <Card className="p-6">
           <div className="flex justify-between items-center">
-            <ListHeader value="customer Adress" color="text-green-900" />
+            <ListHeader value={t("CUSTOMER ADRESS")} color="text-green-900" />
             <button
               onClick={() => {
                 setAddressConfirm(false);
                 router.push("/checkout_layout/address");
               }}
             >
-              <span className="ms-2 text-blue-900 hover:underline">Change</span>
+              <span className="ms-2 text-blue-900 hover:underline">
+                {t("Change")}
+              </span>
             </button>
           </div>
           {addressData && addressData.shippingAddress ? (
@@ -100,22 +100,24 @@ function ChoosePaymant({
         </Card>
         <Card className="mt-3 p-6">
           <div className="flex justify-between items-center ">
-            <ListHeader value="Delivery Options" color="text-green-900" />
+            <ListHeader value={t("DELIVERY OPTIONS")} color="text-green-900" />
             <button
               onClick={() => {
                 setDeliveryConfirm(false);
                 router.push("/checkout_layout/shipping-options");
               }}
             >
-              <span className="ms-2 text-blue-900 hover:underline">Change</span>
+              <span className="ms-2 text-blue-900 hover:underline">
+                {t("Change")}
+              </span>
             </button>
           </div>
           {addressData ? (
             <CustomerAdress
               title={
                 addressData.deliveryMethod == "express"
-                  ? "Door Delivery"
-                  : "Pick-up Station"
+                  ? t("Door Delivery")
+                  : t("Pick-up Station")
               }
               info="Delivery Sheduled on 30 March"
             />
@@ -127,10 +129,10 @@ function ChoosePaymant({
         <div className="text-grey-100">
           {" "}
           <Card className="mt-3 p-6">
-            <ListHeader value={"payment method"} />
+            <ListHeader value={t("PAYMENT METHOD")} />
             <hr></hr>
             <div>
-              <h2 className="py-3 font-bold">Payment on delivery</h2>
+              <h2 className="py-3 font-bold">{t("Payment on delivery")}</h2>
               <div className="flex justify-between">
                 <div className="flex items-start ">
                   <div>
@@ -150,14 +152,17 @@ function ChoosePaymant({
                       htmlFor="helper-radio"
                       className="font-medium text-gray-900 dark:text-gray-300"
                     >
-                      <span className="font-semibold ">Cash On Delivery</span>
+                      <span className="font-semibold ">
+                        {t("Cash On Delivery")}
+                      </span>
                     </label>
                     <p
                       id="helper-radio-text"
                       className="text-xs font-normal text-gray-500 dark:text-gray-300"
                     >
-                      For more secure and contactless delivery and to get 10 EGP
-                      discount we recommend using Pay by Card
+                      {t(
+                        "For more secure and contactless delivery and to get 10 EGP discount we recommend using Pay by Card"
+                      )}
                     </p>
                   </div>
                 </div>
@@ -171,12 +176,17 @@ function ChoosePaymant({
               <div className="flex justify-start items-center border rounded p-2">
                 <div>
                   <p className="text-sm">
-                    - When you choose Cash on delivery, you can pay for your
-                    order in cash when you receive your shipment at home or
-                    Jumia’s pick-up stations.
+                    -
+                    {t(
+                      "When you choose Cash on delivery, you can pay for your order in cash when you receive your shipment at home or"
+                    )}
+                    {t("shipment at home or Jumia’s pick-up stations.")}
                   </p>
                   <p className="text-sm">
-                    - Enjoy 10 EGP discount when you pay via prepaid method.
+                    -{" "}
+                    {t(
+                      "- Enjoy 10 EGP discount when you pay via prepaid method."
+                    )}
                   </p>
                   <p className="text-xs">
                     <Link
@@ -184,28 +194,31 @@ function ChoosePaymant({
                       className="text-blue-900 mt-2 flex justify-start items-center"
                       onClick={() => setOpenModal(true)}
                     >
-                      <span className="hover:underline">Details</span>
+                      <span className="hover:underline">{t("Details")}</span>
                     </Link>
                     <Modal show={openModal} onClose={() => setOpenModal(false)}>
-                      <Modal.Header>Cash on Delivery</Modal.Header>
+                      <Modal.Header>{t("Cash on Delivery")}</Modal.Header>
                       <Modal.Body>
                         <div className="space-y-6">
                           <div className="text-base leading-relaxed text-gray-500 dark:text-gray-400">
                             <div className="">
-                              {" "}
-                              - When you choose Cash on delivery, you can pay
-                              for your order in cash when you receive your
-                              shipment at home or Jumia’s pick-up stations. -
-                              Enjoy 10 EGP discount when you pay via prepaid
-                              method. - Egyptian pounds are accepted only. -
-                              Please provide the specified amount only when
-                              paying for the possibility that there will be
-                              enough cash with the delivery representative if a
-                              value is paid higher than the requested one. - You
-                              must pay for the product before opening the
-                              shipment. - In case the product is returned, the
-                              available refund methods are (refund voucher -
-                              postal transfer).
+                              -
+                              {t(
+                                "When you choose Cash on delivery, you can pay for your order in cash when you receive your shipment at home or"
+                              )}
+                              {t(
+                                "shipment at home or Jumia’s pick-up stations."
+                              )}
+                              {t(
+                                "- Enjoy 10 EGP discount when you pay via prepaid method."
+                              )}
+                              {t("- Egyptian pounds are accepted only.")}
+                              {t(
+                                "- Please provide the specified amount only when paying for the possibility that there will be enough cash with the delivery representative if a value is paid higher than the requested one. - You must pay for the product before opening the shipment."
+                              )}
+                              {t(
+                                "- In case the product is returned, the available refund methods are (refund voucher -postal transfer)."
+                              )}
                             </div>
                           </div>
                         </div>
@@ -213,7 +226,7 @@ function ChoosePaymant({
                       <Modal.Footer>
                         <SaveButton
                           handleSubmit={handleSubmit}
-                          label="Accept"
+                          label={t("ACCEPT")}
                           color="amber"
                         />
                       </Modal.Footer>
@@ -243,14 +256,15 @@ function ChoosePaymant({
                       htmlFor="helper-radio"
                       className="font-medium text-gray-900 dark:text-gray-300"
                     >
-                      <span className="text-semi ">Pay by Card</span>
+                      <span className="text-semi ">{t("Pay by Card")}</span>
                     </label>
                     <p
                       id="helper-radio-text"
                       className="text-xs font-normal text-gray-500 dark:text-gray-300"
                     >
-                      Get 10 EGP off on shipping fees when You pay with Your
-                      card
+                      {t(
+                        "Get 10 EGP off on shipping fees when You pay with Your card"
+                      )}
                     </p>
                   </div>
                 </div>
@@ -276,3 +290,11 @@ function ChoosePaymant({
 
 export default ChoosePaymant;
 ChoosePaymant.getLayout = CheckPageLayout;
+export async function getStaticProps({ locale }) {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, ["common", "order"])),
+      // Will be passed to the page component as props
+    },
+  };
+}

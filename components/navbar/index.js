@@ -1,4 +1,3 @@
-"use client";
 import { useRouter } from "next/router";
 import Elementthree from "./elementthree";
 import Shoppingcart from "./shoppingcart";
@@ -8,12 +7,14 @@ import { useState } from "react";
 import { getSearch } from "@/firebase";
 import Link from "next/link";
 import LangToggel from "../langToggel/LangToggel";
+import { useTranslation } from "next-i18next";
 
 export default function Navbar() {
   const router = useRouter();
   const [productsSearch, setProductsSearch] = useState([]);
   const [inputValue, setInputValue] = useState("");
-
+  const { t } = useTranslation("nav");
+  console.log(t);
   function handleSearch(value) {
     setInputValue(value);
     if (value.length) {
@@ -61,7 +62,7 @@ export default function Navbar() {
             <input
               onChange={(e) => handleSearch(e.target.value)}
               type="text"
-              placeholder="Search Products"
+              placeholder={t("Search Products")}
               className="input input-bordered input-warning bg-white w-full outline-none max-w-md  my-auto hidden lg:inline"
             />
             <div
@@ -90,7 +91,7 @@ export default function Navbar() {
             type="submit"
             className="btn btn-warning rounded-2 text-white hidden lg:inline"
           >
-            Search
+            {t("Search")}
           </button>
           <Account />
           <Help />
