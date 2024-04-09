@@ -1,34 +1,50 @@
+import React, { useState, useEffect, createContext } from 'react';
+import { collection, getDocs } from 'firebase/firestore';
+import { firestore, auth } from '../../../firebase'; // Assuming you have access to auth
+import OrderData from './OrderData';
 import { AccountPageLayout } from "@/components/Account_Layout";
-import Link from "next/link";
-import React from "react";
 
-function PendingReviews() {
-  return (
-    <>
-      <div className="box-border  h-[100%]">
-        <header className="py-2 border-b px-4">
-          <h2>Pending Reviews</h2>
-        </header>
-        <div className="text-center mx-48  py-8 items-center h-[100%]">
-          <img src="/review.e9fae2f3 (1).svg" className="w-100 h-100 my-2  " />
-          <p className="py-2">You have no orders waiting for feedback</p>
-          <p className="py-2">
-            After getting your products delivered, you will be able to rate and
-            review them. Your feedback will be published on the product page to
-            help all Jumia's users get the best shopping experience!
-          </p>
-          <Link
-            href="#" //home path
-            className="btn text-white bg-amber-500 hover:bg-yellow-400 my-6 p-4"
-          >
-            {" "}
-            CONTINUE SHOPPING
-          </Link>
-        </div>
-      </div>
-    </>
-  );
+export const MyDataContext = createContext()
+export default function PendingReviews() {
+    const [orderDocs, setOrderDocs] = useState([]);
+    const [userOrders, setUserOrders] = useState([]);
+    const [checker, setChecker] = useState(true);
+
+    useEffect(() => {
+        // Get all orders Documents.
+        getDocs(collection(firestore, 'order-details')).then(data => {
+            setOrderDocs([...data.docs]);
+        }).catch(err => {
+            console.error('Error fetching order details:', err);
+        })
+    }, []);
+    // console.log(orderDocs);
+    useEffect(() => {
+        orderDocs.forEach((order) => {
+            const userID = order.data().userId;
+            if (userID === auth.currentUser.uid) {
+                getDocs(collection(order.ref, 'orders')).then(data => {
+                    const ordersData = data.docs.map(doc => doc.data());
+                    setUserOrders(prevOrders => [...prevOrders, ...ordersData]);
+                });
+                setChecker(true);
+            } 
+            else {
+                console.log('User ID does not match');
+                setChecker(false);
+            }
+        });
+    }, [orderDocs]);
+
+    // useEffect(() => {
+    //     console.log(userOrders);
+    // }, [userOrders]);
+
+    return (
+        <MyDataContext.Provider value = {userOrders}> 
+            <OrderData checker = {checker} />
+        </MyDataContext.Provider>
+    );
 }
 
-export default PendingReviews;
 PendingReviews.getLayout = AccountPageLayout;

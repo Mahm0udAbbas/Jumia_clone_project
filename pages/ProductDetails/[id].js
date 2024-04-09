@@ -13,6 +13,8 @@ import AssignmentReturnOutlinedIcon from "@mui/icons-material/AssignmentReturnOu
 import { getProductById } from "@/firebase";
 import { Breadcrumbs } from "@mui/material";
 import addToCart from "@/services/addToCart";
+import { ConstructionOutlined } from "@mui/icons-material";
+import { useRouter } from 'next/router';
 
 const data5 = [
   {
@@ -141,6 +143,9 @@ export const getServerSideProps = async (context) => {
 };
 
 const ProductDetails = ({ product }) => {
+  const router = useRouter();
+  const { id } = router.query;
+
   product = product.json;
   let date = new Date();
   const [toast, setToast] = useState(false);
@@ -443,15 +448,15 @@ const ProductDetails = ({ product }) => {
           <div className="grid grid-cols-12 gap-4 px-2">
             <div className="mt-3 bg-white mt-2 col-span-12 md:col-span-9 rounded">
               <FeedbackList
-                rating={product.rating}
-                verifiedReting={product.ratingQuantity}
+                product={product}
+                id ={id}
               />
             </div>
           </div>
 
           <div className="grid grid-cols-12 gap-4 px-2">
             <div className="bg-white mt-2 col-span-12 md:col-span-9 rounded p-5 ">
-              <p className="text-gray-700 hover:text-gray-900 text-xl font-meduims">
+              <p className="text-gray-700 hover:text-gray-900 text-xl font-medium">
                 You may also like
               </p>
               <ProductSection
