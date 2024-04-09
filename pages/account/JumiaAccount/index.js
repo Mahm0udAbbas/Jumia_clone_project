@@ -1,8 +1,14 @@
 import Link from "next/link";
 import React from "react";
 import EditIcon from "@mui/icons-material/Edit";
-import { AccountPageLayout } from "../../../components/Account_Layout";
+import { AccountPageLayout } from "@/components/Account_Layout";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "@/firebase";
 function Myaccount() {
+  const [user, setUser] = React.useState(null);
+  React.useEffect(() => {
+    onAuthStateChanged(auth, user => setUser(user));
+  }, []);
   return (
     <>
       <main>
@@ -14,9 +20,10 @@ function Myaccount() {
             <div className=" border p-2 h-[100%]">
               <article>
                 <header className="border-b p-4">ACCOUNT DETAILS</header>
+                {/* Get name and user email. */}
                 <div>
-                  <p className="pt-2 px-2">User Name API</p>
-                  <p className="p-2">User Email API</p>
+                  <p className="pt-2 px-2">{user?.displayName}</p>
+                  <p className="p-2">{user?.email}</p>
                 </div>
               </article>
             </div>

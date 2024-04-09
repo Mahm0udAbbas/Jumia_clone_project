@@ -4,8 +4,9 @@ import { auth, firestore } from "@/firebase";
 
 export default function useAddToCart(product) {
   const newCartProduct = { product, quantity: 1 };
-  const localCart = JSON.parse(localStorage.getItem("cart"));
-  let spreadLocalCart = Array();
+  // Local storage.
+  const localStorageCart = JSON.parse(localStorage.getItem("cart"));
+  let tempCart = Array();
 
   onAuthStateChanged(auth, (user) => {
     if (user) {
@@ -21,6 +22,7 @@ export default function useAddToCart(product) {
                 products: firebaseCart,
               });
             } else {
+              // Add new cart
               updateDoc(doc(firestore, "cart", user.uid), {
                 products: arrayUnion(newCartProduct),
               });
@@ -33,16 +35,17 @@ export default function useAddToCart(product) {
         }
       });
     } else {
-      if (localCart && localCart.length) {
-        localCart.find((item) => {
+      if (localStorageCart && localStorageCart.length) {
+        localStorageCart.find((item) => {
           // If add product, but is exists increase quantity by one.
           if (item.product.proId == newCartProduct.product.proId) {
             ++item.quantity;
-            spreadLocalCart = [...localCart];
+            tempCart = [...localStorageCart];
           } else {
-            spreadLocalCart = [...localCart, newCartProduct];
+            // Add new cart
+            tempCart = [...localStorageCart, newCartProduct];
           }
-          localStorage.setItem("cart", JSON.stringify(spreadLocalCart));
+          localStorage.setItem("cart", JSON.stringify(tempCart));
         });
       } else {
         localStorage.setItem("cart", JSON.stringify([newCartProduct]));

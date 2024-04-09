@@ -1,8 +1,9 @@
 import React from "react";
 import { AccountPageLayout } from "../../../components/Account_Layout";
+import Link from "next/link";
 
 function AccountManagement() {
-  return <div>AccountManagement</div>;
+  return <Link href="">AccountManagement</Link>;
 }
 
 export default AccountManagement;

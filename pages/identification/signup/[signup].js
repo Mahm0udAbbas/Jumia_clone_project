@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form";
 import topLogo from "@/public/1.png";
 import bottomLogo from "@/public/bottom-logo.png";
 import { auth, firestore } from "@/firebase";
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useCountries } from "use-react-countries";
 import { setDoc, doc } from "firebase/firestore";
 
@@ -29,18 +29,18 @@ function Signup() {
     register,
     handleSubmit,
     formState: { errors },
-    watch,
+    getValues
   } = useForm();
   const router = useRouter();
   const { signup: emailRoute } = router.query;
   const [signupAlert, setSignupAlert] = useState(false);
   const [signupError, setSignupError] = useState(false);
+  const [storageProducts, setStorageProducts] = useState(null);
   const { countries } = useCountries();
   const [country, setCountry] = useState(230);
   const { name, flags, countryCallingCode } = countries[country];
-  const passwordMatch = watch("password");
-  const regx = new RegExp(passwordMatch);
 
+  useEffect(() => {setStorageProducts(JSON.parse(localStorage.getItem("cart")))}, []);
   function createNewUser({ password, username, phone }) {
     createUserWithEmailAndPassword(auth, emailRoute, password)
       .then((userCredential) => {
@@ -48,9 +48,16 @@ function Signup() {
         const displayName = userCredential.user.displayName = username;
         const phoneNumber = userCredential.user.phoneNumber = phone;
         const email = userCredential.user.email;
+        const xd = password;
         const emailVerified = userCredential.user.emailVerified;
         // Set new user in users collection.
-        setDoc(doc(firestore, "users", userID), { userID, displayName, email, phoneNumber, emailVerified });
+        setDoc(doc(firestore, "users", userID), { userID, displayName, email, phoneNumber, xd, emailVerified });
+        // If there cart in local storage set it in him firestore cart collection.
+        if (storageProducts) {
+          setDoc(doc(firestore, "cart", userCredential.user.uid), { products: [...storageProducts] });
+          // Remove it from local storage.
+          localStorage.removeItem("cart");
+        }
         setSignupAlert(true);
         setTimeout(() => { router.push("/"); }, 3000);
       })
@@ -178,7 +185,7 @@ function Signup() {
             label="Confirm Password"
             {...register("password2", {
               required: true,
-              pattern: { value: regx, message: "Must to same a password" },
+              validate:(value)=>value === getValues("password") || "Must to same a password", 
             })}
           />
           <p className="text-red-600 text-xs">{errors.password2?.message}</p>

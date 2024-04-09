@@ -11,6 +11,7 @@ import { useRouter } from "next/router";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import { auth, firestore } from "@/firebase";
 import { getDoc, doc } from "firebase/firestore";
+import Header from './../header/header';
 
 export default function Account() {
   const [isOpen, setIsOpen] = useState(false);
@@ -21,6 +22,17 @@ export default function Account() {
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
   };
+
+  function handleClickList(routePath) {
+    const user = auth.currentUser;
+    // I check. User is login or not.
+    if (user) {
+      router.push(routePath);
+    }
+    else {
+      router.push("/identification");
+    }
+  }
 
   const handleClickOutside = (event) => {
     if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -85,7 +97,7 @@ export default function Account() {
             )}
           </div>
           <hr></hr>
-          <Link href="/account/JumiaAccount">
+          <Link href="" onClick={() => { handleClickList("/account/JumiaAccount") }}>
             <div className="block px-4 py-2 hover:bg-gray-100">
               <div className="flex items-center space-x-2">
                 <PersonOutlineIcon className="h-6" />
@@ -93,7 +105,7 @@ export default function Account() {
               </div>
             </div>
           </Link>
-          <Link href="/account/Orders">
+          <Link href="" onClick={() => { handleClickList("/account/Orders") }}>
             <div className="block px-4 py-2 hover:bg-gray-100">
               <div className="flex items-center space-x-2">
                 <ShoppingBagOutlinedIcon className="h-6" />
@@ -101,7 +113,7 @@ export default function Account() {
               </div>
             </div>
           </Link>
-          <Link href="/account/Saveditems">
+          <Link href="" onClick={() => { handleClickList("/account/Saveditems") }}>
             <div className="block px-4 py-2 hover:bg-gray-100">
               <div className="flex items-center space-x-2">
                 <FavoriteBorderIcon className="h-6" />
@@ -122,7 +134,8 @@ export default function Account() {
                   setTimeout(() => {
                     setLoading(false);
                     setUserState(null);
-                  }, 3000);
+                    router.reload();
+                  }, 2000);
                 });
               }}
             >

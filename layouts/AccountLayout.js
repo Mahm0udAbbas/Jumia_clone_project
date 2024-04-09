@@ -52,7 +52,7 @@ const AccountLayout = ({ children }) => {
             Recently Viewed
           </Link>
           <Link
-            href="/account/AccountManagement"
+            href="/UserManagment/basic-details/show"
             className=" p-3 hover:bg-orange-300"
           >
             Account Management
