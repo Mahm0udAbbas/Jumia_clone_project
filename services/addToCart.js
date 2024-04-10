@@ -39,6 +39,8 @@ export function useAddToCart() {
             });
           } else {
             // Add new cart
+            dispatch(setToast(true));
+            dispatch(toastMessage("Add product successfully."));
             setDoc(doc(firestore, "cart", user.uid), {
               products: [newCartProduct],
             });
