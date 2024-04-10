@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 
 function LangToggel() {
   const { locale, locales, push, query, asPath } = useRouter();
-  console.log(useRouter());
+  
   const [en, ar] = locales;
   function handleEn() {
     console.log("hello");

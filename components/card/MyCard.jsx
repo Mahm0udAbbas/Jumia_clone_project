@@ -8,13 +8,16 @@ import {
 import Image from "next/image";
 import logoExpress from "@/public/Logo-express.png";
 import StarIcon from "@mui/icons-material/Star";
-import useAddToCart from "@/services/addToCart";
+import {useAddToCart} from "@/services/addToCart";
 import { useTranslation } from "next-i18next";
 import { useRouter } from "next/router";
 
+
 function CatProdCard({ cardData }) {
+  const [ addToCart ] = useAddToCart();
   const { t } = useTranslation("common");
   const { locale } = useRouter();
+  
 
   return (
     <Card
@@ -80,7 +83,7 @@ function CatProdCard({ cardData }) {
           color="amber"
           fullWidth
           onClick={() => {
-            useAddToCart(cardData);
+            addToCart(cardData);
           }}
         >
           {" "}

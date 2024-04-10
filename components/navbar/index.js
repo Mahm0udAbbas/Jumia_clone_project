@@ -8,13 +8,15 @@ import { getSearch } from "@/firebase";
 import Link from "next/link";
 import LangToggel from "../langToggel/LangToggel";
 import { useTranslation } from "next-i18next";
+import { useSelector } from "react-redux";
 
 export default function Navbar() {
   const router = useRouter();
   const [productsSearch, setProductsSearch] = useState([]);
+  const toast = useSelector((state) => state.toast);
   const [inputValue, setInputValue] = useState("");
   const { t } = useTranslation("nav");
-  console.log(t);
+
   function handleSearch(value) {
     setInputValue(value);
     if (value.length) {
@@ -93,12 +95,31 @@ export default function Navbar() {
           >
             {t("Search")}
           </button>
-
+          {toast.value ? <Toast message={toast.message} /> : ""}
           <Account />
           <Help />
           <Shoppingcart />
         </div>
       </div>
     </>
+  );
+}
+
+function Toast({ message }) {
+  return (
+    <div className="toast toast-top toast-center">
+      <div className="alert alert-success">
+        <svg
+          className="w-5 h-5 text-white"
+          aria-hidden="true"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="currentColor"
+          viewBox="0 0 20 20"
+        >
+          <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z" />
+        </svg>
+        <span>{message}</span>
+      </div>
+    </div>
   );
 }
