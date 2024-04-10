@@ -8,7 +8,17 @@ import Product from "@/components/Product/product";
 import MySpinner from "@/components/order/Spiner/Spinner";
 import CatProdList from "@/components/CatProdList/CatProdList";
 import { catIds } from "@/data";
-
+import { useTranslation } from "next-i18next";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import Link from "next/link";
+export async function getStaticProps({ locale }) {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, ["common"])),
+      // Will be passed to the page component as props
+    },
+  };
+}
 export default function Watches() {
   const [loading, setLoading] = useState(true);
   const imageUrls = [
@@ -19,6 +29,7 @@ export default function Watches() {
     "https://eg.jumia.is/cms/global-21/icons/men-watches/Below_99_EGP_Store_192_x_107_.png",
     "https://eg.jumia.is/cms/global-21/icons/men-watches/Wlisth_192_x_107_.png",
   ];
+  const { t } = useTranslation("common");
 
   const [catProducts, setCatProducts] = useState([]);
   useEffect(() => {
@@ -44,14 +55,14 @@ export default function Watches() {
     return (
       <main className="container mx-auto">
         <Breadcrumbs separator="/">
-          <a href="/" className="opacity-60">
-            Home
-          </a>
-          <a href="/category/watches">Watches</a>
+          <Link href="/" className="opacity-60">
+            {t("Home")}
+          </Link>
+          <Link href="/category/watches">{t("Watches")}</Link>
         </Breadcrumbs>
         <div className="py-2">
           <SubCategories>
-            <Header title="Watches" />
+            <Header title={t("WATCHES")} />
             <div className="grid gap-2  grid-cols-1 sm:grid-cols-3  md:grid-cols-6  p-5">
               {imageUrls.map((imageUrl, index) => (
                 <div key={index} className="">

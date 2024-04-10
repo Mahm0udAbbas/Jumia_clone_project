@@ -1,4 +1,3 @@
-"use client";
 import { useRouter } from "next/router";
 import Elementthree from "./elementthree";
 import Shoppingcart from "./shoppingcart";
@@ -7,12 +6,15 @@ import Help from "./help";
 import { useState } from "react";
 import { getSearch } from "@/firebase";
 import Link from "next/link";
+import LangToggel from "../langToggel/LangToggel";
+import { useTranslation } from "next-i18next";
 
 export default function Navbar() {
   const router = useRouter();
   const [productsSearch, setProductsSearch] = useState([]);
   const [inputValue, setInputValue] = useState("");
-
+  const { t } = useTranslation("nav");
+  console.log(t);
   function handleSearch(value) {
     setInputValue(value);
     if (value.length) {
@@ -36,7 +38,7 @@ export default function Navbar() {
 
   return (
     <>
-      <div className="bg-orange-500 mb-3">
+      <div className="bg-orange-500   ">
         <div className=" .mx-auto w-full align-middle  md:max-w-7xl mx-auto">
           <img
             src="https://ng.jumia.is/cms/0-1-cpr/2023/new-top-strip/free-delivery-top-strip_1.gif"
@@ -44,9 +46,10 @@ export default function Navbar() {
           />
         </div>
       </div>
+      <LangToggel />
       <div className="bg-white align-middle relative">
-        <div className="md:max-w-7xl mx-auto flex py-3 flex-row justify-between space-x-2 ">
-          <span className="flex space-x-2">
+        <div className="md:max-w-7xl mx-auto flex py-3 flex-row justify-between items-center flex-wrap lg:flex-nowrap space-y-3 space-x-2 ">
+          <span className="flex space-x-2 ">
             <Elementthree />
             <img
               src="/jumia.png"
@@ -59,7 +62,7 @@ export default function Navbar() {
             <input
               onChange={(e) => handleSearch(e.target.value)}
               type="text"
-              placeholder="Search Products"
+              placeholder={t("Search Products")}
               className="input input-bordered input-warning bg-white w-full outline-none max-w-md  my-auto hidden lg:inline"
             />
             <div
@@ -88,8 +91,9 @@ export default function Navbar() {
             type="submit"
             className="btn btn-warning rounded-2 text-white hidden lg:inline"
           >
-            Search
+            {t("Search")}
           </button>
+
           <Account />
           <Help />
           <Shoppingcart />

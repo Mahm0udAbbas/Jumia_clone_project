@@ -8,6 +8,8 @@ import Product from "@/components/Product/product";
 import MySpinner from "@/components/order/Spiner/Spinner";
 import CatProdList from "@/components/CatProdList/CatProdList";
 import { catIds } from "@/data";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { useTranslation } from "next-i18next";
 
 export default function Supermarket() {
   const [loading, setLoading] = useState(false);
@@ -34,6 +36,7 @@ export default function Supermarket() {
     "https://eg.jumia.is/cms/Ramadan-24/CATs-UNs/Supermarket/Farida/572x250EN.png",
   ];
   const [catProducts, setCatProducts] = useState([]);
+  const { t } = useTranslation("common");
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -57,16 +60,16 @@ export default function Supermarket() {
       <main className="container mx-auto">
         <Breadcrumbs separator="/">
           <a href="/" className="opacity-60">
-            Home
+            {t("Home")}
           </a>
-          <a href="/category/supermarket">Supermarket</a>
+          <a href="/category/supermarket">{t("Supermarket")}</a>
         </Breadcrumbs>
         <div className="">
           <SubCategories>
-            <Header title="Supermarket" />
-            <div className="grid gap-2  grid-cols-1 sm:grid-cols-3  md:grid-cols-6  p-5">
+            <Header title={t("SUPERMARKET")} />
+            <div className="grid gap-2  grid-cols-1 sm:grid-cols-3  md:grid-cols-6   p-5">
               {imageUrls.map((imageUrl, index) => (
-                <div key={index} className="">
+                <div key={index} className="justify-self-center">
                   <Product imageUrl={imageUrl} imageAlt={`img ${index + 1}`} />
                 </div>
               ))}
@@ -74,7 +77,7 @@ export default function Supermarket() {
           </SubCategories>
           <SubCategories>
             <div className="my-3">
-              <Header title="Supermarket Top Deals" />
+              <Header title={t("SUPERMARKET TOP DEALS")} />
               <div className="grid gap-2  grid-cols-1   md:grid-cols-2  justify-center items-center p-5">
                 {imageUrls1.map((imageUrl, index) => (
                   <div key={index} className="flex items-center justify-center">
@@ -89,7 +92,7 @@ export default function Supermarket() {
           </SubCategories>
           <SubCategories>
             <div className="my-3">
-              <Header title="Check More Deals" />
+              <Header title={t("CHECK MORE DEALS")} />
               <div className="grid gap-2  grid-cols-1   md:grid-cols-2  justify-center items-center p-5">
                 {imageUrls2.map((imageUrl, index) => (
                   <div key={index} className="flex items-center justify-center">
@@ -112,11 +115,20 @@ export default function Supermarket() {
             />
             ;
           </div>
-          <div className=" col-span-12 md:col-span-9 py-2">
+          <div className=" col-span-12 md:col-span-9 ">
             <CatProdList catProducts={catProducts} catData="Supermarket" />
           </div>
         </div>
       </main>
     );
   }
+}
+
+export async function getStaticProps({ locale }) {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, ["common"])),
+      // Will be passed to the page component as props
+    },
+  };
 }

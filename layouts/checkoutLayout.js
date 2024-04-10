@@ -8,7 +8,8 @@ import React, { useEffect, useState } from "react";
 import { doc, onSnapshot } from "firebase/firestore";
 import MySpinner from "@/components/order/Spiner/Spinner";
 import { useRouter } from "next/router";
-
+import { useTranslation } from "next-i18next";
+import LangToggel from "@/components/langToggel/LangToggel";
 function CheckoutLayout({ children }) {
   const [cartProducts, setCartProducts] = useState([]);
   const [userState, setUserState] = useState(null);
@@ -16,7 +17,7 @@ function CheckoutLayout({ children }) {
   const [adressConfirm, setAddressConfirm] = useState(false);
   const [paymentConfirm, setPaymentConfirm] = useState(false);
   const [deliveryConfirm, setDeliveryConfirm] = useState(false);
-  console.log(paymentConfirm, deliveryConfirm, adressConfirm);
+  const { t } = useTranslation("order");
   const router = useRouter();
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -34,6 +35,8 @@ function CheckoutLayout({ children }) {
           localStorage.getItem("cart")
         );
         setCartProducts(productsFromLocalStorage || []);
+        alert("You shoud login first");
+        router.push("/identification");
       }
     });
     return () => unsubscribe();
@@ -48,6 +51,7 @@ function CheckoutLayout({ children }) {
     return (
       <>
         <section className="min-h-screen">
+          <LangToggel />
           <MyNavbar />
           <section className="container mx-auto  grid grid-cols-12 gap-6 ">
             <section className=" col-span-12 md:col-span-8 lg:col-span-9  p-0 ">
@@ -83,7 +87,7 @@ function CheckoutLayout({ children }) {
               >
                 <ArrowBackIosNewIcon className="text-sm me-1" />
                 <span className="hover:underline">
-                  Go back & continue shopping
+                  {t("Go back & continue shopping")}
                 </span>
               </Link>
             </div>

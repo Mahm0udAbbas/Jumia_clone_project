@@ -1,11 +1,12 @@
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
+import { useTranslation } from "next-i18next";
 
 export default function Help() {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
-
+  const { t } = useTranslation("nav");
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
   };
@@ -30,7 +31,7 @@ export default function Help() {
         onClick={toggleDropdown}
       >
         <HelpOutlineOutlinedIcon className="h-12 font-bold" />
-        <span >help</span>
+        <span>{t("help")}</span>
       </div>
       {isOpen && (
         <div
@@ -40,42 +41,42 @@ export default function Help() {
           <Link href="/help">
             <p className="block text-sm px-4 py-2  hover:bg-gray-100">
               <div className="flex items-center ">
-                <span>help Center</span>
+                <span>{t("help Center")}</span>
               </div>
             </p>
           </Link>
           <Link href="/help">
             <p className="block text-sm px-4 py-2 hover:bg-gray-100">
               <div className="flex items-center">
-                <span>Place an Order</span>
+                <span>{t("Place an Order")}</span>
               </div>
             </p>
           </Link>
           <Link href="/help">
             <p className="block text-sm px-4 py-2 hover:bg-gray-100 ">
               <div className="flex items-center">
-                <span>Pay for Your Order</span>
+                <span>{t("Pay for Your Order")}</span>
               </div>
             </p>
           </Link>
           <Link href="/help">
             <p className="block text-sm px-4 py-2 hover:bg-gray-100 ">
               <div className="flex items-center">
-                <span>Track Your Order</span>
+                <span>{t("Track Your Order")}</span>
               </div>
             </p>
           </Link>
           <Link href="/help">
             <p className="block text-sm px-4 py-2 hover:bg-gray-100 ">
               <div className="flex items-center">
-                <span>Cancel an Order</span>
+                <span>{t("Cancel an Order")}</span>
               </div>
             </p>
           </Link>
           <Link href="/help">
             <p className="block text-sm px-4 py-2 hover:bg-gray-100 ">
               <div className="flex items-center">
-                <span>Create a return</span>
+                <span>{t("Create a return")}</span>
               </div>
             </p>
           </Link>

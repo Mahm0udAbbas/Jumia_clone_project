@@ -1,8 +1,6 @@
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-import LocalAtmIcon from "@mui/icons-material/LocalAtm";
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 import ShoppingBagOutlinedIcon from "@mui/icons-material/ShoppingBagOutlined";
-import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
 import React, { useState, useEffect, useRef } from "react";
 import { Button } from "@material-tailwind/react";
 import { Spinner } from "@material-tailwind/react";
@@ -11,14 +9,14 @@ import { useRouter } from "next/router";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import { auth, firestore } from "@/firebase";
 import { getDoc, doc } from "firebase/firestore";
-import Header from './../header/header';
-
+import { useTranslation } from "next-i18next";
 export default function Account() {
   const [isOpen, setIsOpen] = useState(false);
   const router = useRouter();
   const dropdownRef = useRef(null);
   const [userState, setUserState] = useState(null);
   const [isLoading, setLoading] = useState(false);
+  const { t } = useTranslation("nav");
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
   };
@@ -65,13 +63,13 @@ export default function Account() {
           <>
             <PersonOutlineIcon className="h-12 font-bold" />
             <span>
-              Hi, {userState.displayName?.split(" ")[0] || <Spinner />}
+              {t("Hi")}, {userState.displayName?.split(" ")[0] || <Spinner />}
             </span>
           </>
         ) : (
           <>
             <PersonOutlineIcon className="h-12 font-bold" />
-            <span>Account</span>
+            <span>{t("Account")}</span>
           </>
         )}
       </div>
@@ -92,7 +90,7 @@ export default function Account() {
                   router.push("/identification");
                 }}
               >
-                SIGNUP
+                {t("SIGNUP")}
               </button>
             )}
           </div>
@@ -101,7 +99,7 @@ export default function Account() {
             <div className="block px-4 py-2 hover:bg-gray-100">
               <div className="flex items-center space-x-2">
                 <PersonOutlineIcon className="h-6" />
-                <span>My Account</span>
+                <span>{t("My Account")}</span>
               </div>
             </div>
           </Link>
@@ -109,7 +107,7 @@ export default function Account() {
             <div className="block px-4 py-2 hover:bg-gray-100">
               <div className="flex items-center space-x-2">
                 <ShoppingBagOutlinedIcon className="h-6" />
-                <span>Orders</span>
+                <span>{t("Orders")}</span>
               </div>
             </div>
           </Link>
@@ -117,7 +115,7 @@ export default function Account() {
             <div className="block px-4 py-2 hover:bg-gray-100">
               <div className="flex items-center space-x-2">
                 <FavoriteBorderIcon className="h-6" />
-                <span>Saved Items</span>
+                <span>{t("Saved Items")}</span>
               </div>
             </div>
           </Link>
@@ -139,7 +137,7 @@ export default function Account() {
                 });
               }}
             >
-              SIGNOUT
+              {t("SIGNOUT")}
             </Button>
           ) : (
             ""

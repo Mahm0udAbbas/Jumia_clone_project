@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import styles from "../../styles/Services.module.css";
 import Toggler from "../Toggler/Toggler";
+import { useTranslation } from "next-i18next";
 
 export default function Services() {
   const [activeItem, setActiveItem] = useState(null);
-
+  const { t } = useTranslation("help");
   const handleItemClick = (index) => {
     setActiveItem(index);
   };
@@ -28,7 +29,7 @@ export default function Services() {
             onClick={() => handleItemClick(8)}
           >
             <span className={`${styles.clickable}`} data-type="guide"></span>
-            <p className={`${styles.txt}`}>Place an Order</p>
+            <p className={`${styles.txt}`}>{t("Place an Order")}</p>
             <img
               className={`${styles.img}`}
               src="https://cxp-desktop.netlify.app/jpg/how-to-place-order-d.png"
@@ -42,7 +43,7 @@ export default function Services() {
             onClick={() => handleItemClick(9)}
           >
             <span className={`${styles.clickable}`} data-type="guide"></span>
-            <p className={`${styles.txt}`}>Track Your Order</p>
+            <p className={`${styles.txt}`}>{t("Track Your Order")}</p>
             <img
               className={`${styles.img}`}
               src="https://cxp-desktop.netlify.app/jpg/how-to-track-order-d.png"
@@ -56,7 +57,7 @@ export default function Services() {
             onClick={() => handleItemClick(10)}
           >
             <span className={`${styles.clickable}`} data-type="guide"></span>
-            <p className={`${styles.txt}`}>Pay For Order</p>
+            <p className={`${styles.txt}`}>{t("Pay For Order")}</p>
             <img
               className={`${styles.img}`}
               src="https://cxp-desktop.netlify.app/jpg/how-to-pay-for-order-d.png"
@@ -70,7 +71,7 @@ export default function Services() {
             onClick={() => handleItemClick(11)}
           >
             <span className={`${styles.clickable}`} data-type="guide"></span>
-            <p className={`${styles.txt}`}>Track Your Order</p>
+            <p className={`${styles.txt}`}>{t("Cancel Your Order")}</p>
             <img
               className={styles.img}
               src="https://cxp-desktop.netlify.app/jpg/how-to-cancel-order-d.png"
@@ -84,7 +85,7 @@ export default function Services() {
             onClick={() => handleItemClick(12)}
           >
             <span className={`${styles.clickable}`} data-type="guide"></span>
-            <p className={`${styles.txt}`}>Create a Return</p>
+            <p className={`${styles.txt}`}>{t("Create a Return")}</p>
             <img
               className={`${styles.img}`}
               src="https://cxp-desktop.netlify.app/jpg/how-to-request-return-d.png"
@@ -98,7 +99,7 @@ export default function Services() {
             <input
               type="text"
               className="rounded p-2 w-full pl-12 focus:outline-none"
-              placeholder='Type keywords like "return"'
+              placeholder={t("Type keywords like 'return'")}
             />
 
             <button

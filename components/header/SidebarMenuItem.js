@@ -1,6 +1,8 @@
 import Link from "next/link";
+import { useTranslation } from "next-i18next";
 
 export default function SidebarMenuItem({ link, text, Icon, active }) {
+  const { t } = useTranslation("home");
   return (
     <div
       className="hoverEffect flex items-center text-gray-700 justify-start text-sm space-x-3

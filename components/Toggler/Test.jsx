@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import { useTranslation } from "next-i18next";
+import { useRouter } from "next/navigation";
 
 export default function Test({ filteredData }) {
   const [toggles, setToggles] = useState(
@@ -7,7 +9,7 @@ export default function Test({ filteredData }) {
   useEffect(() => {
     setToggles(Array(filteredData.length).fill(false));
   }, [filteredData]);
-
+  const { t } = useTranslation("help");
   // Function to toggle the state of a specific item
   const toggleFAQ = (index) => {
     const newToggles = [...toggles];
@@ -24,7 +26,7 @@ export default function Test({ filteredData }) {
               onClick={() => toggleFAQ(index)}
               aria-expanded={toggles[index] ? "true" : "false"}
             >
-              <span className="flex-1 text-base-content">{item.title}</span>
+              <span className="flex-1 text-base-content">{t(item.title)}</span>
               <svg
                 className="flex-shrink-0 w-2 h-2 ml-auto fill-current transform transition duration-200 ease-out"
                 viewBox="0 0 16 16"
@@ -68,11 +70,11 @@ export default function Test({ filteredData }) {
               }}
             >
               <div className="pb-5 leading-relaxed">
-                {/* Render HTML content safely */}
+                {/* {t(item.description)} */}
                 <div
                   className="space-y-2 leading-relaxed"
                   dangerouslySetInnerHTML={{
-                    __html: item.description,
+                    __html: t(item.description),
                   }}
                 />
               </div>

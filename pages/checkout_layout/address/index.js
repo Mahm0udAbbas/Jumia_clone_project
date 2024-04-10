@@ -3,9 +3,8 @@ import Delivery from "@/components/order/DeliveryDetails/Delivery";
 import EditAdressForm from "@/components/order/EditAdressForm/EditAdressForm";
 import PaymentMethod from "@/components/order/PaymentMethod/PaymentMethod";
 import { CheckPageLayout } from "../../../layouts/checkoutLayout";
-
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 function Adress({ setAddressConfirm }) {
-  console.log("hi");
   return (
     <>
       <div>
@@ -23,3 +22,11 @@ function Adress({ setAddressConfirm }) {
 
 export default Adress;
 Adress.getLayout = CheckPageLayout;
+export async function getStaticProps({ locale }) {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, ["common", "order"])),
+      // Will be passed to the page component as props
+    },
+  };
+}
