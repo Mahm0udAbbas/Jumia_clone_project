@@ -31,7 +31,7 @@ export function useAddToCart() {
               } else {
                 // Add new product
                 dispatch(setToast(true));
-                dispatch(toastMessage("Increased product successfully."));
+                dispatch(toastMessage("Add product successfully."));
                 updateDoc(doc(firestore, "cart", user.uid), {
                   products: arrayUnion(newCartProduct),
                 });
