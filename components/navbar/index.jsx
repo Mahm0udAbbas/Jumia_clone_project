@@ -16,6 +16,7 @@ export default function Navbar() {
   const toast = useSelector((state) => state.toast);
   const [inputValue, setInputValue] = useState("");
   const { t } = useTranslation("nav");
+  const english = /^[A-Za-z0-9]*$/;
 
   function handleSearch(value) {
     setInputValue(value);
@@ -80,7 +81,7 @@ export default function Navbar() {
                     onClick={() => setProductsSearch([])}
                     className="text-sm p-1 block hover:bg-gray-200"
                   >
-                    {product.en.title}
+                    {english.test(inputValue) ? product.en.title : product.ar.title}
                   </Link>
                 );
               })}

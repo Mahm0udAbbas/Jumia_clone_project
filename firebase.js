@@ -427,9 +427,11 @@ export async function getSearch(query) {
   if (result) {
     data = result.docs.filter((doc) => {
       const product = doc.data();
-      const title = product.en.title.toLowerCase();
-      const matchingSearch = title.includes(query.toLowerCase());
-      if (matchingSearch) {
+      const titleEn = product.en.title.toLowerCase();
+      const titleAr = product.ar.title
+      const matchingSearchEn = titleEn.includes(query.toLowerCase());
+      const matchingSearchAr = titleAr.includes(query);
+      if (matchingSearchEn || matchingSearchAr) {
         return doc;
       }
     });
