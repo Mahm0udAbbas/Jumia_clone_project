@@ -11,18 +11,23 @@ import { auth, firestore } from "@/firebase";
 import Image from "next/image";
 import topLogo from "@/public/1.png";
 import bottomLogo from "@/public/bottom-logo.png";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useTranslation } from "next-i18next";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
 function Login_signup() {
   const router = useRouter();
   const provider = new GoogleAuthProvider();
   const [spinner, setSpinner] = useState(false);
+  const [storageProducts, setStorageProducts] = useState([]);
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
+  useEffect(() => {
+    setStorageProducts(JSON.parse(localStorage.getItem("cart")));
+  }, []);
   const { t } = useTranslation("login");
 
   async function loginOrSignup({ email }) {
@@ -35,6 +40,43 @@ function Login_signup() {
   }
 
   function loginWithGoogle() {
+    signInWithPopup(auth, provider)
+      .then((result) => {
+        // The signed-in user info.
+        const userID = result.user.uid;
+        const displayName = result.user.displayName;
+        const phoneNumber = result.user.phoneNumber;
+        const email = result.user.email;
+        const emailVerified = result.user.emailVerified;
+        // Set new user in users collection.
+        setDoc(doc(firestore, "users", userID), {
+          userID,
+          displayName,
+          email,
+          phoneNumber,
+          emailVerified,
+        });
+        // If there cart in local storage set it in him fire store cart collection.
+        if (storageProducts) {
+          setDoc(doc(firestore, "cart", result.user.uid), {
+            products: [...storageProducts],
+          });
+          // Remove it from local storage.
+          localStorage.removeItem("cart");
+        }
+        // This gives you a Google Access Token. You can use it to access the Google API.
+        const credential = GoogleAuthProvider.credentialFromResult(result);
+        // For UI.
+        setSpinner(true);
+        setTimeout(() => {
+          setSpinner(false);
+          router.push("/");
+        }, 3000);
+      })
+      .catch((error) => {
+        // Handle Errors here.
+        console.log("Error: ", error);
+      });
     signInWithPopup(auth, provider)
       .then((result) => {
         // The signed-in user info.
@@ -93,11 +135,12 @@ function Login_signup() {
             alt="logo-image"
           />
           <Typography variant="h3" color="black">
-            Welcome to Jumia
+            {t("Welcome to Jumia")}
           </Typography>
           <Typography color="black" className="mt-1 text-center">
-            Type your e-mail or phone number to log in or create a Jumia
-            account.
+            {t(
+              "Type your e-mail or phone number to log in or create a Jumia account."
+            )}
           </Typography>
         </div>
 
@@ -126,25 +169,16 @@ function Login_signup() {
             color="amber"
             fullWidth
           >
-            Continue
+            {t("Continue")}
           </Button>
           <Typography color="black" className="text-xs my-2 text-center">
-            By continuing you agree to Jumia&apos;s
+            {t("By continuing you agree to Jumia&apos;s")}
             <a href="#" className="block underline mt-1 text-orange-500">
-              Terms and Conditions
+              {t("Terms and Conditions")}
             </a>
           </Typography>
         </form>
         <div className="w-[28rem]">
-          <Button
-            className="mt-5 mb-8 hover:bg-orange-800/5"
-            size="lg"
-            variant="outlined"
-            color="orange"
-            fullWidth
-          >
-            Login with Passkeys
-          </Button>
           <Button
             size="lg"
             variant="outlined"
@@ -161,8 +195,9 @@ function Login_signup() {
             Continue with Google
           </Button>
           <Typography color="black" className="text-sm text-center">
-            For further support, you may visit the Help Center or contact our
-            customer service team.
+            {t(
+              "For further support, you may visit the Help Center or contact our customer service team."
+            )}
           </Typography>
           <div className="flex flex-col  items-center mt-5">
             <Image
@@ -208,4 +243,12 @@ function Spinner() {
       <span className="sr-only">Loading...</span>
     </div>
   );
+}
+export async function getStaticProps({ locale }) {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, ["common", "login"])),
+      // Will be passed to the page component as props
+    },
+  };
 }
