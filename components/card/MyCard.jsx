@@ -9,10 +9,18 @@ import Image from "next/image";
 import logoExpress from "@/public/Logo-express.png";
 import StarIcon from "@mui/icons-material/Star";
 import useAddToCart from "@/services/addToCart";
+import { useTranslation } from "next-i18next";
+import { useRouter } from "next/router";
 
 function CatProdCard({ cardData }) {
+  const { t } = useTranslation("common");
+  const { locale } = useRouter();
+
   return (
-    <Card key={cardData.proId} className="items-between justify-between  shadow-none group hover:shadow-2xl">
+    <Card
+      key={cardData.proId}
+      className="items-between justify-between  shadow-none group hover:shadow-2xl"
+    >
       <div className="flex items-center justify-center p-2">
         <img
           width={100}
@@ -21,9 +29,12 @@ function CatProdCard({ cardData }) {
           alt="product picture"
         />
       </div>
-      <CardBody className="text-left">
+      <CardBody className="">
         <p className="mb-1"></p>
-        <p className="font-medium"> {cardData.en.title}</p>
+        <p className="font-medium">
+          {" "}
+          {locale == "en" ? cardData.en.title : cardData.ar.title}
+        </p>
         <Typography className="flex">
           <span className="me-2  text-gray-500 font-normal text-xs">
             {cardData.price}
@@ -73,7 +84,7 @@ function CatProdCard({ cardData }) {
           }}
         >
           {" "}
-          Add to Card
+          {t("ADD TO CART")}
         </Button>
       </CardFooter>
     </Card>

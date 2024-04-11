@@ -3,19 +3,21 @@ import StarIcon from "@mui/icons-material/Star";
 import TaskAltIcon from "@mui/icons-material/TaskAlt";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { Progress } from "@material-tailwind/react";
+import { useTranslation } from "next-i18next";
 
 const FeedbackList = ({ rating, verifiedReting }) => {
-  const now = 60;
+  const { t } = useTranslation("productdetails");
 
   return (
     <div className="flex flex-col p-5">
       <div className="flex justify-between items-center w-full">
         <h3 className="text-gray-700 hover:text-gray-900 text-lg font-medium">
-          Verified Customer Feedback
+          {t("Verified Customer Feedback")}
         </h3>
         <div className="my-3 border-b border-gray-300"></div>
         <button className="flex items-center text-orange-500">
-          SEE ALL <ArrowForwardIosIcon className="text-orange-500 text-sm" />
+          {t("SEE ALL")}{" "}
+          <ArrowForwardIosIcon className="text-orange-500 text-sm" />
         </button>
       </div>
 
@@ -25,7 +27,7 @@ const FeedbackList = ({ rating, verifiedReting }) => {
         <div className="col-span-12 md:col-span-4">
           <div className="flex flex-col items-center p-3">
             <p className="text-gray-700 hover:text-gray-900">
-              VERIFIED RATINGS ({verifiedReting})
+              {t("VERIFIED RATINGS")} ({verifiedReting})
             </p>
             <div className="bg-gray-200 p-3 w-full max-w-xs text-center">
               <h2 className="text-amber-500 text-2xl font-bold mb-1">
@@ -35,15 +37,11 @@ const FeedbackList = ({ rating, verifiedReting }) => {
                 <StarIcon className="text-amber-500" />
               </div>
               <p className="text-gray-700 hover:text-gray-900">
-                {verifiedReting} verified ratings
+                {verifiedReting} {t("verified ratings")}
               </p>
             </div>
             <div className="flex flex-col w-full max-w-xs mt-5">
-              {/* {[5, 4, 3, 2, 1].map((rating, index) => (  */}
-              <div
-                className="flex justify-between items-center w-full"
-                // key={index}
-              >
+              <div className="flex justify-between items-center w-full">
                 <span className="flex">
                   <StarIcon className="text-amber-500" />({verifiedReting})
                 </span>
@@ -54,7 +52,6 @@ const FeedbackList = ({ rating, verifiedReting }) => {
                   color="amber"
                 />
               </div>
-              {/* ))} */}
             </div>
           </div>
         </div>
@@ -62,7 +59,7 @@ const FeedbackList = ({ rating, verifiedReting }) => {
         <div className="col-span-12 md:col-span-8">
           <div className="flex flex-col items-start p-3">
             <p className="text-gray-700 hover:text-gray-900">
-              PRODUCT REVIEWS ({verifiedReting})
+              {t("PRODUCT REVIEWS")} ({verifiedReting})
             </p>
             <div className="flex justify-center pb-3">
               <div className="flex">
@@ -96,7 +93,9 @@ const FeedbackList = ({ rating, verifiedReting }) => {
               </p>
               <div className="flex items-center">
                 <TaskAltIcon className="text-green-500 mr-1" />
-                <p className="text-green-500 text-sm">Verified Purchase</p>
+                <p className="text-green-500 text-sm">
+                  {t("Verified Purchase")}
+                </p>
               </div>
             </div>
           </div>

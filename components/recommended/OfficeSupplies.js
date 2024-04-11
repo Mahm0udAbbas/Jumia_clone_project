@@ -2,10 +2,14 @@ import React, { useState, useEffect } from "react";
 import { getProductsByCategoryId } from "../../firebase";
 import RecomHeader from "../Product/header";
 import MySpinner from "../order/Spiner/Spinner";
+import { useRouter } from "next/router";
+import { useTranslation } from "next-i18next";
 
 export default function OfficeSupplies() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const { t } = useTranslation("home");
+  const { locale } = useRouter();
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -23,7 +27,10 @@ export default function OfficeSupplies() {
 
   return (
     <div className="pt-5">
-      <RecomHeader title="Recommended Office Supplies" color="bg-yellow-300 " />
+      <RecomHeader
+        title={t("Recommended Office Supplies")}
+        color="bg-yellow-300 "
+      />
       <div className="carousel carousel-center w-full bg-white shadow-lg rounded-lg">
         {!loading ? (
           products.map((product) => (
@@ -37,7 +44,7 @@ export default function OfficeSupplies() {
                 alt={`Product ${product.en.title}`}
               />
               <span className="justify-center text-center">
-                {product.en.title}
+                {locale == "en" ? product.en.title : product.ar.title}
               </span>
             </div>
           ))

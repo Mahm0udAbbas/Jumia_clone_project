@@ -3,10 +3,13 @@ import RecomHeader from "../Product/header";
 import { getAllProducts } from "../../firebase";
 import Link from "next/link";
 import MySpinner from "../order/Spiner/Spinner";
-
+import { useTranslation } from "next-i18next";
+import { useRouter } from "next/router";
 export default function SliderMainPage() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const { t } = useTranslation("home");
+  const { locale } = useRouter();
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -29,7 +32,7 @@ export default function SliderMainPage() {
   } else {
     return (
       <div className=" mt-5  items-center justify-center ">
-        <RecomHeader title="Recommended Products" color="bg-yellow-300" />
+        <RecomHeader title={t("Recommended Products")} color="bg-yellow-300" />
         <div className=" grid grid-cols-1 sm:grid-cols-2  md:grid-cols-4  gap-2 mt-1">
           {products.map((product) => (
             <div key={product.id} className=" ">
@@ -43,7 +46,7 @@ export default function SliderMainPage() {
                 </div>
                 <div className="text-center">
                   <h3 className="text-lg font-semibold mb-2 ">
-                    {product.en.title}
+                    {locale == "en" ? product.en.title : product.ar.title}
                   </h3>
                 </div>
                 <div className=" self-center">
@@ -51,7 +54,7 @@ export default function SliderMainPage() {
                     href={`/ProductDetails/${product.id}`}
                     className="btn btn-warning rounded-2 text-white  p-3 m-2"
                   >
-                    Details
+                    {t("Details")}
                   </Link>
                 </div>
               </div>

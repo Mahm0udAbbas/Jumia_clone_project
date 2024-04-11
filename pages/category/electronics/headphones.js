@@ -5,11 +5,14 @@ import MySpinner from "@/components/order/Spiner/Spinner";
 import CatProdList from "@/components/CatProdList/CatProdList";
 import { getAllSubCategories, getProductsBySubCategoryId } from "@/firebase";
 import { catIds, subCatIds } from "@/data";
-
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { useTranslation } from "next-i18next";
+import Link from "next/link";
 export default function Headphones() {
   const [loading, setLoading] = useState(true);
   const [catProducts, setCatProducts] = useState([]);
   const [subCats, setSubCats] = useState([]);
+  const { t } = useTranslation("common");
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -36,11 +39,11 @@ export default function Headphones() {
     return (
       <main className="container mx-auto">
         <Breadcrumbs separator="/">
-          <a href="/" className="opacity-60">
-            Home
-          </a>
-          <a href="/category/electronics">Electronics</a>
-          <a href="/category/electronics/headphones">Headphones</a>
+          <Link href="/" className="opacity-60">
+            {t("Home")}
+          </Link>
+          <Link href="/category/electronics">{t("Electronics")}</Link>
+          <Link href="/category/electronics/headphones">{t("Headphones")}</Link>
         </Breadcrumbs>
         <div className="grid grid-cols-12 gap-2">
           <div className="col-span-12   md:col-span-3">
@@ -57,11 +60,19 @@ export default function Headphones() {
             <CatProdList
               catProducts={catProducts}
               catData="Electronics"
-              subCatData="Headphones"
+              subCatData={"Headphones"}
             />
           </div>
         </div>
       </main>
     );
   }
+}
+export async function getStaticProps({ locale }) {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, ["common"])),
+      // Will be passed to the page component as props
+    },
+  };
 }

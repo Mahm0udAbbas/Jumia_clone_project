@@ -5,10 +5,21 @@ import { Breadcrumbs } from "@material-tailwind/react";
 import CatProdList from "@/components/CatProdList/CatProdList";
 import MySpinner from "@/components/order/Spiner/Spinner";
 import { catIds } from "@/data";
-
+import { useTranslation } from "next-i18next";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import Link from "next/link";
+export async function getStaticProps({ locale }) {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, ["common"])),
+      // Will be passed to the page component as props
+    },
+  };
+}
 export default function Perfumes() {
   const [loading, setLoading] = useState(true);
   const [catProducts, setCatProducts] = useState([]);
+  const { t } = useTranslation("common");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -33,10 +44,10 @@ export default function Perfumes() {
     return (
       <main className="container mx-auto">
         <Breadcrumbs separator="/">
-          <a href="/" className="opacity-60">
-            Home
-          </a>
-          <a href="/category/perfumes">Perfumes</a>
+          <Link href="/" className="opacity-60">
+            {t("Home")}
+          </Link>
+          <Link href="/category/perfumes">{t("Perfumes")}</Link>
         </Breadcrumbs>
         <div className="grid grid-cols-12 gap-2">
           <div className="col-span-12   md:col-span-3">

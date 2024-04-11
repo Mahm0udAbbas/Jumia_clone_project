@@ -1,10 +1,11 @@
 import Test from "./Test";
 import Test2 from "./Test2";
 import styles from "../../styles/Toggler.module.css";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import jsonData from "./dummyData.json";
-
+import { useTranslation } from "next-i18next";
 export default function Toggler({ activeItemIndex }) {
+  const { t } = useTranslation("help");
   const [activeItem, setActiveItem] = useState(0);
 
   const [filteredData, setFilteredData] = useState(
@@ -39,7 +40,7 @@ export default function Toggler({ activeItemIndex }) {
                         src="https://cxp-desktop.netlify.app/jpg/payments.jpg"
                         alt="icon"
                       />
-                      Payment
+                      {t("Payment")}
                     </li>
                     <li
                       className={`flex justify-start items-center gap-x-5 cursor-pointer border-b p-4 ${
@@ -52,7 +53,7 @@ export default function Toggler({ activeItemIndex }) {
                         src="https://cxp-desktop.netlify.app/jpg/vouchers.jpg"
                         alt="icon"
                       />
-                      Vouchers
+                      {t("Vouchers")}
                     </li>
                     <li
                       className={`flex justify-start items-center gap-x-5 cursor-pointer border-b p-4 ${
@@ -65,7 +66,8 @@ export default function Toggler({ activeItemIndex }) {
                         src="https://cxp-desktop.netlify.app/jpg/delivery.jpg"
                         alt="icon"
                       />
-                      Products
+
+                      {t("Products")}
                     </li>
                     <li
                       className={`flex justify-start items-center gap-x-5 cursor-pointer border-b p-4 ${
@@ -78,7 +80,8 @@ export default function Toggler({ activeItemIndex }) {
                         src="https://cxp-desktop.netlify.app/jpg/returns-refunds.jpg"
                         alt="icon"
                       />
-                      Delivery
+
+                      {t("Delivery")}
                     </li>
                     <li
                       className={`flex justify-start items-center gap-x-5 cursor-pointer border-b p-4 ${
@@ -91,7 +94,7 @@ export default function Toggler({ activeItemIndex }) {
                         src="https://cxp-desktop.netlify.app/jpg/products.jpg"
                         alt="icon"
                       />
-                      Orders
+                      {t("Orders")}
                     </li>
                     <li
                       className={`flex justify-start items-center gap-x-5 cursor-pointer border-b p-4 ${
@@ -104,7 +107,7 @@ export default function Toggler({ activeItemIndex }) {
                         src="https://cxp-desktop.netlify.app/jpg/account.jpg"
                         alt="icon"
                       />
-                      Returns & Refunds
+                      {t("Returns & Refunds")}
                     </li>
                     <li
                       className={`flex justify-start items-center gap-x-5 cursor-pointer border-b p-4 ${
@@ -117,7 +120,7 @@ export default function Toggler({ activeItemIndex }) {
                         src="https://cxp-desktop.netlify.app/jpg/jumia-express.jpg"
                         alt="icon"
                       />
-                      Account
+                      {t("Account")}
                     </li>
                     <li
                       className={`flex justify-start items-center gap-x-5 cursor-pointer p-4 ${
@@ -130,7 +133,7 @@ export default function Toggler({ activeItemIndex }) {
                         src="https://cxp-desktop.netlify.app/jpg/products.jpg"
                         alt="icon"
                       />
-                      Sell on Jumia
+                      {t("Sell on Jumia")}
                     </li>
                   </ul>
                 </div>
@@ -152,7 +155,7 @@ export default function Toggler({ activeItemIndex }) {
         <div className={`${styles.Chat1}`}>
           <div>
             <p style={{ fontWeight: 600, color: "#282828", fontSize: "20px" }}>
-              Talk to an agent
+              {t("Talk to an agent")}
             </p>
             <div className={`${styles.Chat}`}>
               <button className={`${styles.cta}`}>
@@ -177,8 +180,9 @@ export default function Toggler({ activeItemIndex }) {
                     }}
                     className={`${styles.text}`}
                   >
-                    Ramadan Kareem! We are available from Sunday to Thursday and
-                    on Saturday, between 8 pm and 2 am.
+                    {t(
+                      "Ramadan Kareem! We are available from Sunday to Thursday and on Saturday, between 8 pm and 2 am."
+                    )}
                   </p>
                 </div>
               </button>

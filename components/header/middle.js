@@ -2,7 +2,7 @@ import React from "react";
 export default function Middle() {
   return (
     <>
-      <div className="w-[100%] lg:w-[60%] z-0">
+      <div className="w-[100%] lg:w-[60%] z-0 mx-2">
         <div className="carousel w-full h-[100%] rounded-lg">
           <div id="slide1" className="carousel-item relative w-full">
             <img
