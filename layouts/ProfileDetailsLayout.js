@@ -1,3 +1,5 @@
+// import UserNavigate from "@/components/UserNavigate/UserNavigate";
+
 import UserNavigate from "@/components/UserNavigate/UserNavigate";
 
 function ProfileDetailsLayout({ children }) {

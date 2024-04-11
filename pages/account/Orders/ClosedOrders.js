@@ -1,4 +1,4 @@
-import { AccountPageLayout } from "@/components/Account_Layout";
+import { AccountPageLayout } from "@/layouts/AccountLayout";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";

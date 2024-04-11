@@ -1,6 +1,4 @@
-import { AccountPageLayout } from "@/components/Account_Layout";
-import Image from "next/image";
-import Link from "next/link";
+import { AccountPageLayout } from "@/layouts/AccountLayout";
 import React from "react";
 // import { DeleteForeverIcon } from "react-icons/ai";
 import FavCard from "@/components/FavCard/FavCard";

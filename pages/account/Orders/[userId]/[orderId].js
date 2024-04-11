@@ -1,4 +1,4 @@
-import { AccountPageLayout } from "@/components/Account_Layout";
+import { AccountPageLayout } from "@/layouts/AccountLayout";
 import MySpinner from "@/components/order/Spiner/Spinner";
 import { CancelOrderById, fetchOrderDetails, getOrderById } from "@/firebase";
 import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";

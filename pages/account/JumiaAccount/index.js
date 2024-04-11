@@ -1,13 +1,13 @@
 import Link from "next/link";
 import React from "react";
 import EditIcon from "@mui/icons-material/Edit";
-import { AccountPageLayout } from "@/components/Account_Layout";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "@/firebase";
+import { AccountPageLayout } from "@/layouts/AccountLayout";
 function Myaccount() {
   const [user, setUser] = React.useState(null);
   React.useEffect(() => {
-    onAuthStateChanged(auth, user => setUser(user));
+    onAuthStateChanged(auth, (user) => setUser(user));
   }, []);
   return (
     <>
