@@ -2,7 +2,7 @@ import Link from "next/link";
 import React from "react";
 import EditOldAddress from "./EditOldAddress";
 import AddNewAddress from "./AddNewAddress";
-import { AccountPageLayout } from "../../../components/Account_Layout";
+import { AccountPageLayout } from "@/layouts/AccountLayout";
 import BorderColorIcon from "@mui/icons-material/BorderColor";
 
 function AddressBook() {

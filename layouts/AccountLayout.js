@@ -77,3 +77,7 @@ const AccountLayout = ({ children }) => {
 };
 
 export default AccountLayout;
+export const AccountPageLayout = (page) => (
+  <AccountLayout>{page}</AccountLayout>
+);
+AccountLayout.getLayout = AccountPageLayout;

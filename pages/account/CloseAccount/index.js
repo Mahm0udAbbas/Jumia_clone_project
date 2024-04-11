@@ -1,4 +1,4 @@
-import { AccountPageLayout } from "@/components/Account_Layout";
+import { AccountPageLayout } from "@/layouts/AccountLayout";
 import React from "react";
 
 function CloseAccount() {

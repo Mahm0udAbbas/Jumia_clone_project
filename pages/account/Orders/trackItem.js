@@ -1,13 +1,10 @@
-// "use client";
-
 import { Timeline } from "flowbite-react";
 import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
-import { AccountPageLayout } from "@/components/Account_Layout";
+import { AccountPageLayout } from "@/layouts/AccountLayout";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth, fetchOrderDetails } from "@/firebase";
 import { useEffect, useState } from "react";
 import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
-
 import MySpinner from "@/components/order/Spiner/Spinner";
 import Link from "next/link";
 function TrackItem() {

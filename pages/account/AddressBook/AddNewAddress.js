@@ -1,4 +1,4 @@
-import { AccountPageLayout } from "@/components/Account_Layout";
+import { AccountPageLayout } from "@/layouts/AccountLayout";
 import EditAdressForm from "@/components/order/EditAdressForm/EditAdressForm";
 import Link from "next/link";
 import React from "react";

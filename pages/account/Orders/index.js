@@ -1,4 +1,4 @@
-import { AccountPageLayout } from "@/components/Account_Layout";
+import { AccountPageLayout } from "@/layouts/AccountLayout";
 import MySpinner from "@/components/order/Spiner/Spinner";
 import { auth, fetchOrderDetails, getOrderSubcollection } from "@/firebase";
 import { onAuthStateChanged } from "firebase/auth";

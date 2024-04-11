@@ -1,4 +1,4 @@
-import { AccountPageLayout } from "@/components/Account_Layout";
+import { AccountPageLayout } from "@/layouts/AccountLayout";
 import CatProdList from "@/components/CatProdList/CatProdList";
 import React from "react";
 

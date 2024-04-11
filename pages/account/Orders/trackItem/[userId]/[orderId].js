@@ -2,7 +2,7 @@
 
 import { Timeline } from "flowbite-react";
 import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
-import { AccountPageLayout } from "@/components/Account_Layout";
+import { AccountPageLayout } from "@/layouts/AccountLayout";
 import { getOrderById } from "@/firebase";
 import { useEffect, useState } from "react";
 import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
