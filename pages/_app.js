@@ -23,20 +23,17 @@ const App = ({ Component, pageProps }) => {
     document.querySelector("body").setAttribute("dir", dir);
   }, [locale]);
   return (
-    <>
+    <Provider store={store}>
       {Component.getLayout ? (
-        <Provider store={store}>
-          <MyLayout Component={Component} pageProps={pageProps} />
-        </Provider>
+        <MyLayout Component={Component} pageProps={pageProps} />
       ) : (
         <>
-          {" "}
           <Navbar />
           <MyLayout Component={Component} pageProps={pageProps} />
           <Footer />
         </>
       )}
-    </>
+    </Provider>
   );
 };
 
