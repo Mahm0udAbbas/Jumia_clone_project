@@ -63,16 +63,16 @@ export default function ReviewList() {
                   // Access each item inside the 'items' array
                   if(item.product.proId == ReviewList && order.status == "delivered"){
                       order.review = "reviewed";
-                      orderDocs.forEach((doc1)=>{
-                          if (doc1.data().userId === user.uid)
+                      orderDocs.forEach((orderDoc)=>{
+                          if (orderDoc.data().userId === user.uid)
                           {
-                              setDoc(doc(doc1.ref, "orders",order.id),order)
+                              setDoc(doc(orderDoc.ref, "orders",order.id),order)
                           }
                       })
                   }
                 });
               });
-              
+
             for (const product of products) {
                 if (product.proId === ReviewList) {
                     const orderRef = doc(firestore, 'products', product.id);
@@ -85,7 +85,6 @@ export default function ReviewList() {
                     updatedRating = updatedRating.concat(evaluation);
                     await updateDoc(orderRef, {
                         rating: updatedRating,
-                        review: "reviewed"
                     });
                 }
             }
