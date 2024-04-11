@@ -34,7 +34,7 @@ export default function Supermarket() {
       <div className="carousel carousel-center w-full bg-white shadow-lg rounded-lg">
         {!loading ? (
           products.map((product) => (
-            <Link key={product.proId} href={`/ProductDetails/${product.proId}`}>
+            <Link key={product.id} href={`/ProductDetails/${product.id}`}>
               <div className="carousel-item flex flex-col w-[150px] md:w-[200px]">
                 <img
                   src={product.thumbnail}

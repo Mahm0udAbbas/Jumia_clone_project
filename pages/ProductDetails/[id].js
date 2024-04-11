@@ -40,12 +40,13 @@ export const getServerSideProps = async ({ params, locale }) => {
 };
 
 const ProductDetails = ({ product }) => {
+  const { query } = useRouter();
   const { t } = useTranslation("productdetails");
   const [addToCart] = useAddToCart();
   const { locale } = useRouter();
   product = product.json;
   let date = new Date();
-
+  console.log(product);
   return (
     <>
       <div className="container mx-auto">
@@ -56,7 +57,7 @@ const ProductDetails = ({ product }) => {
               <a href="/" className="opacity-60">
                 {t("Home")}
               </a>
-              <a href={`/ProductDetails/${product.id}`}>
+              <a href={`/ProductDetails/${query.id}`}>
                 {locale == "en"
                   ? product.en.description
                   : product.ar.description}
