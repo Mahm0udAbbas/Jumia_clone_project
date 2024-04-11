@@ -8,7 +8,6 @@ export function useAddToCart() {
   const dispatch = useDispatch();
 
   function addToCart(product) {
-    setTimeout(() => dispatch(setToast(false)), 2000);
     const newCartProduct = { product, quantity: 1 };
     // Local storage.
     const localStorageCart = JSON.parse(localStorage.getItem("cart"));
@@ -71,7 +70,7 @@ export function useAddToCart() {
         }
       }
     });
-
+    setTimeout(() => dispatch(setToast(false)), 3000);
   }
   return [addToCart];
 }

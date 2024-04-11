@@ -8,13 +8,16 @@ import {
 import Image from "next/image";
 import logoExpress from "@/public/Logo-express.png";
 import StarIcon from "@mui/icons-material/Star";
-import {useAddToCart} from "@/services/addToCart";
+import { useAddToCart } from "@/services/addToCart";
 import { useTranslation } from "next-i18next";
 import { useRouter } from "next/router";
+import { useSelector } from "react-redux";
+import { Toast } from "../navbar";
 
 
 function CatProdCard({ cardData }) {
-  const [ addToCart ] = useAddToCart();
+  const toast = useSelector((state) => state.toast);
+  const [addToCart] = useAddToCart();
   const { t } = useTranslation("common");
   const { locale } = useRouter();
   
@@ -24,6 +27,7 @@ function CatProdCard({ cardData }) {
       key={cardData.proId}
       className="items-between justify-between  shadow-none group hover:shadow-2xl"
     >
+      {toast.value ? <Toast message={toast.message} /> : ""}
       <div className="flex items-center justify-center p-2">
         <img
           width={100}

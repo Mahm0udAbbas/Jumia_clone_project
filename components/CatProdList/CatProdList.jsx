@@ -9,7 +9,7 @@ function CatProdList({ catProducts, catData, subCatData }) {
     return (
       <>
         <div className="bg-white">
-          <p className="p-3 tex t-black text-xl">
+          <p className="p-3 text-black text-xl">
             {t(catData)}
             {subCatData ? ` / ${t(subCatData)}` : ""}{" "}
           </p>

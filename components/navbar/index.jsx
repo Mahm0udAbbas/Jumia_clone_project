@@ -95,17 +95,17 @@ export default function Navbar() {
           >
             {t("Search")}
           </button>
-          {toast.value ? <Toast message={toast.message} /> : ""}
           <Account />
           <Help />
           <Shoppingcart />
         </div>
       </div>
+      {toast.value ? <Toast message={toast.message} /> : ""}
     </>
   );
 }
 
-function Toast({ message }) {
+export function Toast({ message }) {
   return (
     <div className="toast toast-top toast-center">
       <div className="alert alert-success">
