@@ -38,7 +38,7 @@ export default function Supermarket() {
     "https://eg.jumia.is/cms/Ramadan-24/CATs-UNs/Supermarket/Farida/572x250EN.png",
   ];
   const [catProducts, setCatProducts] = useState([]);
-  const { t } = useTranslation("common");
+  const { t } = useTranslation("common", "nav");
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -129,7 +129,7 @@ export default function Supermarket() {
 export async function getStaticProps({ locale }) {
   return {
     props: {
-      ...(await serverSideTranslations(locale, ["common"])),
+      ...(await serverSideTranslations(locale, ["common", "nav"])),
       // Will be passed to the page component as props
     },
   };

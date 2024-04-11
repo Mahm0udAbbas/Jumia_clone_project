@@ -10,7 +10,7 @@ import { useTranslation } from "next-i18next";
 import Link from "next/link";
 export default function Kindle() {
   const [loading, setLoading] = useState(true);
-  const { t } = useTranslation("common");
+  const { t } = useTranslation("common", "nav");
 
   const [catProducts, setCatProducts] = useState([]);
   useEffect(() => {
@@ -61,7 +61,7 @@ export default function Kindle() {
 export async function getStaticProps({ locale }) {
   return {
     props: {
-      ...(await serverSideTranslations(locale, ["common"])),
+      ...(await serverSideTranslations(locale, ["common", "nav"])),
       // Will be passed to the page component as props
     },
   };

@@ -13,12 +13,11 @@ import {
 import { catIds, subCatIds } from "@/data";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useTranslation } from "next-i18next";
-import Link from "next/link";
 export default function Labtop() {
   const [loading, setLoading] = useState(true);
   const [catProducts, setCatProducts] = useState([]);
   const [subCats, setSubCats] = useState([]);
-  const { t } = useTranslation("common");
+  const { t } = useTranslation("common", "nav");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -77,7 +76,7 @@ export default function Labtop() {
 export async function getStaticProps({ locale }) {
   return {
     props: {
-      ...(await serverSideTranslations(locale, ["common"])),
+      ...(await serverSideTranslations(locale, ["common", "nav"])),
       // Will be passed to the page component as props
     },
   };

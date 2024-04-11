@@ -35,7 +35,7 @@ export default function Electronics() {
   const [catProducts, setCatProducts] = useState([]);
   const [subCats, setSubCats] = useState([]);
   console.log(subCats);
-  const { t } = useTranslation("common");
+  const { t } = useTranslation("common", "nav");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -130,7 +130,7 @@ export default function Electronics() {
 export async function getStaticProps({ locale }) {
   return {
     props: {
-      ...(await serverSideTranslations(locale, ["common"])),
+      ...(await serverSideTranslations(locale, ["common", "nav"])),
       // Will be passed to the page component as props
     },
   };

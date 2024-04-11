@@ -12,7 +12,7 @@ export default function Phones() {
   const [loading, setLoading] = useState(true);
   const [catProducts, setCatProducts] = useState([]);
   const [subCats, setSubCats] = useState([]);
-  const { t } = useTranslation("common");
+  const { t } = useTranslation("common", "nav");
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -70,7 +70,7 @@ export default function Phones() {
 export async function getStaticProps({ locale }) {
   return {
     props: {
-      ...(await serverSideTranslations(locale, ["common"])),
+      ...(await serverSideTranslations(locale, ["common", "nav"])),
       // Will be passed to the page component as props
     },
   };

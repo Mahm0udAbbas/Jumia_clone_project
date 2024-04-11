@@ -14,7 +14,7 @@ import Link from "next/link";
 export async function getStaticProps({ locale }) {
   return {
     props: {
-      ...(await serverSideTranslations(locale, ["common"])),
+      ...(await serverSideTranslations(locale, ["common", "nav"])),
       // Will be passed to the page component as props
     },
   };
@@ -36,7 +36,7 @@ export default function OfficeSupplies() {
     "  https://eg.jumia.is/cms/41-22/UNs-Deals/Stationery/EN/School_Supplies_-_Floor-Desktop_-EN_.png",
   ];
   const [catProducts, setCatProducts] = useState([]);
-  const { t } = useTranslation("common");
+  const { t } = useTranslation("common", "nav");
   useEffect(() => {
     const fetchData = async () => {
       try {

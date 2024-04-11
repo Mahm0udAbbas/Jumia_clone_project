@@ -106,8 +106,8 @@ export default function Account() {
               </div>
             </div>
           </div>
-          <Link
-            href=""
+          <div
+            className="cursor-pointer"
             onClick={() => {
               handleClickList("/account/Orders");
             }}
@@ -118,9 +118,9 @@ export default function Account() {
                 <span>{t("Orders")}</span>
               </div>
             </div>
-          </Link>
-          <Link
-            href=""
+          </div>
+          <div
+            className="cursor-pointer"
             onClick={() => {
               handleClickList("/account/Saveditems");
             }}
@@ -131,7 +131,7 @@ export default function Account() {
                 <span>{t("Saved Items")}</span>
               </div>
             </div>
-          </Link>
+          </div>
           {userState ? (
             <Button
               type="submit"

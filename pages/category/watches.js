@@ -11,14 +11,7 @@ import { catIds } from "@/data";
 import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import Link from "next/link";
-export async function getStaticProps({ locale }) {
-  return {
-    props: {
-      ...(await serverSideTranslations(locale, ["common"])),
-      // Will be passed to the page component as props
-    },
-  };
-}
+
 export default function Watches() {
   const [loading, setLoading] = useState(true);
   const imageUrls = [
@@ -29,7 +22,7 @@ export default function Watches() {
     "https://eg.jumia.is/cms/global-21/icons/men-watches/Below_99_EGP_Store_192_x_107_.png",
     "https://eg.jumia.is/cms/global-21/icons/men-watches/Wlisth_192_x_107_.png",
   ];
-  const { t } = useTranslation("common");
+  const { t } = useTranslation("common", "nav");
 
   const [catProducts, setCatProducts] = useState([]);
   useEffect(() => {
@@ -88,4 +81,12 @@ export default function Watches() {
       </main>
     );
   }
+}
+export async function getStaticProps({ locale }) {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, ["common", "nav"])),
+      // Will be passed to the page component as props
+    },
+  };
 }
