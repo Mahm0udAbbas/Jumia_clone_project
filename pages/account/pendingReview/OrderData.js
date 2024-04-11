@@ -2,9 +2,10 @@ import React from 'react';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { useRouter } from 'next/router';
 import Order from './Order';
-import {MyDataContext} from './index';
+import { MyDataContext } from './index';
 import NoOrders from './NoOrders';
-export default function OrderData({checker}) {
+
+export default function OrderData() {
     const router = useRouter();
     return (
         <MyDataContext.Consumer>
@@ -20,14 +21,16 @@ export default function OrderData({checker}) {
                         </div>
                     </header>
                     <div className="gap-5 flex flex-col flex-wrap items-stretch text-center py-8 h-[100%]">
-                        {checker ? (
-                            orders.map((order, index) => {
-                                if (order.status === "delivered") {
+                        {orders.map((order, index) => {
+                            if (order.status === "delivered") {
+                                if (order.review === "reviewed") {
+                                    return <NoOrders key={index} />;
+                                } else {
                                     return <Order order={order} key={index} />;
                                 }
-                                return null;
-                            })) : (<NoOrders />)
-                        }
+                            }
+                            return null;
+                        })}
                     </div>
                 </div>
             )}

@@ -3,7 +3,6 @@ import Button from '@mui/material/Button';
 import Link from "next/link";
 
 function Order({order}) {
-// console.log(order);
   return (
     <>
         <div className="flex border rounded-lg p-3">

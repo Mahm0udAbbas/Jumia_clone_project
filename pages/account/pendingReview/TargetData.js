@@ -12,7 +12,6 @@ export default function TargetData({ ReviewList ,addUserOrders }) {
   const router = useRouter();
   const userOrders = useContext(MyDataContext);
   const [matchedOrder, setMatchedOrder] = useState(null);
-  // console.log('userOrders Order:', userOrders);
 
   // loop on orders array to match between Target id & order id to choose the right one
   useEffect(() => {
@@ -22,8 +21,6 @@ export default function TargetData({ ReviewList ,addUserOrders }) {
     setMatchedOrder(order);
   }, [userOrders]);
   
-  // console.log('Matched Order:', matchedOrder);
-
   //useState of form inputs & Error validation
   const [rate, setrate] = useState(0);
   const [ReviewTitle, setReviewTitle] = useState('');
@@ -80,7 +77,6 @@ export default function TargetData({ ReviewList ,addUserOrders }) {
       "date": new Date().toLocaleDateString()
   };
     addUserOrders(evaluation);
-    // console.log(evaluationsArray);
 
     // Clear the form inputs and rating
     setrate(0);
@@ -93,6 +89,7 @@ export default function TargetData({ ReviewList ,addUserOrders }) {
       ReviewTitleDetail: '',
       rating: ''
     });
+    router.back()
   };
 
   return (

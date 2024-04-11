@@ -4,9 +4,6 @@ import TaskAltIcon from '@mui/icons-material/TaskAlt';
 import Rating from '@mui/material/Rating';
 
 export default function Review({ title , detail , name , rate ,date}) {
-console.log(title)
-console.log(detail)
-console.log(name)
 
     return (
         <div className="flex flex-col items-start p-3">

@@ -8,7 +8,6 @@ export const MyDataContext = createContext()
 export default function PendingReviews() {
     const [orderDocs, setOrderDocs] = useState([]);
     const [userOrders, setUserOrders] = useState([]);
-    const [checker, setChecker] = useState(true);
 
     useEffect(() => {
         // Get all orders Documents.
@@ -18,31 +17,27 @@ export default function PendingReviews() {
             console.error('Error fetching order details:', err);
         })
     }, []);
-    // console.log(orderDocs);
     useEffect(() => {
-        orderDocs.forEach((order) => {
-            const userID = order.data().userId;
-            if (userID === auth.currentUser.uid) {
-                getDocs(collection(order.ref, 'orders')).then(data => {
+        const fetchUserOrders = async () => {
+            for (const order of orderDocs) {
+                const userID = order.data().userId;
+                if (userID === auth.currentUser.uid) {
+                    const data = await getDocs(collection(order.ref, 'orders'));
                     const ordersData = data.docs.map(doc => doc.data());
                     setUserOrders(prevOrders => [...prevOrders, ...ordersData]);
-                });
-                setChecker(true);
-            } 
-            else {
-                console.log('User ID does not match');
-                setChecker(false);
+                } else {
+                    console.log('User ID does not match');
+                }
             }
-        });
+        };
+        if (orderDocs.length > 0) {
+            fetchUserOrders();
+        }
     }, [orderDocs]);
-
-    // useEffect(() => {
-    //     console.log(userOrders);
-    // }, [userOrders]);
 
     return (
         <MyDataContext.Provider value = {userOrders}> 
-            <OrderData checker = {checker} />
+            <OrderData />
         </MyDataContext.Provider>
     );
 }

@@ -7,6 +7,7 @@ import { Progress } from "@material-tailwind/react";
 import { useRouter } from 'next/router';
 import Review from './review';
 import { firestore } from '../../firebase';
+import NoReviews from './NoReviews';
 
 const ListReview = () => {
     const [products, setProducts] = useState([]);
@@ -34,16 +35,15 @@ const ListReview = () => {
     // choose the current product
     const product = products.find(prod => prod.id === ListReview);
 
-    //calculate average of rating
-    const rating = product ? product.rating : 0; 
+    let rating = product && Array.isArray(product.rating) ? product.rating : [];
     const ratingLength = rating.length;
     let sumOfRates = 0;
     for (let i = 0; i < rating.length; i++) {
         sumOfRates += Number(rating[i].rate);
     }    
-    const averageRate = sumOfRates / ratingLength;
-    const roundedAverageRate = averageRate.toFixed(1);
-         
+    const averageRate = ratingLength > 0 ? sumOfRates / ratingLength : 0;
+    const roundedAverageRate = averageRate.toFixed(1);    
+
     return (
         <div className="w-full py-5 px-24 mx-auto">
         <div className="bg-white rounded">
@@ -96,19 +96,24 @@ const ListReview = () => {
                 <p className="text-gray-700 hover:text-gray-900 text-sm">
                 PRODUCT REVIEWS ({ratingLength})
             </p>
-            {rating && Array.isArray(rating) && rating.length > 0 && rating.map((review, index) => (
-    <div key={index}>
-        <Review
-            title={review.ReviewTitle}
-            detail={review.ReviewTitleDetail}
-            name={review.name}
-            rate={review.rate}
-            date={review.date}
-            className={index !== rating.length - 1 ? "border-b border-gray-300" : ""}
-        />
-        {index !== rating.length - 1 && <div className="border-b border-gray-300"></div>}
-    </div>
-))}
+            {Array.isArray(rating) && rating.length > 0 ? (
+    rating.map((review, index) => (
+        <div key={index}>
+            <Review
+                title={review.ReviewTitle}
+                detail={review.ReviewTitleDetail}
+                name={review.name}
+                rate={review.rate}
+                date={review.date}
+                className={index !== rating.length - 1 ? "border-b border-gray-300" : ""}
+            />
+            {index !== rating.length - 1 && <div className="border-b border-gray-300"></div>}
+        </div>
+    ))
+) : (
+    <NoReviews />
+)}
+
 
                     </div>
                 </div>
