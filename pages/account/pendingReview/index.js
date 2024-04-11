@@ -1,8 +1,11 @@
 import { AccountPageLayout } from "@/layouts/AccountLayout";
 import Link from "next/link";
 import React from "react";
-
+import { useTranslation } from "next-i18next";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 function PendingReviews() {
+  const { t } = useTranslation("common", "account");
+
   return (
     <>
       <div className="box-border  h-[100%]">
@@ -32,3 +35,11 @@ function PendingReviews() {
 
 export default PendingReviews;
 PendingReviews.getLayout = AccountPageLayout;
+export async function getStaticProps({ locale }) {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, ["common", "account"])),
+      // Will be passed to the page component as props
+    },
+  };
+}

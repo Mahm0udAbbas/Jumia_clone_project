@@ -1,9 +1,11 @@
 import { AccountPageLayout } from "@/layouts/AccountLayout";
 import React from "react";
-// import { DeleteForeverIcon } from "react-icons/ai";
 import FavCard from "@/components/FavCard/FavCard";
-
+import { useTranslation } from "next-i18next";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 function SavedItem() {
+  const { t } = useTranslation("common", "account");
+
   return (
     <>
       <div className="box-border sm:flex-col">
@@ -20,3 +22,11 @@ function SavedItem() {
 
 export default SavedItem;
 SavedItem.getLayout = AccountPageLayout;
+export async function getStaticProps({ locale }) {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, ["common", "account"])),
+      // Will be passed to the page component as props
+    },
+  };
+}

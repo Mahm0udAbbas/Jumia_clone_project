@@ -4,7 +4,10 @@ import EditIcon from "@mui/icons-material/Edit";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "@/firebase";
 import { AccountPageLayout } from "@/layouts/AccountLayout";
+import { useTranslation } from "next-i18next";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 function Myaccount() {
+  const { t } = useTranslation("common", "account");
   const [user, setUser] = React.useState(null);
   React.useEffect(() => {
     onAuthStateChanged(auth, (user) => setUser(user));
@@ -54,3 +57,11 @@ function Myaccount() {
 
 export default Myaccount;
 Myaccount.getLayout = AccountPageLayout;
+export async function getStaticProps({ locale }) {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, ["common", "account"])),
+      // Will be passed to the page component as props
+    },
+  };
+}

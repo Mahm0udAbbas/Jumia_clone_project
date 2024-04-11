@@ -4,8 +4,11 @@ import EditOldAddress from "./EditOldAddress";
 import AddNewAddress from "./AddNewAddress";
 import { AccountPageLayout } from "@/layouts/AccountLayout";
 import BorderColorIcon from "@mui/icons-material/BorderColor";
-
+import { useTranslation } from "next-i18next";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 function AddressBook() {
+  const { t } = useTranslation("common", "account", "order");
+
   return (
     <>
       <div>
@@ -52,3 +55,11 @@ function AddressBook() {
 
 export default AddressBook;
 AddressBook.getLayout = AccountPageLayout;
+export async function getStaticProps({ locale }) {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, ["common", "account", "order"])),
+      // Will be passed to the page component as props
+    },
+  };
+}
