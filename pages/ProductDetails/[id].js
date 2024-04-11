@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import FeedbackList from "../../components/ProductDetails/CustomerFeedback/index";
+// import FeedbackList from "../../components/ProductDetails/CustomerFeedback/index";
 import ProductSection from "../../components/ProductDetails/ProductSection/index";
 import StarIcon from "@mui/icons-material/Star";
 import StarHalfIcon from "@mui/icons-material/StarHalf";
@@ -18,6 +18,7 @@ import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import { data5 } from "@/data";
+import FeedbackList from "@/components/ProductDetails/CustomerFeedback";
 
 export const getServerSideProps = async ({ params, locale }) => {
   const { id } = params;
@@ -185,7 +186,6 @@ const ProductDetails = ({ product }) => {
                         {t("Check All Our Installments Offers from here")}{" "}
                       </p>
                     </div>
-                    
                   </div>
                 </div>
               </div>
@@ -411,5 +411,3 @@ const ProductDetails = ({ product }) => {
 };
 
 export default ProductDetails;
-
-

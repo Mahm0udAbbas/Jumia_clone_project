@@ -25,13 +25,13 @@ const App = ({ Component, pageProps }) => {
   return (
     <Provider store={store}>
       {Component.getLayout ? (
-          <MyLayout Component={Component} pageProps={pageProps} />
+        <MyLayout Component={Component} pageProps={pageProps} />
       ) : (
         <>
           <Navbar />
           <MyLayout Component={Component} pageProps={pageProps} />
           <Footer />
-          </>
+        </>
       )}
     </Provider>
   );
