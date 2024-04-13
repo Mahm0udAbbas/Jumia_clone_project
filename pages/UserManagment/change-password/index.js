@@ -6,13 +6,16 @@ import { auth, firestore } from "@/firebase";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { userManagementLayout } from "@/layouts/ProfileDetailsLayout";
-
+import { useTranslation } from "next-i18next";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 function ChangePassword() {
   const router = useRouter();
   const [user, setUser] = useState(null);
   const [current, setCurrent] = useState(null);
   const [alertSuccess, setAlertSuccess] = useState(false);
   const [alertFail, setAlertFail] = useState(false);
+  const { t } = useTranslation("user");
+
   const {
     register,
     handleSubmit,
@@ -57,7 +60,7 @@ function ChangePassword() {
   }
   return (
     <>
-      <h1 className="text-xl mb-5">Password Settings</h1>
+      <h1 className="text-xl mb-5">{t("Password Settings")}</h1>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="relative z-0 mb-5">
           <input
@@ -76,7 +79,7 @@ function ChangePassword() {
             htmlFor="floating_standard"
             className="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 peer-focus:text-orange-500 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto"
           >
-            Current Password
+            {t("Current Password")}
           </label>
           <p className="text-red-400">{errors.currentPassword?.message}</p>
         </div>
@@ -97,7 +100,7 @@ function ChangePassword() {
             htmlFor="floating_standard"
             className="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 peer-focus:text-orange-500 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto"
           >
-            New Password
+            {t("New Password")}
           </label>
           <p className="text-red-400">{errors.newPassword?.message}</p>
         </div>
@@ -116,7 +119,7 @@ function ChangePassword() {
             htmlFor="floating_standard"
             className="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 peer-focus:text-orange-500 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto"
           >
-            Confirm Password
+            {t("Confirm Password")}
           </label>
           <p className="text-red-400">{errors.confirmPassword?.message}</p>
         </div>
@@ -124,7 +127,7 @@ function ChangePassword() {
           type="submit"
           className="text-white px-20 rounded-md py-3 bg-orange-500 hover:bg-orange-600"
         >
-          Submit
+          {t("Submit")}
         </button>
       </form>
       <div
@@ -133,7 +136,7 @@ function ChangePassword() {
         }
       >
         <div className="alert alert-neutral">
-          <span>successfully updated!.</span>
+          <span>{t("successfully updated!.")}</span>
         </div>
       </div>
       <div
@@ -142,7 +145,7 @@ function ChangePassword() {
         }
       >
         <div className="alert alert-error">
-          <span>Error updating.</span>
+          <span>{t("Error updating.")}</span>
         </div>
       </div>
     </>
@@ -151,3 +154,11 @@ function ChangePassword() {
 
 export default ChangePassword;
 ChangePassword.getLayout = userManagementLayout;
+export async function getServerSideProps({ locale }) {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, ["user"])),
+      // Will be passed to the page component as props
+    },
+  };
+}

@@ -4,17 +4,22 @@ import { CancelOrderById, fetchOrderDetails, getOrderById } from "@/firebase";
 import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
 import { Link } from "@mui/material";
 import { useRouter } from "next/router";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { useTranslation } from "next-i18next";
+
 import { useEffect, useState } from "react";
-export const getServerSideProps = async (context) => {
-  console.log(context.params);
-  const { orderId, userId } = context.params;
-  console.log("get User ID :" + userId);
-  console.log("get Order ID :" + orderId);
+export const getServerSideProps = async ({ params, locale }) => {
+  const { orderId, userId } = params;
 
   try {
     const orderObject = await getOrderById(userId, orderId);
+    const translations = await serverSideTranslations(locale, [
+      "common",
+      "account",
+      "nav",
+    ]);
     return {
-      props: { orderObject },
+      props: { ...translations, orderObject },
     };
   } catch (e) {
     console.log("the error is :" + e);
@@ -25,23 +30,22 @@ export const getServerSideProps = async (context) => {
 };
 function OrderDetails({ orderObject }) {
   const [orderDetails, setOrderDetails] = useState(null);
+  const { t } = useTranslation("common", "account", "nav");
+  const { locale } = useRouter();
   let total = Number();
   const router = useRouter();
-  console.log(orderObject);
   useEffect(() => {
     async function getData() {
       setOrderDetails(await fetchOrderDetails(router.query.userId));
     }
     getData();
   }, [router.query]);
-  console.log(orderDetails);
   // go TO Order History Page
   function goToOrderHistory() {
     router.push(
       `/account/Orders/trackItem/${router.query.userId}/${router.query.orderId}`
     );
   }
-
   // get Total
   orderObject.items.map((product) => {
     return (total += product.product.price * product.quantity);
@@ -57,17 +61,21 @@ function OrderDetails({ orderObject }) {
         >
           <header className="flex items-center py-2">
             <KeyboardBackspaceIcon className="me-2" />
-            <span className="text-xl font-bold">Order Details</span>
+            <span className="text-xl font-bold">{t("Order Details")}</span>
           </header>
         </Link>
         <hr></hr>
         <div className="py-2 text-gray-500 text-sm">
-          <p className="mb-1">{orderObject.length} items</p>
-          <p className="mb-1">placed on {orderObject.timestamp}</p>
-          <p>Total:EGP {total} </p>
+          <p className="mb-1">{t("items")}</p>
+          <p className="mb-1">{t("placed on") + " " + orderObject.timestamp}</p>
+          <p>
+            {t("Total")}:{t("EGP")} {total}{" "}
+          </p>
         </div>
         <hr></hr>
-        <p className="font-semibold  py-2  capitalize">items in your order</p>
+        <p className="font-semibold  py-2  capitalize">
+          {t("Items In Your Order")}
+        </p>
         <div className="py-2">
           {orderObject.items.map((order, index) => {
             return (
@@ -83,7 +91,9 @@ function OrderDetails({ orderObject }) {
                 />
                 <div className="flex-1 p-2 ">
                   <p className="font-semibold text-lg py-1">
-                    {order.product.en.title}
+                    {locale == "en"
+                      ? order.product.en.title
+                      : order.product.ar.title}
                   </p>
                   <p
                     className={`text-white ${
@@ -97,14 +107,18 @@ function OrderDetails({ orderObject }) {
                     }
                      w-fit py-1 px-2 rounded-md text-sm`}
                   >
-                    {orderObject.status}
+                    {t(orderObject.status)}
                   </p>
                   <div className="flex  items-center  text-gray-500  py-1 px-2  text-sm">
-                    <p className="me-4">Qty : {order.quantity}</p>
-                    <p>EGP: {order.product.price}</p>
+                    <p className="me-4">
+                      {t("Qty")} : {order.quantity}
+                    </p>
+                    <p>
+                      {t("EGP")}: {order.product.price}
+                    </p>
                   </div>
                   <p className="py-1 text-sm text-gray-500">
-                    deliverd in 3 Days from {orderObject.timestamp}
+                    {t("delivered in 3 Days from")} {orderObject.timestamp}
                   </p>
                 </div>
                 <div className="p-2  flex flex-col justify-between items-center">
@@ -118,7 +132,7 @@ function OrderDetails({ orderObject }) {
                           : "text-white  text-sm bg-amber-500 rounded-md py-3 px-4 no-underline  uppercase hover:bg-amber-400"
                       }`}
                     >
-                      Track My Item
+                      {t("TRACK MY ITEM")}
                     </button>
                   </div>
                   <div>
@@ -136,7 +150,7 @@ function OrderDetails({ orderObject }) {
                           : "text-white  text-sm bg-amber-500 rounded-md py-3 px-4 no-underline  uppercase hover:bg-amber-400"
                       }`}
                     >
-                      Cancel Oreder
+                      {t("CANCEL ORDER")}
                     </button>
                   </div>
                 </div>
@@ -149,39 +163,46 @@ function OrderDetails({ orderObject }) {
         <div className="py-3 grid gap-4 grid-cols-1 md:grid-cols-2 ">
           <div className="border rounded-lg ">
             <header className="font-bold capitalize text-lg border-b py-2 px-3">
-              payment information
+              {t("Payment Information")}
             </header>
             <div className="mt-3 mb-5 py-2 px-3 capitalize">
-              <p className="  font-semibold mb-2">payment method</p>
+              <p className="  font-semibold mb-2">{t("Payment Method")}</p>
               <p className="text-sm text-gray-500 ">
                 {orderObject.paymentMethod == "cash"
-                  ? "cash on delivery"
-                  : "pay by card"}
+                  ? t("cash on delivery")
+                  : t("pay by card")}
               </p>
             </div>
             <div className="mt-3 mb-5 py-2 px-3 capitalize">
-              <p className="  font-semibold mb-2">payment details</p>
+              <p className="  font-semibold mb-2">{t("Payment Details")}</p>
               <div className="text-sm text-gray-500 ">
-                <p className="mb-1">item total :EGP{total}</p>
-                <p className="mb-1">delivery fees :EGP 35.00</p>
-                <p>total : {total + 35}</p>
+                <p className="mb-1">
+                  {t("Item Total")} :{t("EGP")}
+                  {total}
+                </p>
+                <p className="mb-1">
+                  {t("Delivery Fees")} :{t("EGP")} 35.00
+                </p>
+                <p>
+                  {t("Total")} : {total + 35}
+                </p>
               </div>
             </div>
           </div>
           <div className="border rounded-lg ">
             <header className="font-bold capitalize text-lg border-b py-2 px-3">
-              delivery information
+              {t("Delivery Information")}
             </header>
             <div className="mt-3 mb-5 py-2 px-3 capitalize">
-              <p className="  font-semibold mb-2">delivery method</p>
+              <p className="  font-semibold mb-2">{t("Delivery Method")}</p>
               <p className="text-sm text-gray-500 ">
                 {orderDetails.deliveryMethod == "express"
-                  ? "Door delivery"
-                  : "Pick Up Station"}
+                  ? t("Door Delivery")
+                  : t("Pick Up Station")}
               </p>
             </div>
             <div className="mt-3 mb-5 py-2 px-3 capitalize">
-              <p className="  font-semibold mb-2">shipping adress</p>
+              <p className="  font-semibold mb-2">{t("Shipping Address")}</p>
               <div className="text-sm text-gray-500 ">
                 <p className="mb-1">{`${orderDetails.shippingAddress.firstName} ${orderDetails.shippingAddress.lastName}`}</p>
                 <p className="mb-1">{` ${orderDetails.shippingAddress.city} ${orderDetails.shippingAddress.region}`}</p>

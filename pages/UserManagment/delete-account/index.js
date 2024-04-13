@@ -1,4 +1,4 @@
-import { defaultPage } from "../default";
+// import { defaultPage } from "../default";
 import Image from "next/image";
 import logo from "@/public/1.png";
 import { useEffect, useState } from "react";
@@ -7,12 +7,16 @@ import { auth, firestore } from "@/firebase";
 import { useRouter } from "next/router";
 import { collection, deleteDoc, doc, getDocs } from "firebase/firestore";
 import { userManagementLayout } from "@/layouts/ProfileDetailsLayout";
+import { useTranslation } from "next-i18next";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
 function DeleteAccount() {
   const router = useRouter();
   const [user, setUser] = useState(null);
   const [alertSuccess, setAlertSuccess] = useState(false);
   const [alertFail, setAlertFail] = useState(false);
+  const { t } = useTranslation("user");
+
   useEffect(() => {
     onAuthStateChanged(auth, (user) => setUser(user));
   }, []);
@@ -63,12 +67,11 @@ function DeleteAccount() {
     <>
       <section className="flex flex-col items-center">
         <Image src={logo} width={50} height={50} alt="logo" />
-        <h1 className="text-xl my-6">We hate to see you go.</h1>
+        <h1 className="text-xl my-6">{t("We hate to see you go.")}</h1>
         <p className="text-center">
-          Before you delete your account, we would want you to know that this
-          action will delete your data across all Jumia platforms. If that's
-          what you want, please proceed with entering your password to confirm
-          that it's you.
+          {t(
+            "Before you delete your account, we would want you to know that this action will delete your data across all Jumia platforms. If that's what you want, please proceed with entering your password to confirm that it's you."
+          )}
         </p>
         <form className="w-full mt-6">
           <div className="relative z-0 mb-5">
@@ -83,7 +86,7 @@ function DeleteAccount() {
               htmlFor="floating_standard"
               className="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 peer-focus:text-orange-500 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto"
             >
-              Email
+              {t("Email")}
             </label>
           </div>
         </form>
@@ -92,7 +95,7 @@ function DeleteAccount() {
           className="btn bg-orange-500 hover:bg-orange-600 text-white  w-full"
           onClick={() => document.getElementById("my_modal_1").showModal()}
         >
-          Delete Account
+          {t("Delete Account")}
         </button>
         <dialog id="my_modal_1" className="modal">
           <div className="modal-box">
@@ -112,7 +115,7 @@ function DeleteAccount() {
               />
             </svg>
             <p className="py-4 text-center">
-              Are you sure you want to delete this account?
+              {t("Are you sure you want to delete this account?")}
             </p>
             <div className="modal-action">
               <form method="dialog">
@@ -120,9 +123,9 @@ function DeleteAccount() {
                   className="btn text-white bg-red-600 hover:bg-red-800 mx-4"
                   onClick={deleteAccount}
                 >
-                  Yes, I'm sure
+                  {t("Yes, I'm sure")}
                 </button>
-                <button className="btn">No, cancel</button>
+                <button className="btn">{t("No, cancel")}</button>
               </form>
             </div>
           </div>
@@ -134,7 +137,7 @@ function DeleteAccount() {
           }
         >
           <div className="alert alert-success">
-            <span>Account deleted!.</span>
+            <span>{t("Account deleted!.")}</span>
           </div>
         </div>
         <div
@@ -143,7 +146,7 @@ function DeleteAccount() {
           }
         >
           <div className="alert alert-error">
-            <span>Error happen.</span>
+            <span>{t("Error happen.")}</span>
           </div>
         </div>
       </section>
@@ -153,3 +156,11 @@ function DeleteAccount() {
 
 export default DeleteAccount;
 DeleteAccount.getLayout = userManagementLayout;
+export async function getServerSideProps({ locale }) {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, ["user"])),
+      // Will be passed to the page component as props
+    },
+  };
+}

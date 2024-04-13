@@ -3,15 +3,13 @@ import { useRouter } from "next/router";
 
 function LangToggel() {
   const { locale, locales, push, query, asPath } = useRouter();
-  
   const [en, ar] = locales;
   function handleEn() {
-    console.log("hello");
-    const route = query.id ? `${asPath}` : "";
+    const route = query.id || query.userId ? `${asPath}` : "";
     push(route, undefined, { locale: en });
   }
   function handleAr() {
-    const route = query.id ? `${asPath}` : "";
+    const route = query.id || query.userId ? `${asPath}` : "";
     push(route, undefined, { locale: ar });
   }
   return (
