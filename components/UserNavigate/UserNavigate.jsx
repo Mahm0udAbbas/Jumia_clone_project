@@ -14,6 +14,7 @@ import Image from "next/image";
 import { onAuthStateChanged } from "firebase/auth";
 import { doc, onSnapshot } from "firebase/firestore";
 import Link from "next/link";
+import { useTranslation } from "next-i18next";
 
 function Icon({ id, open }) {
   return (
@@ -39,6 +40,7 @@ function Icon({ id, open }) {
 function UserNavigate() {
   const [open, setOpen] = useState(0);
   const [user, setUser] = useState(null);
+  const { t } = useTranslation("user");
   const handleOpen = (value) => setOpen(open === value ? 0 : value);
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
@@ -50,46 +52,48 @@ function UserNavigate() {
 
   return (
     <>
-      <div className="flex flex-col items-center items-center mb-10">
-        <Image src={logo} width={50} height={50} alt="logo" />
-        <h1 className="mt-3 font-medium">
-          Hello, {user?.displayName || <MySpinner />}
-        </h1>
+      <div>
+        <div className="flex flex-col items-center  mb-10">
+          <Image src={logo} width={50} height={50} alt="logo" />
+          <h1 className="mt-3 font-medium">
+            {t("Hello")}, {user?.displayName || <MySpinner />}
+          </h1>
+        </div>
+        <Accordion open={open === 1} icon={<Icon id={1} open={open} />}>
+          <AccordionHeader onClick={() => handleOpen(1)}>
+            <AccountCircleIcon />
+            {t("Profile Details")}
+          </AccordionHeader>
+          <AccordionBody>
+            <Link
+              href="/UserManagment/basic-details/show"
+              className="p-3 block font-medium text-md hover:bg-gray-100"
+            >
+              {t("Basic Details")}
+            </Link>
+          </AccordionBody>
+        </Accordion>
+        <Accordion open={open === 2} icon={<Icon id={2} open={open} />}>
+          <AccordionHeader onClick={() => handleOpen(2)}>
+            <SecurityIcon />
+            {t("Security Setting")}
+          </AccordionHeader>
+          <AccordionBody>
+            <Link
+              href="/UserManagment/change-password"
+              className="p-3 block font-medium text-md hover:bg-gray-100"
+            >
+              {t("Change Password")}
+            </Link>
+            <Link
+              href="/UserManagment/delete-account"
+              className="p-3 block font-medium text-red-500 text-md hover:bg-gray-100"
+            >
+              {t("Delete Account")}
+            </Link>
+          </AccordionBody>
+        </Accordion>
       </div>
-      <Accordion open={open === 1} icon={<Icon id={1} open={open} />}>
-        <AccordionHeader onClick={() => handleOpen(1)}>
-          <AccountCircleIcon />
-          Profile Details
-        </AccordionHeader>
-        <AccordionBody>
-          <Link
-            href="/UserManagment/basic-details/show"
-            className="p-3 block font-medium text-md hover:bg-gray-100"
-          >
-            Basic Details
-          </Link>
-        </AccordionBody>
-      </Accordion>
-      <Accordion open={open === 2} icon={<Icon id={2} open={open} />}>
-        <AccordionHeader onClick={() => handleOpen(2)}>
-          <SecurityIcon />
-          Security Setting
-        </AccordionHeader>
-        <AccordionBody>
-          <Link
-            href="/UserManagment/change-password"
-            className="p-3 block font-medium text-md hover:bg-gray-100"
-          >
-            Change Password
-          </Link>
-          <Link
-            href="/UserManagment/delete-account"
-            className="p-3 block font-medium text-red-500 text-md hover:bg-gray-100"
-          >
-            Delete Account
-          </Link>
-        </AccordionBody>
-      </Accordion>
     </>
   );
 }

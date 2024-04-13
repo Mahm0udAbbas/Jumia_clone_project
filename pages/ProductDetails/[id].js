@@ -45,8 +45,9 @@ const ProductDetails = ({ product }) => {
   const [addToCart] = useAddToCart();
   const { locale } = useRouter();
   product = product.json;
-  let date = new Date();
   console.log(product);
+  let date = new Date();
+
   return (
     <>
       <div className="container mx-auto">

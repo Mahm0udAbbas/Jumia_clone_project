@@ -8,15 +8,19 @@ import { useEffect, useState } from "react";
 import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
 import MySpinner from "@/components/order/Spiner/Spinner";
 import Link from "next/link";
-export const getServerSideProps = async (context) => {
-  console.log(context.params);
-  const { orderId, userId } = context.params;
-  console.log("get User ID :" + userId);
-  console.log("get Order ID :" + orderId);
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { useTranslation } from "next-i18next";
+export const getServerSideProps = async ({ params, locale }) => {
+  const { orderId, userId } = params;
   try {
     const orderObject = await getOrderById(userId, orderId);
+    const translations = await serverSideTranslations(locale, [
+      "common",
+      "account",
+      "nav",
+    ]);
     return {
-      props: { orderObject },
+      props: { ...translations, orderObject },
     };
   } catch (e) {
     console.log("the error is :" + e);
@@ -27,22 +31,15 @@ export const getServerSideProps = async (context) => {
 };
 function TrackItem({ orderObject }) {
   const [orderDetails, setOrderDetails] = useState();
-  //   useEffect(() => {
-  //     // const unsubscribe = onAuthStateChanged(auth, async (user) => {
-  //     //   setOrderDetails(await fetchOrderDetails(user.uid));
-  //     // });
-  //     // return () => {
-  //     //   unsubscribe();
-  //     };
-  //   });
-  console.log(orderObject);
+  const { t } = useTranslation("common", "account", "nav");
+
   if (orderObject) {
     return (
       <div className="p-4">
         <Link href={`/account/Orders`}>
           <header className="flex items-center py-2">
             <KeyboardBackspaceIcon className="me-2" />
-            <span className="text-xl font-bold">Order History</span>
+            <span className="text-xl font-bold">{t("Order History")}</span>
           </header>
         </Link>
         <hr></hr>
@@ -62,10 +59,10 @@ function TrackItem({ orderObject }) {
                         : " bg-gray-200"
                     }  w-fit rounded-lg`}
                   >
-                    Order Palced
+                    {t("Order Palced")}
                   </Timeline.Title>
                   <Timeline.Time>{orderObject.timestamp}</Timeline.Time>
-                  <Timeline.Body>order placed</Timeline.Body>
+                  <Timeline.Body>{t("order placed")}</Timeline.Body>
                 </Timeline.Content>
               </Timeline.Item>
             </>
@@ -79,16 +76,18 @@ function TrackItem({ orderObject }) {
                       : " bg-gray-200"
                   }  w-fit rounded-lg`}
                 >
-                  pending confirmation
+                  {t("pending confirmation")}
                 </Timeline.Title>
                 <Timeline.Time>{orderObject.timestamp}</Timeline.Time>
                 <Timeline.Body>
                   {orderObject.status === "pending-confirmation"
-                    ? "Your order is currently being processed, and we will notify you once the item has been shipped."
+                    ? t(
+                        "Your order is currently being processed, and we will notify you once the item has been shipped."
+                      )
                     : orderObject.status === "shipped" ||
                       orderObject.status === "out-for-delivery" ||
                       orderObject.status === "deliverd"
-                    ? "confirmed"
+                    ? t("confirmed")
                     : ""}
                 </Timeline.Body>
               </Timeline.Content>
@@ -103,15 +102,17 @@ function TrackItem({ orderObject }) {
                       : " bg-gray-200"
                   }  w-fit rounded-lg`}
                 >
-                  Shipped
+                  {t("Shipped")}
                 </Timeline.Title>
-                <Timeline.Time>April 2022</Timeline.Time>
+                <Timeline.Time></Timeline.Time>
                 <Timeline.Body>
                   {orderObject.status === "shipped"
-                    ? "Your order is currently being shipped, and we will notify you once the item is out for delivery."
+                    ? t(
+                        "Your order is currently being shipped, and we will notify you once the item is out for delivery."
+                      )
                     : orderObject.status === "out-for-delivery" ||
                       orderObject.status === "deliverd"
-                    ? "shipped"
+                    ? t("shipped")
                     : ""}
                 </Timeline.Body>
               </Timeline.Content>
@@ -126,14 +127,14 @@ function TrackItem({ orderObject }) {
                       : " bg-gray-200"
                   }  w-fit rounded-lg`}
                 >
-                  out for delivery
+                  {t("out for delivery")}
                 </Timeline.Title>
-                <Timeline.Time>April 2022</Timeline.Time>
+                <Timeline.Time></Timeline.Time>
                 <Timeline.Body>
                   {orderObject.status === "out-for-delivery"
-                    ? "Your order is currently out for delivery."
+                    ? t("Your order is currently out for delivery.")
                     : orderObject.status === "deliverd"
-                    ? "Deliverd"
+                    ? t("delivered")
                     : ""}
                 </Timeline.Body>
               </Timeline.Content>
@@ -148,12 +149,12 @@ function TrackItem({ orderObject }) {
                       : " bg-gray-200"
                   }  w-fit rounded-lg`}
                 >
-                  delivered
+                  {t("delivered")}
                 </Timeline.Title>
-                <Timeline.Time>April 2022</Timeline.Time>
+                <Timeline.Time></Timeline.Time>
                 <Timeline.Body>
-                  {orderObject.status === "deliverd"
-                    ? "Your order is deliverd successfully."
+                  {orderObject.status === "delivered"
+                    ? t("Your order is deliverd successfully.")
                     : ""}
                 </Timeline.Body>
               </Timeline.Content>

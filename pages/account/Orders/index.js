@@ -4,11 +4,16 @@ import { auth, fetchOrderDetails, getOrderSubcollection } from "@/firebase";
 import { onAuthStateChanged } from "firebase/auth";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
+import { useTranslation } from "next-i18next";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { useRouter } from "next/router";
 function Orders() {
   const [orderData, setOrderData] = useState(null);
   const [orderDetails, setOrderDetails] = useState(null);
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const { t } = useTranslation("common", "account", "nav");
+  const { locale } = useRouter();
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
@@ -30,8 +35,6 @@ function Orders() {
     });
     return () => unsubscribe();
   }, []);
-  console.log(orderDetails);
-  console.log(orderData);
   if (loading) {
     return (
       <div className="flex justify-center items-center h-screen">
@@ -43,14 +46,14 @@ function Orders() {
       <>
         {orderData.length ? (
           <div>
-            <h2 className="py-2 border-b px-4">ORDERS</h2>
+            <h2 className="py-2 border-b px-4">{t("ORDERS")}</h2>
             <div className="py-4 h-[80%]">
               <div className=" border-b py-2  flex flex-col md:flex-row">
                 <Link
                   className="px-4 hover:text-orange-400 mb-2 md:mb-0 "
                   href="/account/Orders"
                 >
-                  Your Orders ({orderData ? orderData.length : ""})
+                  {t("Your Orders")} ({orderData ? orderData.length : ""})
                 </Link>
               </div>
 
@@ -58,12 +61,11 @@ function Orders() {
                 return (
                   <div key={index} className=" p-3 border my-2 ">
                     <div className="flex justify-between items-center">
-                      {" "}
                       <Link
                         href={`/account/Orders/${user.uid}/${order.id}`}
                         className="text-amber-500  rounded-md py-1 px-2  uppercase hover:bg-red-200"
                       >
-                        see details
+                        {t("SEE DETAILS")}
                       </Link>
                     </div>
                     {order.items.map((item, index) => {
@@ -79,7 +81,9 @@ function Orders() {
                               />
                               <div className="flex-1 p-2 ">
                                 <p className="font-semibold text-lg py-1">
-                                  {item.product.en.title}
+                                  {locale == "en"
+                                    ? item.product.en.title
+                                    : item.product.ar.title}
                                 </p>
                                 <p
                                   className={`text-black ${
@@ -92,10 +96,10 @@ function Orders() {
                                       : "bg-blue-500"
                                   }w-fit py-1 px-2 rounded-md text-sm`}
                                 >
-                                  {order.status}
+                                  {t(order.status)}
                                 </p>
                                 <p className="py-1 text-sm text-gray-500">
-                                  deliverd by Sunday 31-03
+                                  {t("delivered in three days")}
                                 </p>
                               </div>
                               <div className="p-2"></div>
@@ -131,3 +135,11 @@ function Orders() {
 
 export default Orders;
 Orders.getLayout = AccountPageLayout;
+export async function getStaticProps({ locale }) {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, ["common", "account", "nav"])),
+      // Will be passed to the page component as props
+    },
+  };
+}
