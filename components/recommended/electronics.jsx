@@ -10,7 +10,6 @@ export default function Electronics() {
   const [loading, setLoading] = useState(true);
   const { t } = useTranslation("home");
   const { locale } = useRouter();
-  console.log(products);
   useEffect(() => {
     const fetchData = async () => {
       try {
