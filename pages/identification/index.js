@@ -77,42 +77,7 @@ function Login_signup() {
         // Handle Errors here.
         console.log("Error: ", error);
       });
-    signInWithPopup(auth, provider)
-      .then((result) => {
-        // The signed-in user info.
-        console.log(result.user);
-        const userID = result.user.uid;
-        const displayName = result.user.displayName;
-        const phoneNumber = result.user.phoneNumber;
-        const email = result.user.email;
-        const emailVerified = result.user.emailVerified;
-        // Set new user in users collection.
-        setDoc(doc(firestore, "users", userID), {
-          userID,
-          displayName,
-          email,
-          phoneNumber,
-          emailVerified,
-        });
-        // This gives you a Facebook Access Token. You can use it to access the Facebook API.
-        const credential = GoogleAuthProvider.credentialFromResult(result);
-        const accessToken = credential.accessToken;
-        setSpinner(true);
-        setTimeout(() => {
-          setSpinner(false);
-          router.push("/");
-        }, 3000);
-      })
-      .catch((error) => {
-        // Handle Errors here.
-        console.log(error);
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        // The email of the user's account used.
-        const email = error.customData?.email;
-        // The AuthCredential type that was used.
-        const credential = GoogleAuthProvider.credentialFromError(error);
-      });
+      // We not need this part.
   }
 
   return (
