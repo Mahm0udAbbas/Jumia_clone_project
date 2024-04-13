@@ -149,7 +149,7 @@ function Login_signup() {
             <Input
               size="lg"
               color={errors.email ? "red" : "orange"}
-              label="Enter your email"
+              label={t("Enter your email")}
               {...register("email", {
                 required: true,
                 pattern: {
@@ -169,10 +169,10 @@ function Login_signup() {
             color="amber"
             fullWidth
           >
-            {t("Continue")}
+            {t("CONTINUE")}
           </Button>
           <Typography color="black" className="text-xs my-2 text-center">
-            {t("By continuing you agree to Jumia&apos;s")}
+            {t("By continuing you agree to Jumia's")}
             <a href="#" className="block underline mt-1 text-orange-500">
               {t("Terms and Conditions")}
             </a>
@@ -192,7 +192,7 @@ function Login_signup() {
               alt="metamask"
               className="h-6 w-6"
             />
-            Continue with Google
+            {t("CONTINUE WITH GOOGLE")}
           </Button>
           <Typography color="black" className="text-sm text-center">
             {t(
@@ -244,10 +244,10 @@ function Spinner() {
     </div>
   );
 }
-export async function getStaticProps({ locale }) {
+export async function getServerSideProps({ locale }) {
   return {
     props: {
-      ...(await serverSideTranslations(locale, ["common", "login"])),
+      ...(await serverSideTranslations(locale, ["login"])),
       // Will be passed to the page component as props
     },
   };

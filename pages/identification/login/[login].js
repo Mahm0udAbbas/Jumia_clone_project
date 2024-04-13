@@ -8,16 +8,21 @@ import bottomLogo from "@/public/bottom-logo.png";
 import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
 import { setDoc, doc } from "firebase/firestore";
-
+import { useTranslation } from "next-i18next";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 function Login() {
   const { register, handleSubmit, formState } = useForm();
   const [storageProducts, setStorageProducts] = useState(null);
   const [isLoading, setLoading] = useState(false);
   const [errors, setErrors] = useState({ password: "" });
   const router = useRouter();
+  const { t } = useTranslation("login");
+
   const { login: email } = router.query;
 
-  useEffect(() => {setStorageProducts(JSON.parse(localStorage.getItem("cart")))}, []);
+  useEffect(() => {
+    setStorageProducts(JSON.parse(localStorage.getItem("cart")));
+  }, []);
 
   async function userLogin({ password }) {
     await signInWithEmailAndPassword(auth, email, password)
@@ -25,7 +30,9 @@ function Login() {
         setLoading(true);
         // If there cart in local storage set it in him firestore cart collection.
         if (storageProducts) {
-          setDoc(doc(firestore, "cart", userCredential.user.uid), { products: [...storageProducts] });
+          setDoc(doc(firestore, "cart", userCredential.user.uid), {
+            products: [...storageProducts],
+          });
           // Remove it from local storage.
           localStorage.removeItem("cart");
         }
@@ -53,10 +60,10 @@ function Login() {
           alt="logo-image"
         />
         <Typography variant="h3" color="black">
-          Welcome to back.
+          {t("Welcome back.")}
         </Typography>
         <Typography color="black" className="mt-1 text-center">
-          Log back into your Jumia account.
+          {t("Log back into your Jumia account.")}
         </Typography>
       </div>
       <form className="mb-20" onSubmit={handleSubmit(userLogin)}>
@@ -78,7 +85,7 @@ function Login() {
               setErrors({ ...errors, password: "" });
             }}
             color={errors.password ? "red" : "orange"}
-            label="Password"
+            label={t("Password")}
             {...register("password", {
               required: true,
               minLength: { value: 8, message: "Must be 8 characters." },
@@ -97,13 +104,14 @@ function Login() {
           color="amber"
           fullWidth
         >
-          Continue
+          {t("CONTINUE")}
         </Button>
       </form>
       <div className="w-[28rem]">
         <Typography color="black" className="text-sm text-center">
-          For further support, you may visit the Help Center or contact our
-          customer service team.
+          {t(
+            "For further support, you may visit the Help Center or contact our customer service team."
+          )}
         </Typography>
         <div className="flex flex-col  items-center mt-5">
           <Image
@@ -122,3 +130,11 @@ function Login() {
 export default Login;
 export const loginSignup = (page) => page;
 Login.getLayout = loginSignup;
+export async function getServerSideProps({ locale }) {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, ["login"])),
+      // Will be passed to the page component as props
+    },
+  };
+}
