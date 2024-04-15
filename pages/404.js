@@ -1,18 +1,24 @@
 import Link from "next/link";
 import Image from "next/image";
 import React from "react";
-
+import { useTranslation } from "next-i18next";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 export default function Error() {
+  const { t } = useTranslation("common");
   return (
     <div className="w-full text-center flex flex-col md:flex-row justify-between items-center p-10 container mx-auto">
       <div className="text-start p-4">
-        <h1 className="mb-2 text-lg font-bold">Sorry Page Unavailable</h1>
-        <p className="mb-2">We couldn’t find the page you are looking for</p>
+        <h1 className="mb-2 text-lg font-bold">
+          {t("Sorry Page Unavailable")}
+        </h1>
         <p className="mb-2">
-          But we have millions more shopping items for you to browse!
+          {t("We couldn’t find the page you are looking for")}
+        </p>
+        <p className="mb-2">
+          {t("But we have millions more shopping items for you to browse!")}
         </p>
         <Link href="/" className="btn btn-warning text-white mt-6 ">
-          GO TO HOMEPAGE
+          {t("GO TO HOMEPAGE")}
         </Link>
       </div>{" "}
       <Image
@@ -22,4 +28,12 @@ export default function Error() {
       />
     </div>
   );
+}
+export async function getStaticProps({ locale }) {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, ["common", "nav"])),
+      // Will be passed to the page component as props
+    },
+  };
 }

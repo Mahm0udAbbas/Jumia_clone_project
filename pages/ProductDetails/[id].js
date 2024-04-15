@@ -27,6 +27,7 @@ export const getServerSideProps = async ({ params, locale }) => {
     const product = await getProductById(id);
     const translations = await serverSideTranslations(locale, [
       "productdetails",
+      "nav",
     ]);
     return {
       props: { ...translations, product },
