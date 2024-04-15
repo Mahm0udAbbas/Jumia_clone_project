@@ -11,7 +11,9 @@ import Product from "@/components/Product/product";
 import MySpinner from "@/components/order/Spiner/Spinner";
 import CatProdList from "@/components/CatProdList/CatProdList";
 import { catIds } from "@/data";
-
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { useTranslation } from "next-i18next";
+import Link from "next/link";
 export default function Electronics() {
   const [loading, setLoading] = useState(true);
   const imageUrls = [
@@ -32,6 +34,9 @@ export default function Electronics() {
   ];
   const [catProducts, setCatProducts] = useState([]);
   const [subCats, setSubCats] = useState([]);
+  console.log(subCats);
+  const { t } = useTranslation("common", "nav");
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -57,14 +62,14 @@ export default function Electronics() {
     return (
       <main className="container mx-auto">
         <Breadcrumbs separator="/">
-          <a href="/" className="opacity-60">
-            Home
-          </a>
-          <a href="/category/electronics">Electronics</a>
+          <Link href="/" className="opacity-60">
+            {t("Home")}
+          </Link>
+          <Link href="/category/electronics">{t("Electronics")}</Link>
         </Breadcrumbs>
         <div className="">
           <SubCategories>
-            <Header title="Electronics" />
+            <Header title={t("ELECTRONICS")} />
             <div className="grid gap-2  grid-cols-1 sm:grid-cols-3  md:grid-cols-6  p-5">
               {imageUrls.map((imageUrl, index) => (
                 <div key={index} className="">
@@ -75,7 +80,7 @@ export default function Electronics() {
           </SubCategories>
           <SubCategories>
             <div className="my-3">
-              <Header title="Top Deals" />
+              <Header title={t("TOP DEALS")} />
               <div className="grid gap-2  grid-cols-1   md:grid-cols-2  justify-center items-center p-5">
                 {imageUrls1.map((imageUrl, index) => (
                   <div key={index} className="flex items-center justify-center">
@@ -90,7 +95,7 @@ export default function Electronics() {
           </SubCategories>
           <SubCategories>
             <div className="my-3">
-              <Header title="Check More Deals" />
+              <Header title={t("CHECK MORE DEALS")} />
               <div className="grid gap-2  grid-cols-1   md:grid-cols-2  justify-center items-center p-5">
                 {imageUrls2.map((imageUrl, index) => (
                   <div key={index} className="flex items-center justify-center">
@@ -121,4 +126,12 @@ export default function Electronics() {
       </main>
     );
   }
+}
+export async function getStaticProps({ locale }) {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, ["common", "nav"])),
+      // Will be passed to the page component as props
+    },
+  };
 }

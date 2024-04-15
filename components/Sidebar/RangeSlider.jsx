@@ -6,6 +6,7 @@ import Button from "@mui/material/Button";
 import NestedCat from "./NestedCat";
 import styles from "../../styles/RangeSlider.module.css";
 import { getProductsByCategoryId } from "@/firebase";
+import { useTranslation } from "next-i18next";
 
 function valuetext(value) {
   return `${value}`;
@@ -13,9 +14,7 @@ function valuetext(value) {
 
 export default function RangeSlider({ setCatProducts, catId, subCatId }) {
   const [value, setValue] = useState([20, 48000]);
-  const [appliedValue, setAppliedValue] = useState([20, 48000]);
-  const [loading, setLoading] = useState(true);
-
+  const { t } = useTranslation("common");
   const handleChange = (event, newValue) => {
     const updatedValue = Array.isArray(newValue)
       ? newValue.map((v) => Math.min(Math.max(v, 0), 48000))
@@ -31,8 +30,7 @@ export default function RangeSlider({ setCatProducts, catId, subCatId }) {
   };
 
   const handleSubmit = () => {
-    setAppliedValue(value);
-    getData(appliedValue, subCatId);
+    getData(value, subCatId);
   };
   async function getData(value, subCatId) {
     // Receive value as a parameter
@@ -54,10 +52,12 @@ export default function RangeSlider({ setCatProducts, catId, subCatId }) {
   return (
     <Box>
       <Box style={{ display: "flex", alignItems: "center", marginTop: "8px" }}>
-        <NestedCat>PRICE (EGP)</NestedCat>
+        <NestedCat>
+          {t("PRICE")} ({t("EGP")})
+        </NestedCat>
         <Box style={{ marginLeft: "auto" }}>
           <Button variant="text" color="warning" onClick={handleSubmit}>
-            APPLY
+            {t("APPLY")}
           </Button>
         </Box>
       </Box>

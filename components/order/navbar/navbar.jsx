@@ -6,6 +6,8 @@ import LocalPoliceOutlinedIcon from "@mui/icons-material/LocalPoliceOutlined";
 import CancelIcon from "@mui/icons-material/Cancel";
 import MenuIcon from "@mui/icons-material/Menu";
 import Link from "next/link";
+import { useTranslation } from "next-i18next";
+
 import {
   Navbar,
   Typography,
@@ -13,6 +15,8 @@ import {
   Collapse,
 } from "@material-tailwind/react";
 function TMyNavbar() {
+  const { t } = useTranslation("order");
+
   return (
     <>
       <div className="my-2 flex flex-col gap-2 relative text-black flex w-full gap-2 md:w-max lg:mb-0 lg:mt-0 lg:flex-row lg:items-center lg:gap-6 ">
@@ -21,8 +25,8 @@ function TMyNavbar() {
             <span className="flex flex-row items-center">
               <PermPhoneMsgOutlinedIcon className="mx-4 " />
               <span className="flex flex-col text-sm">
-                <span>Need Help?</span>
-                <span>Contact Us</span>
+                <span>{t("Need Help?")}</span>
+                <span>{t("Contact Us")}</span>
               </span>
             </span>
           </span>
@@ -31,8 +35,8 @@ function TMyNavbar() {
           <span className="flex flex-row items-center ">
             <KeyboardReturnOutlinedIcon className="mx-4 " />
             <span className="flex flex-col text-sm ">
-              <span className="">Easy</span>
-              <span>Return</span>
+              <span className="">{t("Return Easy")}</span>
+              <span>{t("Return")}</span>
             </span>
           </span>
         </Link>
@@ -40,8 +44,8 @@ function TMyNavbar() {
           <span className="flex flex-row items-center">
             <LocalPoliceOutlinedIcon className="mx-4 " />
             <span className="flex flex-col text-sm">
-              <span className="fs-1">Secure</span>
-              <span>Payment</span>
+              <span className="fs-1">{t("Secure")}</span>
+              <span>{t("Payment")}</span>
             </span>
           </span>
         </Link>
@@ -63,11 +67,11 @@ export function MyNavbar() {
       window.removeEventListener("resize", handleWindowResize);
     };
   }, []);
-
+  const { t } = useTranslation("order");
   return (
     <Navbar
-      fullWidth="true"
-      shadow="false"
+      fullWidth={true}
+      shadow={false}
       className=" mx-auto  px-4 py-3 round-0 mb-2  max-w-screen-xl px-6 py-3 max-w-full"
     >
       <div className="flex items-center justify-between text-blue-gray-900">
@@ -77,7 +81,7 @@ export function MyNavbar() {
           variant="h6"
           className="mr-4 ml-2 cursor-pointer py-1.5"
         >
-          <Image
+          <img
             src="/jumia.png"
             height={40}
             width={180}
@@ -89,7 +93,7 @@ export function MyNavbar() {
           variant="h4"
           className="mr-4 ml-2 capitalize py-1.5 flex-grow text-center"
         >
-          edit adress
+          {t("edit order details")}
         </Typography>
         <div className="hidden lg:block">
           <TMyNavbar />

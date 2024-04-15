@@ -1,6 +1,6 @@
 import { Spinner } from "flowbite-react";
 function MySpinner() {
-  return <Spinner aria-label="Extra large spinner example" size="xl" />;
+  return <Spinner color="warning" aria-label="Warning spinner example" size="lg" />;
 }
 
 export default MySpinner;

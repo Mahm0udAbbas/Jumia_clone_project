@@ -1,36 +1,72 @@
 import { useEffect, useState } from "react";
-import { getDocs, collection } from "firebase/firestore";
-import { firestore } from "../../../firebase";
+import {
+  getDocs,
+  collection,
+  where,
+  query,
+  doc,
+  onSnapshot,
+} from "firebase/firestore";
+import {
+  auth,
+  fetchCartProducts,
+  firestore,
+  getCartproducts,
+} from "../../../firebase";
 // import { Card } from "flowbite-react";
 import Image from "next/image";
 import Link from "next/link";
 import MySpinner from "@/components/order/Spiner/Spinner";
 import ListHeader from "@/components/order/ListHeader/ListHeader";
 import CustomerAdress from "@/components/order/customeradress/customeraddress";
-import { CheckPageLayout } from "..";
+import { CheckPageLayout } from "../../../layouts/checkoutLayout";
 import { Card } from "@material-tailwind/react";
-function Summery() {
-  const [addressdata, setAddressData] = useState([]);
+import { onAuthStateChanged } from "firebase/auth";
+import { useRouter } from "next/router";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { useTranslation } from "next-i18next";
+
+function Summery({ setPaymentConfirm, setAddressConfirm, setDeliveryConfirm }) {
+  const [addressData, setAddressData] = useState(null);
+  const [cartProducts, setCartProducts] = useState([]);
+  const router = useRouter();
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const { t } = useTranslation("order");
+  const { locale, push } = useRouter();
+
   useEffect(() => {
-    getData();
+    onAuthStateChanged(auth, (user) => {
+      getData(user);
+      fetchCartProducts(user, setCartProducts);
+    });
   }, []);
-  async function getData() {
+
+  async function getData(user) {
     try {
-      const querySnapshot = await getDocs(
-        collection(firestore, "order-details")
-      );
-      const data = querySnapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
-      setAddressData(data);
-      setLoading(false);
+      if (user) {
+        const orderDetailsRef = collection(firestore, "order-details");
+        const q = query(orderDetailsRef, where("userId", "==", user.uid));
+        const querySnapshot = await getDocs(q);
+        if (!querySnapshot.empty) {
+          const data = querySnapshot.docs[0].data();
+          setAddressData(data);
+        } else {
+          setError("No data found for this user.");
+        }
+      } else {
+        setError("No user found.");
+        alert("You shoud login first");
+        push("/identification");
+      }
     } catch (error) {
       console.error("Error fetching data:", error);
+      setError("Error fetching data. Please try again later.");
+    } finally {
+      setLoading(false);
     }
   }
-  console.log(addressdata);
+
   if (loading) {
     return (
       <div className="flex justify-center items-center h-screen">
@@ -43,78 +79,133 @@ function Summery() {
         <section className="bg-[#e5e5e580]">
           <Card className="p-6">
             <div className="flex justify-between items-center">
-              <ListHeader value="customer Adress" color="text-green-900" />
-              <Link href="/checkout_layout/address">
+              <ListHeader value={t("CUSTOMER ADRESS")} color="text-green-900" />
+              <button
+                onClick={() => {
+                  setAddressConfirm(false);
+                  router.push("/checkout_layout/address");
+                }}
+              >
                 <span className="ms-2 text-blue-900 hover:underline">
-                  Change
+                  {t("Change")}
                 </span>
-              </Link>
+              </button>
             </div>
-            <CustomerAdress
-              title={`${addressdata[0].shippingAddress.firstName} ${addressdata[0].shippingAddress.lastName}`}
-              info={`${addressdata[0].shippingAddress.region} | ${addressdata[0].shippingAddress.city}  | ${addressdata[0].shippingAddress.address} | ${addressdata[0].shippingAddress.additionalInfo}`}
-            />
+            {addressData && addressData.shippingAddress ? (
+              <CustomerAdress
+                title={`${addressData.shippingAddress.firstName} ${addressData.shippingAddress.lastName}`}
+                info={`${addressData.shippingAddress.region} | ${addressData.shippingAddress.city} | ${addressData.shippingAddress.address} | ${addressData.shippingAddress.additionalInfo}`}
+              />
+            ) : (
+              <MySpinner />
+            )}
           </Card>
           <Card className="mt-3 p-6">
             <div className="flex justify-between items-center">
-              <ListHeader value="delivery details" color="text-green-900" />
-              <Link href="/checkout_layout/shipping-options">
+              <ListHeader
+                value={t("DELIVERY DETAILS")}
+                color="text-green-900"
+              />
+              <button
+                onClick={() => {
+                  setDeliveryConfirm(false);
+                  router.push("/checkout_layout/shipping-options");
+                }}
+              >
                 <span className="ms-2 text-blue-900 hover:underline">
-                  Change
+                  {t("Change")}
                 </span>
-              </Link>
+              </button>
             </div>
-            <CustomerAdress
-              title={" Door Delivery"}
-              info={"delivery between 7 March and 10 March"}
-            />
+            {addressData ? (
+              <CustomerAdress
+                title={
+                  addressData.deliveryMethod == "express"
+                    ? t("Door Delivery")
+                    : t("Pick-up Station")
+                }
+                info={t("Delivery in three days")}
+              />
+            ) : (
+              <MySpinner />
+            )}
             <div className="flex justify-between items-center pt-3">
               <span className="text-sm font-semibold text-black dark:text-gray-300">
-                Shipment 1/1
+                {t("Shipment 1 / 1")}
               </span>
               <span className="text-xs text-gray-500 dark:text-gray-300">
-                Fulfilled by Dream2000 EG Marketplace
+                {t("Fulfilled by Dream2000 EG Marketplace")}
               </span>
             </div>
-            <Card className="p-6">
+            <Card className="p-6 border rounded-none" shadow={false}>
               <div>
-                <p className="text-sm">Door Delivery</p>
-                <p className="text-xs">
-                  Delivery between 10 March and 11 March
+                <p className="text-sm">
+                  {addressData.deliveryMethod == "express"
+                    ? t("Door Delivery")
+                    : t("Pick-up Station")}
                 </p>
+                <p className="text-xs">{t("Delivery in three days")}</p>
               </div>
-              <hr></hr>
-              <div className="flex justify-start items-center ">
-                <div>
-                  <Image src="" width={20} height={30} alt="product photo" />
-                </div>
-                <div className="ps-4">
-                  <p className="text-sm">
-                    Galaxy A14 - 6.6-inch 4GB/64GB Dual Sim 4G - Mobile Phone -
-                    Light Green
-                  </p>
-                  <p className="text-xs">QTY: 1</p>
-                </div>
-              </div>
+              {cartProducts.map((cartProduct, index) => {
+                return (
+                  <div key={index}>
+                    <hr></hr>
+                    <div className="flex justify-start items-center py-2 ">
+                      <div>
+                        <img
+                          src={cartProduct.product.thumbnail}
+                          width={80}
+                          height={80}
+                          alt="product photo"
+                        />
+                      </div>
+                      <div className="ps-4">
+                        <p className="text-sm">
+                          {locale == "en"
+                            ? cartProduct.product.en.title
+                            : cartProduct.product.ar.title}
+                        </p>
+                        <p className="text-xs">
+                          {t("QTY")}: {cartProduct.quantity}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
             </Card>
           </Card>
 
           <div className="text-grey-100 pt-3">
             <Card className="p-6">
               <div className="flex justify-between items-center">
-                <ListHeader value="Payment method" color="text-green-900" />
-                <Link href="/checkout_layout/payment-methods">
+                <ListHeader
+                  value={t("PAYMENT METHOD")}
+                  color="text-green-900"
+                />
+                <button
+                  onClick={() => {
+                    setPaymentConfirm(false);
+                    router.push("/checkout_layout/payment-methods");
+                  }}
+                >
                   <span className="ms-2 text-blue-900 hover:underline">
-                    Change
+                    {t("Change")}
                   </span>
-                </Link>
+                </button>
               </div>
-              <CustomerAdress
-                title={"Cash On Delivery"}
-                info={
-                  "For more secure and contactless delivery and to get a 10 EGP discount we recommend using Pay by Card"
-                }
-              />
+              {addressData ? (
+                <CustomerAdress
+                  title={
+                    addressData.paymentMethod == "cash"
+                      ? t("Cash on delivery")
+                      : t("Pay with card")
+                  }
+                  info={t("Delivery in three days")}
+                />
+              ) : (
+                <MySpinner />
+              )}
             </Card>
           </div>
         </section>
@@ -125,3 +216,11 @@ function Summery() {
 
 export default Summery;
 Summery.getLayout = CheckPageLayout;
+export async function getStaticProps({ locale }) {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, ["common", "order"])),
+      // Will be passed to the page component as props
+    },
+  };
+}

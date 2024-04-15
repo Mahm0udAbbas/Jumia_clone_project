@@ -8,11 +8,26 @@ import {
 import Image from "next/image";
 import logoExpress from "@/public/Logo-express.png";
 import StarIcon from "@mui/icons-material/Star";
-import addToCart from "@/services/addToCart";
+import { useAddToCart } from "@/services/addToCart";
+import { useTranslation } from "next-i18next";
+import { useRouter } from "next/router";
+import { useSelector } from "react-redux";
+import { Toast } from "../navbar";
+
 
 function CatProdCard({ cardData }) {
+  const toast = useSelector((state) => state.toast);
+  const [addToCart] = useAddToCart();
+  const { t } = useTranslation("common");
+  const { locale } = useRouter();
+  
+
   return (
-    <Card className="items-between justify-between  shadow-none group hover:shadow-2xl">
+    <Card
+      key={cardData.proId}
+      className="items-between justify-between  shadow-none group hover:shadow-2xl"
+    >
+      {toast.value ? <Toast message={toast.message} /> : ""}
       <div className="flex items-center justify-center p-2">
         <img
           width={100}
@@ -21,9 +36,12 @@ function CatProdCard({ cardData }) {
           alt="product picture"
         />
       </div>
-      <CardBody className="text-left">
+      <CardBody className="">
         <p className="mb-1"></p>
-        <p className="font-medium"> {cardData.en.title}</p>
+        <p className="font-medium">
+          {" "}
+          {locale == "en" ? cardData.en.title : cardData.ar.title}
+        </p>
         <Typography className="flex">
           <span className="me-2  text-gray-500 font-normal text-xs">
             {cardData.price}
@@ -68,10 +86,12 @@ function CatProdCard({ cardData }) {
           className="  text-white invisible group-hover:visible"
           color="amber"
           fullWidth
-          onClick={addToCart(cardData)}
+          onClick={() => {
+            addToCart(cardData);
+          }}
         >
           {" "}
-          Add to Card
+          {t("ADD TO CART")}
         </Button>
       </CardFooter>
     </Card>

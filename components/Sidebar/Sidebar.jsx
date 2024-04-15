@@ -5,6 +5,7 @@ import List from "./List";
 import ListItem from "./ListItem";
 import RangeSlider from "./RangeSlider";
 import RatingFilter from "./RatingFilter";
+import { useTranslation } from "next-i18next";
 
 export default function Sidebar({
   catData,
@@ -14,18 +15,20 @@ export default function Sidebar({
   subCatId,
 }) {
   const checkedItems = false;
+  const { t } = useTranslation("common");
+  console.log(subCats);
   const handleChange = (id) => {
     checkedItems != checkedItems;
   };
   return (
     <div>
       <Category>
-        <NestedCat>CATEGORY</NestedCat>
+        <NestedCat>{t("CATEGORY")}</NestedCat>
         <List>
-          <NestedCat>{catData}</NestedCat>
+          <NestedCat>{t(catData)}</NestedCat>
           {subCats
             ? subCats.map((category, index) => (
-                <ListItem key={index}>{category}</ListItem>
+                <ListItem key={index}>{category.name}</ListItem>
               ))
             : ""}
         </List>
@@ -47,7 +50,7 @@ export default function Sidebar({
         ></List>
         <br />
         <hr />
-        <NestedCat>PRODUCT RATING</NestedCat>
+        <NestedCat>{t("PRODUCT RATING")}</NestedCat>
         <List>
           <RatingFilter
             setCatProducts={setCatProducts}

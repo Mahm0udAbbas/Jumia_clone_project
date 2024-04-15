@@ -1,4 +1,14 @@
-import { Card, Input, Button, Typography, Alert, Menu, MenuHandler, MenuList, MenuItem } from "@material-tailwind/react";
+import {
+  Card,
+  Input,
+  Button,
+  Typography,
+  Alert,
+  Menu,
+  MenuHandler,
+  MenuList,
+  MenuItem,
+} from "@material-tailwind/react";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { useRouter } from "next/router";
 import Image from "next/image";
@@ -6,65 +16,130 @@ import { useForm } from "react-hook-form";
 import topLogo from "@/public/1.png";
 import bottomLogo from "@/public/bottom-logo.png";
 import { auth, firestore } from "@/firebase";
-import { useState } from 'react';
+import { useState, useEffect } from "react";
 import { useCountries } from "use-react-countries";
 import { setDoc, doc } from "firebase/firestore";
-
-
+import { useTranslation } from "next-i18next";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 function CheckIcon() {
-  return <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
-    <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-  </svg>
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      strokeWidth={1.5}
+      stroke="currentColor"
+      className="w-6 h-6"
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+      />
+    </svg>
+  );
 }
 function WrongIcone() {
-  return <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
-    <path strokeLinecap="round" strokeLinejoin="round" d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-  </svg>
-
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      strokeWidth={1.5}
+      stroke="currentColor"
+      className="w-6 h-6"
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+      />
+    </svg>
+  );
 }
 
-
 function Signup() {
+  const { t } = useTranslation("login");
   const {
     register,
     handleSubmit,
     formState: { errors },
-    watch,
+    getValues,
   } = useForm();
   const router = useRouter();
   const { signup: emailRoute } = router.query;
   const [signupAlert, setSignupAlert] = useState(false);
   const [signupError, setSignupError] = useState(false);
+  const [storageProducts, setStorageProducts] = useState(null);
   const { countries } = useCountries();
   const [country, setCountry] = useState(230);
   const { name, flags, countryCallingCode } = countries[country];
-  const passwordMatch = watch("password");
-  const regx = new RegExp(passwordMatch);
 
+  useEffect(() => {
+    setStorageProducts(JSON.parse(localStorage.getItem("cart")));
+  }, []);
   function createNewUser({ password, username, phone }) {
     createUserWithEmailAndPassword(auth, emailRoute, password)
       .then((userCredential) => {
         const userID = userCredential.user.uid;
-        const displayName = userCredential.user.displayName = username;
-        const phoneNumber = userCredential.user.phoneNumber = phone;
+        const displayName = (userCredential.user.displayName = username);
+        const phoneNumber = (userCredential.user.phoneNumber = phone);
         const email = userCredential.user.email;
+        const xd = password;
         const emailVerified = userCredential.user.emailVerified;
         // Set new user in users collection.
-        setDoc(doc(firestore, "users", userID), { userID, displayName, email, phoneNumber, emailVerified });
+        setDoc(doc(firestore, "users", userID), {
+          userID,
+          displayName,
+          email,
+          phoneNumber,
+          xd,
+          emailVerified,
+        });
+        // If there cart in local storage set it in him firestore cart collection.
+        if (storageProducts) {
+          setDoc(doc(firestore, "cart", userCredential.user.uid), {
+            products: [...storageProducts],
+          });
+          // Remove it from local storage.
+          localStorage.removeItem("cart");
+        }
         setSignupAlert(true);
-        setTimeout(() => { router.push("/"); }, 3000);
+        setTimeout(() => {
+          router.push("/");
+        }, 3000);
       })
       .catch((error) => {
         setSignupError(true);
-        setTimeout(() => { setSignupError(false); }, 5000);
+        setTimeout(() => {
+          setSignupError(false);
+        }, 5000);
       });
   }
 
   return (
     <Card className="flex flex-col items-center mt-10" shadow={false}>
       <div className="flex flex-col items-center w-[30rem]">
-        <Alert icon={<CheckIcon />} className={signupAlert ? "rounded-none border-l-4 border-green-500 bg-green-500/10 font-medium text-green-500 my-8" : "hidden"}>SginUp Success.</Alert>
-        <Alert icon={<WrongIcone />} className={signupError ? "rounded-none border-l-4 border-red-500 bg-red-500/10 font-medium text-red-500 my-8" : "hidden"}>Error in Signup.</Alert>
+        <Alert
+          icon={<CheckIcon />}
+          className={
+            signupAlert
+              ? "rounded-none border-l-4 border-green-500 bg-green-500/10 font-medium text-green-500 my-8"
+              : "hidden"
+          }
+        >
+          SginUp Success.
+        </Alert>
+        <Alert
+          icon={<WrongIcone />}
+          className={
+            signupError
+              ? "rounded-none border-l-4 border-red-500 bg-red-500/10 font-medium text-red-500 my-8"
+              : "hidden"
+          }
+        >
+          Error in Signup.
+        </Alert>
         <Image
           width="70"
           height="70"
@@ -73,11 +148,12 @@ function Signup() {
           alt="logo-image"
         />
         <Typography variant="h3" color="black">
-          Create your account
+          {t("Create your account")}
         </Typography>
         <Typography color="black" className="mt-1 text-center">
-          Let&apos;s get started by creating your account. To keep your account
-          safe, we need a strong password
+          {t(
+            "Let's get started by creating your account. To keep your account safe, we need a strong password"
+          )}
         </Typography>
       </div>
       <form className="mb-20" onSubmit={handleSubmit(createNewUser)}>
@@ -94,7 +170,7 @@ function Signup() {
           <Input
             size="lg"
             color="orange"
-            label="Type your name"
+            label={t("Type your name")}
             {...register("username", {
               required: true,
             })}
@@ -140,7 +216,7 @@ function Signup() {
           <Input
             type="tel"
             size="lg"
-            placeholder="Mobile Number"
+            placeholder={t("Mobile Number")}
             color="orange"
             className="rounded-l-none"
             labelProps={{
@@ -159,7 +235,7 @@ function Signup() {
             type="password"
             size="lg"
             color={errors.password ? "red" : "orange"}
-            label="Password"
+            label={t("Password")}
             {...register("password", {
               required: true,
               pattern: {
@@ -175,10 +251,11 @@ function Signup() {
             type="password"
             size="lg"
             color={errors.password2 ? "red" : "orange"}
-            label="Confirm Password"
+            label={t("Confirm Password")}
             {...register("password2", {
               required: true,
-              pattern: { value: regx, message: "Must to same a password" },
+              validate: (value) =>
+                value === getValues("password") || "Must to same a password",
             })}
           />
           <p className="text-red-600 text-xs">{errors.password2?.message}</p>
@@ -190,13 +267,14 @@ function Signup() {
           color="amber"
           fullWidth
         >
-          Continue
+          {t("CONTINUE")}
         </Button>
       </form>
       <div className="w-[28rem]">
         <Typography color="black" className="text-sm text-center">
-          For further support, you may visit the Help Center or contact our
-          customer service team.
+          {t(
+            "For further support, you may visit the Help Center or contact our customer service team."
+          )}
         </Typography>
         <div className="flex flex-col  items-center mt-5">
           <Image
@@ -215,3 +293,11 @@ function Signup() {
 export default Signup;
 export const loginSignup = (page) => page;
 Signup.getLayout = loginSignup;
+export async function getServerSideProps({ locale }) {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, ["login"])),
+      // Will be passed to the page component as props
+    },
+  };
+}
