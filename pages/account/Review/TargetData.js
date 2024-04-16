@@ -1,4 +1,4 @@
-import { AccountPageLayout } from "@/components/Account_Layout";
+import { AccountPageLayout } from "@/layouts/AccountLayout";
 import { Rating, Typography } from "@material-tailwind/react";
 import React, { useState, useContext, useEffect } from 'react';
 import TextField from '@mui/material/TextField';
@@ -7,11 +7,19 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { useRouter } from 'next/router';
 import { Button } from "@material-tailwind/react";
 import { MyDataContext } from './[ReviewList]';
+import {Timestamp} from "firebase/firestore";
 
 export default function TargetData({ ReviewList ,addUserOrders }) {
   const router = useRouter();
   const userOrders = useContext(MyDataContext);
   const [matchedOrder, setMatchedOrder] = useState(null);
+
+  //Get Current Date in dd/mm/yy format
+  let currentDate = Timestamp.now().toDate();
+  const day = currentDate.getDate();
+  const month = currentDate.getMonth() + 1; // Months are zero-based
+  const year = currentDate.getFullYear();
+  const formattedDate = `${day}/${month}/${year}`;
 
   // loop on orders array to match between Target id & order id to choose the right one
   useEffect(() => {
@@ -74,7 +82,7 @@ export default function TargetData({ ReviewList ,addUserOrders }) {
       "name": name,
       "ReviewTitleDetail": ReviewTitleDetail,
       "rate": rate,
-      "date": new Date().toLocaleDateString()
+      "date": formattedDate,
   };
     addUserOrders(evaluation);
 

@@ -1,50 +1,37 @@
-import React, { useState, useEffect, createContext } from "react";
+import React, { useState, useEffect } from "react";
 import { collection, getDocs } from "firebase/firestore";
 import { firestore, auth } from "../../../firebase"; // Assuming you have access to auth
 import OrderData from "./OrderData";
-import { AccountPageLayout } from "@/layouts/AccountLayout";
 import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-// import { AccountPageLayout } from "@/components/Account_Layout";
+import { AccountPageLayout } from "@/layouts/AccountLayout";
 
-export const MyDataContext = createContext();
 export default function PendingReviews() {
-  const [orderDocs, setOrderDocs] = useState([]);
   const [userOrders, setUserOrders] = useState([]);
 
   useEffect(() => {
-    // Get all orders Documents.
-    getDocs(collection(firestore, "order-details"))
-      .then((data) => {
-        setOrderDocs([...data.docs]);
-      })
-      .catch((err) => {
-        console.error("Error fetching order details:", err);
-      });
-  }, []);
-  useEffect(() => {
     const fetchUserOrders = async () => {
-      for (const order of orderDocs) {
-        const userID = order.data().userId;
-        if (userID === auth.currentUser.uid) {
-          const data = await getDocs(collection(order.ref, "orders"));
-          const ordersData = data.docs.map((doc) => doc.data());
-          setUserOrders((prevOrders) => [...prevOrders, ...ordersData]);
-        } else {
-          console.log("User ID does not match");
-        }
+      try {
+        const orderDetailsSnapshot = await getDocs(collection(firestore, "order-details"));
+        const userOrdersPromises = orderDetailsSnapshot.docs.map(async (orderDoc) => {
+          const userID = orderDoc.data().userId;
+          if (userID === auth.currentUser.uid) {
+            const ordersSnapshot = await getDocs(collection(orderDoc.ref, "orders"));
+            return ordersSnapshot.docs.map((doc) => doc.data());
+          }
+          return [];
+        });
+        const userOrdersData = await Promise.all(userOrdersPromises);
+        const mergedOrdersData = userOrdersData.flat();
+        setUserOrders(mergedOrdersData);
+      } catch (err) {
+        console.error("Error fetching order details:", err);
       }
     };
-    if (orderDocs.length > 0) {
-      fetchUserOrders();
-    }
-  }, [orderDocs]);
+    fetchUserOrders();
+  }, []);
 
-  return (
-    <MyDataContext.Provider value={userOrders}>
-      <OrderData />
-    </MyDataContext.Provider>
-  );
+  return <OrderData userOrders={userOrders} />;
 }
 
 PendingReviews.getLayout = AccountPageLayout;

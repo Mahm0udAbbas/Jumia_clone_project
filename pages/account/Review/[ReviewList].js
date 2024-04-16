@@ -1,9 +1,20 @@
-import React, { useState, useEffect, createContext } from 'react';
-import { collection, getDocs, updateDoc, doc, getDoc,setDoc } from 'firebase/firestore';
-import { firestore, auth } from '@/firebase';
-import { AccountPageLayout } from "@/components/Account_Layout";
+import React, {
+    useState,
+    useEffect,
+    createContext
+} from 'react';
+import {
+    collection,
+    getDocs,
+    updateDoc,
+    doc,
+    getDoc,
+    setDoc
+} from 'firebase/firestore';
+import {firestore,auth} from '@/firebase';
+import {AccountPageLayout} from "@/layouts/AccountLayout";
 import TargetData from './TargetData';
-import { useRouter } from 'next/router';
+import {useRouter} from 'next/router';
 
 export const MyDataContext = createContext();
 
@@ -11,7 +22,6 @@ export default function ReviewList() {
     const [orderDocs, setOrderDocs] = useState([]);
     const [userOrders, setUserOrders] = useState([]);
     const [products, setProducts] = useState([]);
-    const [evaluationsArray, setEvaluationsArray] = useState([]);
 
     useEffect(() => {
         // Get all orders Documents.
@@ -52,26 +62,27 @@ export default function ReviewList() {
     }, []);
 
     const router = useRouter();
-    const { ReviewList } = router.query;
-      
+    const {
+        ReviewList
+    } = router.query;
+
     const addUserOrders = async (evaluation) => {
         try {
             userOrders.forEach(order => {
                 // Assuming there is an array named 'items' inside each order
                 order.items.forEach(item => {
-                  const user = auth.currentUser;
-                  // Access each item inside the 'items' array
-                  if(item.product.proId == ReviewList && order.status == "delivered"){
-                      order.review = "reviewed";
-                      orderDocs.forEach((orderDoc)=>{
-                          if (orderDoc.data().userId === user.uid)
-                          {
-                              setDoc(doc(orderDoc.ref, "orders",order.id),order)
-                          }
-                      })
-                  }
+                    const user = auth.currentUser;
+                    // Access each item inside the 'items' array
+                    if (item.product.proId == ReviewList && order.status == "delivered") {
+                        order.review = "reviewed";
+                        orderDocs.forEach((orderDoc) => {
+                            if (orderDoc.data().userId === user.uid) {
+                                setDoc(doc(orderDoc.ref, "orders", order.id), order)
+                            }
+                        })
+                    }
                 });
-              });
+            });
 
             for (const product of products) {
                 if (product.proId === ReviewList) {
@@ -80,7 +91,7 @@ export default function ReviewList() {
                     const productData = productSnapshot.data();
                     let updatedRating = productData.rating || [];
                     if (!Array.isArray(updatedRating)) {
-                        updatedRating = [updatedRating];
+                        updatedRating = [];
                     }
                     updatedRating = updatedRating.concat(evaluation);
                     await updateDoc(orderRef, {
@@ -102,4 +113,3 @@ export default function ReviewList() {
 }
 
 ReviewList.getLayout = AccountPageLayout;
-

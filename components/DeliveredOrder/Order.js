@@ -14,7 +14,7 @@ function Order({order}) {
               <span className="bg-green-500 text-xs min-h-4 rounded text-white w-fit px-2">Delivered</span>
               <p>On {order.timestamp}</p>
             </span>
-            <Link href={`/account/pendingReview/${order.items[0].product.proId}`}>
+            <Link href={`/account/Review/${order.items[0].product.proId}`}>
                 <Button variant="text" color="warning" className="flex items-baseline h-fit">Review</Button>
             </Link>
         </div>
