@@ -1,10 +1,8 @@
 import React from "react";
-import { Button } from "@material-tailwind/react";
-import Link from "next/link";
 import { useTranslation } from "next-i18next";
 
 export default function NoReviews() {
-  const { t } = useTranslation("productdetails");
+  const { t } = useTranslation("account");
   return (
     <div className="px-24 flex flex-col items-center">
       <img
