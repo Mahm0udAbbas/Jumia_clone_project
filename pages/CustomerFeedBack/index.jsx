@@ -1,5 +1,5 @@
-import React from 'react';
-import ListReview from './[ListReview];
+import React from "react";
+import ListReview from "./[ListReview]";
 
 export default function FeedbackList() {
   return (
