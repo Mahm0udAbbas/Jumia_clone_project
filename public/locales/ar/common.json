@@ -90,5 +90,9 @@
   "LOGOUT": "تسجيل الخروج",
   "Address Details": "تفاصيل العنوان",
   "Default Address": "العنوان الافتراضي",
-  "All Products": "جميع المنتجات"
+  "All Products": "جميع المنتجات",
+  "Sorry Page Unavailable": "عذرًا، الصفحة غير متوفرة",
+  "We couldn’t find the page you are looking for": "لم نتمكن من العثور على الصفحة التي تبحث عنها",
+  "But we have millions more shopping items for you to browse!": "ولكن لدينا الملايين من العناصر التسوقية لتصفحها!",
+  "GO TO HOMEPAGE": "الانتقال إلى الصفحة الرئيسية"
 }

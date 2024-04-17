@@ -5,11 +5,13 @@ function LangToggel() {
   const { locale, locales, push, query, asPath } = useRouter();
   const [en, ar] = locales;
   function handleEn() {
-    const route = query.id || query.userId ? `${asPath}` : "";
+    const route =
+      query.id || query.userId || query.ListReview ? `${asPath}` : "";
     push(route, undefined, { locale: en });
   }
   function handleAr() {
-    const route = query.id || query.userId ? `${asPath}` : "";
+    const route =
+      query.id || query.userId || query.ListReview ? `${asPath}` : "";
     push(route, undefined, { locale: ar });
   }
   return (

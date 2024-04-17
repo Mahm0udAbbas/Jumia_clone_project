@@ -4,9 +4,9 @@ import { firestore, getProductsByCategoryId } from "../../firebase";
 import RatingsGenerator from "./RatingsGenerator";
 import Radio from "./Radio";
 export default function RatingFilter({ setCatProducts, catId, subCatId }) {
-  const [storage, setStorage] = useState([]);
+  // const [storage, setStorage] = useState([]);
 
-  useEffect(() => {}, []);
+  // useEffect(() => {}, []);
 
   async function getData(subCatId, id) {
     try {

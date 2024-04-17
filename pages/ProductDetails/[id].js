@@ -27,6 +27,7 @@ export const getServerSideProps = async ({ params, locale }) => {
     const product = await getProductById(id);
     const translations = await serverSideTranslations(locale, [
       "productdetails",
+      "nav",
     ]);
     return {
       props: { ...translations, product },
@@ -40,6 +41,9 @@ export const getServerSideProps = async ({ params, locale }) => {
 };
 
 const ProductDetails = ({ product }) => {
+  const router = useRouter();
+  const { id } = router.query;
+
   const { query } = useRouter();
   const { t } = useTranslation("productdetails");
   const [addToCart] = useAddToCart();
@@ -352,17 +356,14 @@ const ProductDetails = ({ product }) => {
 
           <div className="grid grid-cols-12 gap-4 px-2">
             <div className="mt-3 bg-white mt-2 col-span-12 md:col-span-9 rounded">
-              <FeedbackList
-                rating={product.rating}
-                verifiedReting={product.ratingQuantity}
-              />
+              <FeedbackList product={product} id={id} />
             </div>
           </div>
 
           <div className="grid grid-cols-12 gap-4 px-2">
             <div className="bg-white mt-2 col-span-12 md:col-span-9 rounded p-5 ">
-              <p className="text-gray-700 hover:text-gray-900 text-xl font-meduims">
-                {t("You may also like")}
+              <p className="text-gray-700 hover:text-gray-900 text-xl font-medium">
+                You may also like
               </p>
               <ProductSection
                 data={data5}
