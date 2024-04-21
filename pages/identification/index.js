@@ -121,12 +121,12 @@ function Login_signup() {
       <Card
         className={
           spinner
-            ? "flex flex-col items-center mt-10 relative opacity-25"
-            : "flex flex-col items-center mt-10 relative"
+            ? "flex flex-col items-center pt-10 relative opacity-25 px-3 min-h-screen"
+            : "flex flex-col items-center pt-10 relative px-3 min-h-screen"
         }
         shadow={false}
       >
-        <div className="flex flex-col items-center w-[30rem]">
+        <div className="flex flex-col items-center w-full md:w-[30rem]">
           <Image
             width="70"
             height="70"
@@ -144,8 +144,11 @@ function Login_signup() {
           </Typography>
         </div>
 
-        <form className="border-b-2" onSubmit={handleSubmit(loginOrSignup)}>
-          <div className="w-[28rem] my-10">
+        <form
+          className="border-b-2 w-full md:w-[28rem] "
+          onSubmit={handleSubmit(loginOrSignup)}
+        >
+          <div className="w-full md:w-[28rem] my-10">
             <Input
               size="lg"
               color={errors.email ? "red" : "orange"}
@@ -178,12 +181,12 @@ function Login_signup() {
             </a>
           </Typography>
         </form>
-        <div className="w-[28rem]">
+        <div className="w-full md:w-[28rem]">
           <Button
             size="lg"
             variant="outlined"
             color="blue-gray"
-            className="flex items-center justify-center mt-12 mb-8"
+            className="flex items-center justify-center mt-12 mb-8 "
             onClick={() => loginWithGoogle()}
             fullWidth
           >

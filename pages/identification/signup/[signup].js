@@ -118,8 +118,11 @@ function Signup() {
   }
 
   return (
-    <Card className="flex flex-col items-center mt-10" shadow={false}>
-      <div className="flex flex-col items-center w-[30rem]">
+    <Card
+      className="flex flex-col items-center pt-10 min-h-screen px-3"
+      shadow={false}
+    >
+      <div className="flex flex-col items-center w-full md:w-[30rem]">
         <Alert
           icon={<CheckIcon />}
           className={
@@ -156,8 +159,11 @@ function Signup() {
           )}
         </Typography>
       </div>
-      <form className="mb-20" onSubmit={handleSubmit(createNewUser)}>
-        <div className="w-[28rem] mt-20">
+      <form
+        className="mb-20 w-full md:w-[28rem] "
+        onSubmit={handleSubmit(createNewUser)}
+      >
+        <div className=" mt-20 ">
           <Input
             size="lg"
             defaultValue={emailRoute}
@@ -166,7 +172,7 @@ function Signup() {
             label="Enter your email"
           />
         </div>
-        <div className="w-[28rem] my-10">
+        <div className=" my-10">
           <Input
             size="lg"
             color="orange"
@@ -176,7 +182,7 @@ function Signup() {
             })}
           />
         </div>
-        <div className="relative flex w-full w-[28rem]">
+        <div className="relative flex w-full ">
           <Menu placement="bottom-start">
             <MenuHandler>
               <Button
@@ -230,7 +236,7 @@ function Signup() {
             })}
           />
         </div>
-        <div className="w-[28rem] my-10">
+        <div className="w-full md:w-[28rem] my-10">
           <Input
             type="password"
             size="lg"
@@ -246,7 +252,7 @@ function Signup() {
           />
           <p className="text-red-600 text-xs">{errors.password?.message}</p>
         </div>
-        <div className="w-[28rem] mb-10">
+        <div className="w-full md:w-[28rem] mb-10 ">
           <Input
             type="password"
             size="lg"
@@ -270,7 +276,7 @@ function Signup() {
           {t("CONTINUE")}
         </Button>
       </form>
-      <div className="w-[28rem]">
+      <div className="w-full md:w-[28rem] pb-10 bg-white">
         <Typography color="black" className="text-sm text-center">
           {t(
             "For further support, you may visit the Help Center or contact our customer service team."
