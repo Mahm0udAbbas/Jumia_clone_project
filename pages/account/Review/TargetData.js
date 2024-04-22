@@ -81,14 +81,6 @@ export default function TargetData({ ReviewList, addUserOrders }) {
       setFormError(errors);
       return;
     }
-
-    // Print the values
-    // console.log("Evaluation Title:", ReviewTitle);
-    // console.log("Name:", name);
-    // console.log("Evaluation Detail:", ReviewTitleDetail);
-    // console.log("Rating Value:", rate);
-
-    //store values in object then push to array
     var evaluation = {
       ReviewTitle: ReviewTitle,
       name: name,

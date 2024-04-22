@@ -21,7 +21,7 @@ function AddNewAddress() {
             <h1>Add a New Address</h1>
           </Link>
         </header>
-        <EditAdressForm setAddressConfirm={setAddressConfirm} />
+        <EditAdressForm />
       </div>
     </>
   );
